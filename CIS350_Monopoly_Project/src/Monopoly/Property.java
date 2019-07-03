@@ -12,6 +12,7 @@ public class Property {
     int price;
     int rent;
     int ownerNum;
+    char color;
 
     public Property() {
 
@@ -24,4 +25,11 @@ public class Property {
         this.ownerNum = ownerNum;
     }
 
+    public Property(String n, int price, int rent, int ownerNum, char color) {
+        this.name = n;
+        this.price = price;
+        this.rent = rent;
+        this.ownerNum = ownerNum;
+        this.color = color;
+    }
 }
