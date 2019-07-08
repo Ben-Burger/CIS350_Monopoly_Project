@@ -12,11 +12,12 @@ import javax.swing.JMenuItem;
  * GUI for the Monopoly game board.
  * 
  * @author	Ben Burger
- * @version	7/3/2019
+ * @version	7/8/2019
  */
+@SuppressWarnings("serial")
 public class MonopolyGUI extends JFrame implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
+//	private static final long serialVersionUID = 1L; 
 	
 	private JMenuBar menus;
 	private JMenu mainMenu;
@@ -41,18 +42,12 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 		
 		this.setJMenuBar(menus);
 		
-		
-		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
+		MonopolyPanel panel = new MonopolyPanel();
+		this.getContentPane().add(panel);
 
-		//		MonopolyPanel panel = new MonopolyPanel();
-		//		getContentPane().add(panel);
-
-		this.setSize(1000, 1000);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setVisible(true);
 	}
 	
