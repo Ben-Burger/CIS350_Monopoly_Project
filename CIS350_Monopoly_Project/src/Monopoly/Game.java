@@ -1,6 +1,7 @@
 package Monopoly;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Covers game logic and turn order.
@@ -15,19 +16,72 @@ public class Game {
 
     }
 
+    /**
+     * Initializes game with given number of players
+     * @param numPlayers Total number of players in
+     *                   the game.
+     */
     public Game(int numPlayers) {
         players = new ArrayList<Player>();
         int i;
         for (i = 1; i <= numPlayers; i++) {
+            players.add(new Player(i, 1500));
+        }
+        createProperties();
+        currentPlayer = 0;
+    }
+
+    /**
+     * Rolls two dice and gets the sum.
+     * @return Total of two six sided dice rolls
+     */
+    public int rollDice() {
+        Random d6 = new Random();
+        return d6.nextInt(6) + d6.nextInt(6) + 2;
+    }
+
+    /**
+     * Moves a player 2d6 spaces on the board
+     * @return Number of spaces moved
+     */
+    public int move() {
+        int movement = rollDice();
+        players.get(currentPlayer).currentBoardPlacement += movement;
+        if (players.get(currentPlayer).currentBoardPlacement > 39) {
+            players.get(currentPlayer).currentBoardPlacement -= 39;
+            // Plus $200 for passing GO
+            players.get(currentPlayer).money += 200;
+        }
+        // For future implementation of utilities costs
+        return movement;
+    }
+
+    /**
+     * The current player becomes the owner of the property that he is
+     * currently on. That properties price is taken out of the player's money.
+     */
+    public void buyProperty() {
+        players.get(currentPlayer).money -=
+                board[players.get(currentPlayer).currentBoardPlacement].price;
+        board[players.get(currentPlayer).currentBoardPlacement].ownerNum =
+                currentPlayer;
+    }
+
+    /**
+     * Changes the current player to the next one in order.
+     */
+    public void nextTurn() {
+        currentPlayer++;
+        if (currentPlayer >= players.size() - 1) {
+            currentPlayer = 0;
         }
     }
 
     /**
      * Populates board with properties as in Monopoly.
-     * Owner being -1 indicates a rent payment that goes
-     * to none of the players.
-     * Utilities and railroads currently set to a flat
-     * rate of $25 for rent.
+     * Owner being -1 indicates a rent payment that goes to none of
+     * the players.
+     * Utilities and railroads currently set to a flat rate of $25 for rent.
      */
     private void createProperties() {
         board = new Property[40];
