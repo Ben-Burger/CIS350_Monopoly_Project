@@ -1,17 +1,22 @@
 package Monopoly;
 
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.JPanel;
 
 /**
  * Creates the panel for the Monopoly GUI.
  * 
  * @author	Ben Burger
- * @version	7/3/2019 
+ * @version	7/8/2019 
  */
-public class MonopolyPanel {
+@SuppressWarnings("serial")
+public class MonopolyPanel extends JPanel {
 	
+	/**
+	 * Default constructor for a Monopoly panel.
+	 */
+	public MonopolyPanel () {
+		
+		
+		
+	}
 }
