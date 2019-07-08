@@ -8,9 +8,33 @@ import java.util.Random;
  */
 
 public class Game {
-    int currentPlayer;
-    Property[] board;
-    ArrayList<Player> players;
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public Property[] getBoard() {
+        return board;
+    }
+
+    public void setBoard(Property[] board) {
+        this.board = board;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    private int currentPlayer;
+    private Property[] board;
+    private ArrayList<Player> players;
 
     public Game() {
 
@@ -18,8 +42,7 @@ public class Game {
 
     /**
      * Initializes game with given number of players
-     * @param numPlayers Total number of players in
-     *                   the game.
+     * @param numPlayers Total number of players in the game.
      */
     public Game(int numPlayers) {
         players = new ArrayList<Player>();
