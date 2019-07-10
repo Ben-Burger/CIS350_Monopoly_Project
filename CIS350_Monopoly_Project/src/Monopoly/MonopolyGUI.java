@@ -73,34 +73,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 	 */
 	public static void main (String args[]) {
 		new MonopolyGUI("Monopoly Game");
-
-		int numOfPlayers = startGame();
 	}
 
-	public static int startGame() {
-
-
-		// asks user for the desired board size
-		boolean goodNum = false;
-		int numOfPlayers = 0;
-
-		// stays in loop until valid size is entered or
-		// user hits cancel
-		while (!goodNum) {
-			try {
-				String num = JOptionPane.showInputDialog(null, "Enter in the number of players: \n Between 2 and 4.");
-
-				numOfPlayers = Integer.parseInt(num);
-			}
-			catch(Exception e) {
-				System.exit(0);   // exit the program
-			}
-			if (numOfPlayers >= 2 && numOfPlayers <= 4)
-				goodNum = true;
-
-			else
-				JOptionPane.showMessageDialog(null, "Enter valid number of players.");
-		}
-		return numOfPlayers;
-	}
+	
 }

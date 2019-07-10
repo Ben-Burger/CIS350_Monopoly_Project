@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -25,7 +26,7 @@ import javax.swing.JTextArea;
 public class MonopolyPanel extends JPanel {
 
 	private ButtonListener listener;
-	private BoardPanel board;
+	private static BoardPanel board;
 	private JTextArea gameInfo;
 	private JScrollPane scrollPane;
 	private JButton rollButton;
@@ -108,7 +109,46 @@ public class MonopolyPanel extends JPanel {
 //		c.weighty = 0.5;
 		this.add(endTurnButton, c);
 		
+		playGame();
+	}
+	
+	public static void playGame() {
 		
+		int numOfPlayers = promptUser();
+		
+		try {
+			Game game = new Game(numOfPlayers);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(int i=0;i<numOfPlayers;i++) {
+			board.movePlayer(i+1,0,0);
+		}
+	}
+	
+	public static int promptUser() {
+
+		boolean goodNum = false;
+		int numOfPlayers = 0;
+
+		while (!goodNum) {
+			try {
+				String num = JOptionPane.showInputDialog(null, "Enter in the number of players.\n"
+						+ "Must be between 2 and 4.");
+				numOfPlayers = Integer.parseInt(num);
+			}
+			catch(Exception e) {
+				System.exit(0);   
+			}
+			if (numOfPlayers >= 2 && numOfPlayers <= 4)
+				goodNum = true;
+
+			else
+				JOptionPane.showMessageDialog(null, "Enter valid number of players.");
+		}
+		return numOfPlayers;
 	}
 
 
