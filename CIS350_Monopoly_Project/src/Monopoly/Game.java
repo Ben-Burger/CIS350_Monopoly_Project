@@ -12,6 +12,7 @@ public class Game {
         return currentPlayer;
     }
 
+
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -36,12 +37,13 @@ public class Game {
     private Property[] board;
     private ArrayList<Player> players;
 
+
     public Game() {
 
     }
     /**
      * Initializes game with given number of players
-     * @param numPlayers 2 to 4 players in a game.
+     * @param numPlayers Total number of players in the game.
      */
     public Game(int numPlayers) throws Exception {
         if (numPlayers > 4 || numPlayers < 2) {

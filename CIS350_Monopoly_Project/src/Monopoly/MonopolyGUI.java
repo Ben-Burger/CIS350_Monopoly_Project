@@ -45,6 +45,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		MonopolyPanel panel = new MonopolyPanel();
+
 		this.getContentPane().add(panel);
 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
