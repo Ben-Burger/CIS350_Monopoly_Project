@@ -69,21 +69,14 @@ public class BoardPanel extends JPanel{
 //			}
 //		}
 		
-		for(int i=0;i<40;i++) {
-			movePlayer(1,i,0);
-			movePlayer(2,i,0);
-			movePlayer(3,i,0);
-			movePlayer(4,i,0);
-		}
-//		
-//		movePlayer(1,3,0);
-//		movePlayer(3,3,0);
-//		movePlayer(4,3,0);
-//		movePlayer(2,3,0);
-		
-		
-		
-		
+
+//		for(int i=0;i<40;i++) {
+//			movePlayer(1,i,0);
+//			movePlayer(2,i,0);
+//			movePlayer(3,i,0);
+//			movePlayer(4,i,0);
+//		}
+
 		
 	}
 
