@@ -57,10 +57,8 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		Object comp = e.getSource();
-
 		// MenuBar option of exiting
-		if (comp == exitItem) 
+		if(e.getSource() == exitItem) 
 			System.exit(1);
 	}
 
