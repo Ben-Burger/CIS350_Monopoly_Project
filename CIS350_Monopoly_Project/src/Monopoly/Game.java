@@ -12,6 +12,14 @@ public class Game {
         return players.get(currentPlayer);
     }
 
+    public int getCurrentPlayerNum() {
+    	return players.get(currentPlayer).playerNum;
+    }
+    
+    public int getCurrentPlayerPosition() {
+    	return players.get(currentPlayer).boardPosition;
+    }
+    
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -61,13 +69,11 @@ public class Game {
     
     public Game(int numPlayers) {
         players = new ArrayList<Player>();
-        players.add(new Player());
-        int i;
-        for (i = 1; i <= numPlayers; i++) {
+        for (int i = 1; i <= numPlayers; i++) {
             players.add(new Player(i, 1500));
         }
         createProperties();
-        currentPlayer = 1;
+        currentPlayer = 0;
     }
 
     /**
@@ -113,8 +119,8 @@ public class Game {
      */
     public void nextTurn() {
         currentPlayer++;
-        if (currentPlayer >= players.size() - 1) {
-            currentPlayer = 1;
+        if (currentPlayer > players.size() - 1) {
+            currentPlayer = 0;
         }
     }
 
