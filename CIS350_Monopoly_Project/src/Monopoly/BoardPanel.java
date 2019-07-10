@@ -90,7 +90,7 @@ public class BoardPanel extends JPanel{
 		
 		removePiece(piecePlacements[fromproperty],playernum);
 		placePiece(piecePlacements[toproperty],playernum);
-		
+	
 		
 	}
 	
