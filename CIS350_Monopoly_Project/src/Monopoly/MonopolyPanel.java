@@ -139,7 +139,7 @@ public class MonopolyPanel extends JPanel {
 
 		
 		for(int i=0; i<numOfPlayers; i++) {
-			board.movePlayer(i+1,0,0);
+			board.movePlayer(i+1, 0, 0);
 		}
 
 		playerbank = new JLabel[numOfPlayers];
@@ -186,7 +186,8 @@ public class MonopolyPanel extends JPanel {
 	
 
 	private void turn() {
-		gameInfo.append("Player " + game.getCurrentPlayer().playerNum + "'s turn.\n");
+		gameInfo.append("Player " + game.getCurrentPlayerNum() + "'s turn.\n");
+		gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
 	}
 	
 
@@ -213,18 +214,16 @@ public class MonopolyPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource() == rollButton) {
-
+				int previousPosition = game.getCurrentPlayerPosition();
 				int movement = game.move();
-				board.movePlayer(game.getCurrentPlayer().playerNum, game.getCurrentPlayer().boardPosition, game.getCurrentPlayer().boardPosition-movement);
-				gameInfo.append("Player " + game.getCurrentPlayer().playerNum + " rolled a " + movement + ".\n");
-
-				showProperty();
+				board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), previousPosition);
+				gameInfo.append("Player " + game.getCurrentPlayerNum()+ " rolled a " + movement + ".\n");
+				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
 			}
 
 			if(e.getSource() == endTurnButton) {
 				game.nextTurn();
 				turn();
-				System.out.println(game.getCurrentPlayer().playerNum);
 			}
 		}
 	}
