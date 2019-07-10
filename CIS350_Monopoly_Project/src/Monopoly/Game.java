@@ -8,8 +8,8 @@ import java.util.Random;
  */
 
 public class Game {
-    public int getCurrentPlayer() {
-        return currentPlayer;
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
     }
 
     public void setCurrentPlayer(int currentPlayer) {
@@ -39,22 +39,19 @@ public class Game {
     public Game() {
 
     }
+
+
     /**
      * Initializes game with given number of players
      * @param numPlayers 2 to 4 players in a game.
      */
-    public Game(int numPlayers) throws Exception {
-        if (numPlayers > 4 || numPlayers < 2) {
-            throw new Exception("Must be between 2 and 4 players");
-        }
+    public Game(int numPlayers) {
         players = new ArrayList<Player>();
-        players.add(new Player());
-        int i;
-        for (i = 1; i <= numPlayers; i++) {
+        for (int i = 1; i <= numPlayers; i++) {
             players.add(new Player(i, 1500));
         }
         createProperties();
-        currentPlayer = 1;
+        currentPlayer = 0;
     }
 
     /**
@@ -113,13 +110,14 @@ public class Game {
      *         payment.
      */
     public int propertyActions() {
-        if (board[players.get(currentPlayer).boardPosition].price == 0 &&
-                board[players.get(currentPlayer).boardPosition].rent == 0) {
+        if ((board[players.get(currentPlayer).boardPosition].price == 0
+                && board[players.get(currentPlayer).boardPosition].rent == 0)
+                || board[players.get(currentPlayer).boardPosition].ownerNum
+                        == currentPlayer) {
             return 0;
         } else if (board[players.get(currentPlayer).boardPosition].price != 0
-                && (board[players.get(currentPlayer).boardPosition].ownerNum
-                == 0 || board[players.get(currentPlayer).boardPosition].ownerNum
-                == currentPlayer)) {
+                && board[players.get(currentPlayer).boardPosition].ownerNum
+                == 0) {
             return 1;
         } else {
             return 2;
@@ -149,6 +147,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * Calculates amount of rent owed, taking into account owning all
+     * properties of one color or owning multiple railroads.
+     * @return Total rent owed.
+     */
     private int calculateRent() {
         int owner = board[players.get(currentPlayer).boardPosition].ownerNum;
         char color = board[players.get(currentPlayer).boardPosition].color;
