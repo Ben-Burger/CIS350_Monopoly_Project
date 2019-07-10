@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
  */
 
 public class Game {
+
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
     }
