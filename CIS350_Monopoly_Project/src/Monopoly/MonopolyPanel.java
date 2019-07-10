@@ -31,6 +31,7 @@ public class MonopolyPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private JButton rollButton;
 	private JButton endTurnButton;
+	private static Game game;
 
 	/**
 	 * Default constructor for a Monopoly panel.
@@ -117,7 +118,7 @@ public class MonopolyPanel extends JPanel {
 		int numOfPlayers = promptUser();
 		
 		try {
-			Game game = new Game(numOfPlayers);
+			game = new Game(numOfPlayers);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,6 +127,7 @@ public class MonopolyPanel extends JPanel {
 		for(int i=0;i<numOfPlayers;i++) {
 			board.movePlayer(i+1,0,0);
 		}
+		
 	}
 	
 	public static int promptUser() {
@@ -150,7 +152,17 @@ public class MonopolyPanel extends JPanel {
 		}
 		return numOfPlayers;
 	}
-
+	
+	private void showProperty() {
+		
+		int reply = JOptionPane.showConfirmDialog(null, "please", "Would you like to buy this location?:",
+				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[3].propertycard);
+//		int reply = JOptionPane.showConfirmDialog(null, 
+//				 " Would you like to play again?","",
+//				JOptionPane.YES_NO_OPTION);
+       if (reply == JOptionPane.YES_OPTION) {
+	}
+	}
 
 	/**
 	 * ButtonListener class for Monopoly panel.
@@ -164,7 +176,7 @@ public class MonopolyPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource() == rollButton) {
-
+				showProperty();
 			}
 
 			if(e.getSource() == endTurnButton) {
