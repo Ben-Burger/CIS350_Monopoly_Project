@@ -1,19 +1,13 @@
 package Monopoly;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -26,36 +20,90 @@ import javax.swing.SwingConstants;
  */
 @SuppressWarnings("serial")
 public class MonopolyPanel extends JPanel {
-	//Button Listener for general GUI buttons
-	ButtonListener listener = new ButtonListener();	
 
-	//Instantiate the chess graphical panel
-	public static BoardPanel panel1 = new BoardPanel();
+	private ButtonListener listener;
+	private BoardPanel board;
+	private JLabel gameInfo;
+	private JButton rollButton;
+	private JButton endTurnButton;
 
-
-	GridBagConstraints loc = new GridBagConstraints();
-	
+	/**
+	 * Default constructor for a Monopoly panel.
+	 */
 	public MonopolyPanel () {
-		setLayout(new GridBagLayout());
 
-		loc.gridx=0;
-		loc.gridy=0;
-		loc.anchor=loc.WEST;
-		add(panel1,loc);
+		listener = new ButtonListener();
+
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		board = new BoardPanel();
+		//		c.gridx = 0;
+		//		c.gridy = 0;
+		c.fill = GridBagConstraints.VERTICAL;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
+		//		c.anchor = 0;
+		//		c.weightx = 0;
+		//		c.weighty = 0;
+		this.add(board, c);
+
+		gameInfo = new JLabel("test");
+		c.gridx = 1;
+		c.gridy = 0;
+		//		c.fill = 0;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
+		c.anchor = GridBagConstraints.NORTH;
+		//		c.weightx = 0;
+		//		c.weighty = 0;
+		this.add(gameInfo, c);
+
+		rollButton = new JButton("roll");
+		rollButton.addActionListener(listener);
+		c.gridx = 1;
+		c.gridy = 1;
+		//		c.fill = 0;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
+		c.insets = new Insets(10, 50, 10, 50);
+//		c.anchor = GridBagConstraints.NORTH;
+		//		c.weightx = 0;
+		//		c.weighty = 0;
+		this.add(rollButton, c);
+
+		endTurnButton = new JButton("end turn");
+		endTurnButton.addActionListener(listener);
+		c.gridx = 1;
+		c.gridy = 2;
+		//		c.fill = 0;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
+		c.anchor = GridBagConstraints.NORTH;
+		//		c.weightx = 0;
+		//		c.weighty = 0;
+		this.add(endTurnButton, c);
 	}
-	
-	
-	private class ButtonListener implements ActionListener {
-		// --------------------------------------------------------
-		// Updates the chess model when the button is pushed.
-		// --------------------------------------------------------
-		public void actionPerformed(ActionEvent event) {
 
-			JComponent comp = (JComponent) event.getSource();
+
+	/**
+	 * ButtonListener class for Monopoly panel.
+	 */
+	private class ButtonListener implements ActionListener {
+
+		/**
+		 * Tells the GUI what to do when an action happens.
+		 * @param e - ActionEvent used to indicate action happened
+		 */
+		public void actionPerformed(ActionEvent e) {
+
+			if(e.getSource() == rollButton) {
+				
+			}
+
+			if(e.getSource() == endTurnButton) {
+
+			}
 		}
 	}
-		
 }
-
-
-
