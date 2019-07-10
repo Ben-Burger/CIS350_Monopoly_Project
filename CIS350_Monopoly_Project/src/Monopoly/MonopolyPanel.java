@@ -2,6 +2,7 @@ package Monopoly;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -31,6 +33,8 @@ public class MonopolyPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private JButton rollButton;
 	private JButton endTurnButton;
+	private JLabel[] playerbank;
+	private GridBagConstraints c;
 
 	private Game game;
 	private int numOfPlayers;
@@ -44,17 +48,18 @@ public class MonopolyPanel extends JPanel {
 		numOfPlayers = promptUser();
 		game = new Game(numOfPlayers);
 		
+		
 		listener = new ButtonListener();
 
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		c = new GridBagConstraints();
 
 		board = new BoardPanel();
 		board.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.red));
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.gridheight = 3;
+		c.gridheight = 8;
 //		c.fill = GridBagConstraints.VERTICAL;
 //		c.ipadx = 0;
 //		c.ipady = 0;
@@ -88,13 +93,13 @@ public class MonopolyPanel extends JPanel {
 		rollButton.addActionListener(listener);
 		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 1;
+		c.gridy = 6;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 //		c.fill = NONE;
 //		c.ipadx = 0;
 //		c.ipady = 0;
-		c.insets = new Insets(450, 20, 0, 0);		// (top, left, bottom, right)
+		c.insets = new Insets(150, 20, 0, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
 //		c.weightx = 0.5;
 //		c.weighty = 0.5;
@@ -104,17 +109,18 @@ public class MonopolyPanel extends JPanel {
 		endTurnButton.addActionListener(listener);
 		endTurnButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 7;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 //		c.fill = NONE;
 //		c.ipadx = 0;
 //		c.ipady = 0;
-		c.insets = new Insets(0, 20, 0, 0);		// (top, left, bottom, right)
+		c.insets = new Insets(0, 20, 50, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
 //		c.weightx = 0.5;
 //		c.weighty = 0.5;
 		this.add(endTurnButton, c);
+		
 		
 		playGame();
 	}
@@ -136,6 +142,21 @@ public class MonopolyPanel extends JPanel {
 			board.movePlayer(i+1,0,0);
 		}
 
+		playerbank = new JLabel[numOfPlayers];
+		c.gridx = 1;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(50, 20, 0, 0);
+		for(int i=0; i<numOfPlayers; i++) {
+			c.gridy = 2+i;
+			JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i+1).money);
+		    label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		    label.setForeground(Color.BLUE);
+		    playerbank[i]=label;
+		    this.add(label, c);
+		}
+		
+	    
 		turn();		
 		
 	}
@@ -171,7 +192,7 @@ public class MonopolyPanel extends JPanel {
 
 	private void showProperty() {
 		
-		int reply = JOptionPane.showConfirmDialog(null, "please", "Would you like to buy this location?:",
+		int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?:",
 				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[3].propertycard);
 //		int reply = JOptionPane.showConfirmDialog(null, 
 //				 " Would you like to play again?","",
@@ -194,7 +215,7 @@ public class MonopolyPanel extends JPanel {
 			if(e.getSource() == rollButton) {
 
 				int movement = game.move();
-				board.movePlayer(game.getCurrentPlayer().playerNum, game.getCurrentPlayer().boardPosition + movement, game.getCurrentPlayer().boardPosition);
+				board.movePlayer(game.getCurrentPlayer().playerNum, game.getCurrentPlayer().boardPosition, game.getCurrentPlayer().boardPosition-movement);
 				gameInfo.append("Player " + game.getCurrentPlayer().playerNum + " rolled a " + movement + ".\n");
 
 				showProperty();
