@@ -8,8 +8,8 @@ import java.util.Random;
  */
 
 public class Game {
-    public int getCurrentPlayer() {
-        return currentPlayer;
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
     }
 
 
@@ -45,10 +45,21 @@ public class Game {
      * Initializes game with given number of players
      * @param numPlayers Total number of players in the game.
      */
-    public Game(int numPlayers) throws Exception {
-        if (numPlayers > 4 || numPlayers < 2) {
-            throw new Exception("Must be between 2 and 4 players");
-        }
+//    public Game(int numPlayers) throws Exception {
+//        if (numPlayers > 4 || numPlayers < 2) {
+//            throw new Exception("Must be between 2 and 4 players");
+//        }
+//        players = new ArrayList<Player>();
+//        players.add(new Player());
+//        int i;
+//        for (i = 1; i <= numPlayers; i++) {
+//            players.add(new Player(i, 1500));
+//        }
+//        createProperties();
+//        currentPlayer = 1;
+//    }
+    
+    public Game(int numPlayers) {
         players = new ArrayList<Player>();
         players.add(new Player());
         int i;

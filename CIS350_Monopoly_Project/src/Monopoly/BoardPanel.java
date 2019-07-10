@@ -88,8 +88,8 @@ public class BoardPanel extends JPanel{
 		int row = 0;
 		int col = 0;
 		
-		placePiece(piecePlacements[toproperty],playernum);
 		removePiece(piecePlacements[fromproperty],playernum);
+		placePiece(piecePlacements[toproperty],playernum);
 		
 		
 	}

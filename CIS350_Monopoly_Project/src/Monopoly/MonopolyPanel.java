@@ -26,17 +26,23 @@ import javax.swing.JTextArea;
 public class MonopolyPanel extends JPanel {
 
 	private ButtonListener listener;
-	private static BoardPanel board;
+	private BoardPanel board;
 	private JTextArea gameInfo;
 	private JScrollPane scrollPane;
 	private JButton rollButton;
 	private JButton endTurnButton;
+	
+	private Game game;
+	private int numOfPlayers;
 
 	/**
 	 * Default constructor for a Monopoly panel.
 	 */
 	public MonopolyPanel () {
 
+		numOfPlayers = promptUser();
+		game = new Game(numOfPlayers);
+		
 		listener = new ButtonListener();
 
 		this.setLayout(new GridBagLayout());
@@ -57,9 +63,9 @@ public class MonopolyPanel extends JPanel {
 //		c.weighty = 1;
 		this.add(board, c);
 
-		gameInfo = new JTextArea("Welcome!");
-		for(int i=0; i<100;i++)
-			gameInfo.append("\nHello!");
+		gameInfo = new JTextArea();
+//		for(int i=0; i<100;i++)
+//			gameInfo.append("\nHello!");
 		gameInfo.setEditable(false);
 		scrollPane = new JScrollPane(gameInfo);
 		scrollPane.setPreferredSize(new Dimension(200, 400));
@@ -112,23 +118,19 @@ public class MonopolyPanel extends JPanel {
 		playGame();
 	}
 	
-	public static void playGame() {
+	public void playGame() {
 		
-		int numOfPlayers = promptUser();
+		gameInfo.append("Starting game with " + numOfPlayers + " players!\n");
 		
-		try {
-			Game game = new Game(numOfPlayers);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		for(int i=0;i<numOfPlayers;i++) {
+		for(int i=0; i<numOfPlayers; i++) {
 			board.movePlayer(i+1,0,0);
 		}
+		
+		turn();		
+		
 	}
 	
-	public static int promptUser() {
+	public int promptUser() {
 
 		boolean goodNum = false;
 		int numOfPlayers = 0;
@@ -150,6 +152,11 @@ public class MonopolyPanel extends JPanel {
 		}
 		return numOfPlayers;
 	}
+	
+	private void turn() {
+		gameInfo.append("Player " + game.getCurrentPlayer().playerNum + "'s turn.\n");
+	}
+	
 
 
 	/**
@@ -164,11 +171,15 @@ public class MonopolyPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource() == rollButton) {
-
+				int movement = game.move();
+				board.movePlayer(game.getCurrentPlayer().playerNum, game.getCurrentPlayer().boardPosition + movement, game.getCurrentPlayer().boardPosition);
+				gameInfo.append("Player " + game.getCurrentPlayer().playerNum + " rolled a " + movement + ".\n");
 			}
 
 			if(e.getSource() == endTurnButton) {
-
+				game.nextTurn();
+				turn();
+				System.out.println(game.getCurrentPlayer().playerNum);
 			}
 		}
 	}
