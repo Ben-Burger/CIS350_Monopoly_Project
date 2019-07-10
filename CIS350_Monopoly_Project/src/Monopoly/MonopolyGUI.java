@@ -49,8 +49,6 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
 		MonopolyPanel panel = new MonopolyPanel();
 
-		panel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.blue));
-
 		this.getContentPane().add(panel);
 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -74,6 +72,4 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 	public static void main (String args[]) {
 		new MonopolyGUI("Monopoly Game");
 	}
-
-	
 }
