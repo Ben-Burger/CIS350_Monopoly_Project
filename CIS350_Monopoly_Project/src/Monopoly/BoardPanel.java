@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 
 public class BoardPanel extends JPanel{
 	/** Icon for a monopoly board. */
-	private ImageIcon boardpic = new ImageIcon("MonopolyImage.png");
+	private ImageIcon boardpic = new ImageIcon("MonopolyImage5.png");
 	
 	/** Image for a monopoly board. */
 	private Image img = boardpic.getImage();
@@ -24,7 +24,7 @@ public class BoardPanel extends JPanel{
 	private int playernumonproperty[] = new int[40];
 	
 
-    private PropertyPiecePlacement[] piecePlacements;
+    public PropertyPiecePlacement[] piecePlacements;
 	 
 	
 	
@@ -75,6 +75,15 @@ public class BoardPanel extends JPanel{
 			movePlayer(3,i,0);
 			movePlayer(4,i,0);
 		}
+//		
+//		movePlayer(1,3,0);
+//		movePlayer(3,3,0);
+//		movePlayer(4,3,0);
+//		movePlayer(2,3,0);
+		
+		
+		
+		
 		
 	}
 
@@ -87,38 +96,233 @@ public class BoardPanel extends JPanel{
 		int col = 0;
 		
 		placePiece(piecePlacements[toproperty],playernum);
-//		removePiece(piecePlacements[fromproperty],playernum);
+		removePiece(piecePlacements[fromproperty],playernum);
 		
 		
 	}
 	
 	public void placePiece(PropertyPiecePlacement property, int playernum) {
-		switch(findPlayersOnProperty(property)) {
-		case 0: 
+		if(matrix[property.getNoPieceRow()]
+		[property.getNoPieceCol()].getText().contentEquals("")) {
 			matrix[property.getNoPieceRow()]
-					[property.getNoPieceCol()].setForeground(playerColor(playernum));
+			[property.getNoPieceCol()].setForeground(playerColor(playernum));
 			matrix[property.getNoPieceRow()]
-					[property.getNoPieceCol()].setText(""+playernum);
-			return;
-		case 1: 
-			matrix[property.getOnePieceRow()]
-					[property.getOnePieceCol()].setForeground(playerColor(playernum));
-			matrix[property.getOnePieceRow()]
-					[property.getOnePieceCol()].setText(""+playernum);
-			return;
-		case 2: 
-			matrix[property.getTwoPieceRow()]
-					[property.getTwoPieceCol()].setForeground(playerColor(playernum));
-			matrix[property.getTwoPieceRow()]
-					[property.getTwoPieceCol()].setText(""+playernum);
-			return;
-		case 3: 
-			matrix[property.getThreePieceRow()]
-					[property.getThreePieceCol()].setForeground(playerColor(playernum));
-			matrix[property.getThreePieceRow()]
-					[property.getThreePieceCol()].setText(""+playernum);
-			return;
+				[property.getNoPieceCol()].setText(""+playernum);
 		}
+		else if(matrix[property.getOnePieceRow()]
+				[property.getOnePieceCol()].getText().contentEquals("")) {
+					matrix[property.getOnePieceRow()]
+					[property.getOnePieceCol()].setForeground(playerColor(playernum));
+					matrix[property.getOnePieceRow()]
+						[property.getOnePieceCol()].setText(""+playernum);
+		}
+		else if(matrix[property.getTwoPieceRow()]
+				[property.getTwoPieceCol()].getText().contentEquals("")) {
+					matrix[property.getTwoPieceRow()]
+					[property.getTwoPieceCol()].setForeground(playerColor(playernum));
+					matrix[property.getTwoPieceRow()]
+						[property.getTwoPieceCol()].setText(""+playernum);
+		}
+		else {
+					matrix[property.getThreePieceRow()]
+					[property.getThreePieceCol()].setForeground(playerColor(playernum));
+					matrix[property.getThreePieceRow()]
+						[property.getThreePieceCol()].setText(""+playernum);
+		}
+
+//		switch(findPlayersOnProperty(property)) {
+//		case 0: 
+//			matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].setForeground(playerColor(playernum));
+//			matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].setText(""+playernum);
+//			return;
+//		case 1: 
+//			matrix[property.getOnePieceRow()]
+//					[property.getOnePieceCol()].setForeground(playerColor(playernum));
+//			matrix[property.getOnePieceRow()]
+//					[property.getOnePieceCol()].setText(""+playernum);
+//			return;
+//		case 2: 
+//			matrix[property.getTwoPieceRow()]
+//					[property.getTwoPieceCol()].setForeground(playerColor(playernum));
+//			matrix[property.getTwoPieceRow()]
+//					[property.getTwoPieceCol()].setText(""+playernum);
+//			return;
+//		case 3: 
+//			matrix[property.getThreePieceRow()]
+//					[property.getThreePieceCol()].setForeground(playerColor(playernum));
+//			matrix[property.getThreePieceRow()]
+//					[property.getThreePieceCol()].setText(""+playernum);
+//			return;
+//		}
+		
+	}
+	
+	public void removePiece(PropertyPiecePlacement property, int playernum) {
+		if(matrix[property.getNoPieceRow()]
+				[property.getNoPieceCol()].getText().contentEquals(""+playernum)) 
+			matrix[property.getNoPieceRow()]
+					[property.getNoPieceCol()].setText("");
+		else if(matrix[property.getOnePieceRow()]
+				[property.getOnePieceCol()].getText().contentEquals(""+playernum)) 
+			matrix[property.getOnePieceRow()]
+					[property.getOnePieceCol()].setText("");
+		else if(matrix[property.getTwoPieceRow()]
+				[property.getTwoPieceCol()].getText().contentEquals(""+playernum)) 
+			matrix[property.getTwoPieceRow()]
+					[property.getTwoPieceCol()].setText("");
+		else matrix[property.getThreePieceRow()]
+				[property.getThreePieceCol()].setText("");
+//				
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setText(
+//			
+//			matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].setText(
+//		switch(findPlayersOnProperty(property)) {
+//		case 1: 
+//			matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].setText("");
+//			return;
+//		case 2: 
+//			if(matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].getText().contentEquals(""+playernum)) {
+//				
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setText(
+//							matrix[property.getOnePieceRow()]
+//								[property.getOnePieceCol()].getText());
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setForeground(
+//							matrix[property.getOnePieceRow()]
+//								[property.getOnePieceCol()].getForeground());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setText("");
+//			}
+//			
+//			else matrix[property.getOnePieceRow()]
+//					[property.getOnePieceCol()].setText("");
+//			
+//		case 3: 
+//			if(matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].getText().contentEquals(""+playernum)) {
+//				
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setText(
+//							matrix[property.getOnePieceRow()]
+//								[property.getOnePieceCol()].getText());
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setForeground(
+//							matrix[property.getOnePieceRow()]
+//								[property.getOnePieceCol()].getForeground());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setText(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getText());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setForeground(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getForeground());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setText("");
+//			}
+//			
+//			else if(matrix[property.getOnePieceRow()]
+//					[property.getOnePieceCol()].getText().contentEquals(""+playernum)) {
+//				
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setText(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getText());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setForeground(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getForeground());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setText("");
+//			}
+//			
+//			else matrix[property.getTwoPieceRow()]
+//					[property.getTwoPieceCol()].setText("");
+//		
+//		case 4:
+//			if(matrix[property.getNoPieceRow()]
+//					[property.getNoPieceCol()].getText().contentEquals(""+playernum)) {
+//				System.out.println("HERE");
+//				
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setText(
+//							matrix[property.getOnePieceRow()]
+//								[property.getOnePieceCol()].getText());
+//				matrix[property.getNoPieceRow()]
+//						[property.getNoPieceCol()].setForeground(
+//							matrix[property.getOnePieceRow()]
+//								[property.getOnePieceCol()].getForeground());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setText(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getText());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setForeground(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getForeground());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setText(
+//							matrix[property.getThreePieceRow()]
+//								[property.getThreePieceCol()].getText());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setForeground(
+//							matrix[property.getThreePieceRow()]
+//								[property.getThreePieceCol()].getForeground());
+//				matrix[property.getThreePieceRow()]
+//						[property.getThreePieceCol()].setText("");
+//			}
+//			
+//			else if(matrix[property.getOnePieceRow()]
+//					[property.getOnePieceCol()].getText().contentEquals(""+playernum)) {
+//				
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setText(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getText());
+//				matrix[property.getOnePieceRow()]
+//						[property.getOnePieceCol()].setForeground(
+//							matrix[property.getTwoPieceRow()]
+//								[property.getTwoPieceCol()].getForeground());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setText(
+//							matrix[property.getThreePieceRow()]
+//								[property.getThreePieceCol()].getText());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setForeground(
+//							matrix[property.getThreePieceRow()]
+//								[property.getThreePieceCol()].getForeground());
+//				matrix[property.getThreePieceRow()]
+//						[property.getThreePieceCol()].setText("");
+//			}
+//			
+//			else if(matrix[property.getTwoPieceRow()]
+//					[property.getTwoPieceCol()].getText().contentEquals(""+playernum)) {
+//				
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setText(
+//							matrix[property.getThreePieceRow()]
+//								[property.getThreePieceCol()].getText());
+//				matrix[property.getTwoPieceRow()]
+//						[property.getTwoPieceCol()].setForeground(
+//							matrix[property.getThreePieceRow()]
+//								[property.getThreePieceCol()].getForeground());
+//				matrix[property.getThreePieceRow()]
+//						[property.getThreePieceCol()].setText("");
+//			}
+//			
+//			else matrix[property.getThreePieceRow()]
+//					[property.getThreePieceCol()].setText("");
+//		}
+		
+		
+			
 		
 	}
 	

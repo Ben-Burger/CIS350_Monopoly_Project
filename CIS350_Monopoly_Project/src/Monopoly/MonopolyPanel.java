@@ -98,7 +98,8 @@ public class MonopolyPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource() == rollButton) {
-				
+				board.movePlayer(1,5,3);
+				board.movePlayer(2,5,3);
 			}
 
 			if(e.getSource() == endTurnButton) {
