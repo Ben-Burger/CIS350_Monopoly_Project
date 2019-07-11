@@ -33,7 +33,6 @@ public class MonopolyPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private JButton rollButton;
 	private JButton endTurnButton;
-	private JPanel bank;
 	private JLabel[] playerbank;
 
 	private Game game;
@@ -63,10 +62,10 @@ public class MonopolyPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.gridheight = 4;
+		c.gridheight = 8;
 		this.add(board, c);
 
-		
+
 		gameInfo = new JTextArea();
 		gameInfo.setEditable(false);
 		scrollPane = new JScrollPane(gameInfo);
@@ -80,8 +79,8 @@ public class MonopolyPanel extends JPanel {
 		c.insets = new Insets(0, 20, 0, 0);		// (top, left, bottom, right)
 		this.add(scrollPane, c);
 
-		
-		
+
+
 		playerbank = new JLabel[numOfPlayers];
 		c.gridx = 1;
 		c.gridwidth = 1;
@@ -98,38 +97,37 @@ public class MonopolyPanel extends JPanel {
 				this.add(label, c);
 			}
 			else {
-			JLabel label = new JLabel(" ");
-			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			label.setForeground(Color.BLUE);
-			this.add(label, c);
-			
+				JLabel label = new JLabel(" ");
+				label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+				label.setForeground(Color.BLUE);
+				this.add(label, c);
 			}
 		}
-		
+
 
 		rollButton = new JButton("roll");
 		rollButton.addActionListener(listener);
 		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 6;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.insets = new Insets(100, 20, 0, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(rollButton, c);
 
-		
+
 		endTurnButton = new JButton("end turn");
 		endTurnButton.addActionListener(listener);
 		endTurnButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 7;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.insets = new Insets(50, 20, 50, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(endTurnButton, c);
-		
+
 		c.gridy=0;
 		c.gridx = 2;
 		c.gridwidth = 1;
@@ -142,7 +140,7 @@ public class MonopolyPanel extends JPanel {
 		label.setForeground(Color.RED); //red,blue,gray,black
 		ownedProperties[0].add(label);
 		this.add(ownedProperties[0], c);
-		
+
 		c.gridy=0;
 		c.gridx = 3;
 		c.gridwidth = 1;
@@ -154,7 +152,7 @@ public class MonopolyPanel extends JPanel {
 		label.setForeground(Color.BLUE); //red,blue,gray,black
 		ownedProperties[1].add(label);
 		this.add(ownedProperties[1], c);
-		
+
 		if(numOfPlayers>2) {
 			c.gridy=1;
 			c.gridx = 2;
@@ -168,7 +166,7 @@ public class MonopolyPanel extends JPanel {
 			ownedProperties[2].add(label);
 			this.add(ownedProperties[2], c);
 		}
-		
+
 		if(numOfPlayers>3) {
 			c.gridy=1;
 			c.gridx = 3;
@@ -231,7 +229,6 @@ public class MonopolyPanel extends JPanel {
 
 	private void turn() {
 		updateGameInfo("Player " + game.getCurrentPlayerNum() + "'s turn.");
-		rolled = false;
 	}
 
 
@@ -261,7 +258,7 @@ public class MonopolyPanel extends JPanel {
 				gameInfo.append("Player "+currentPlayer+" has bought "+game.board[propertyNum].name+"!\n");
 				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
 				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
-			
+
 				JLabel label = new JLabel(game.board[propertyNum].name+" (rent: $"+game.board[propertyNum].rent+")");
 				label.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				label.setForeground(playerColor(currentPlayer)); //red,blue,gray,black
@@ -277,15 +274,17 @@ public class MonopolyPanel extends JPanel {
 				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
 			}
 			break;
-        
+		}
+	}
+
 	private void payRent() {
 		int rent = game.calculateRent();
 		int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
-		
+
 		updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner+ ".");
-		
+
 		boolean bankrupt = game.payRent();
-		
+
 		if(bankrupt) {
 			updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
 		}
@@ -317,42 +316,43 @@ public class MonopolyPanel extends JPanel {
 
 			if(e.getSource() == rollButton) {
 				if(!hasrolled) {
-				int previousPosition = game.getCurrentPlayerPosition();
-				int movement = game.move();
-				currentPosition = game.getCurrentPlayerPosition();
-				currentPlayer = game.getCurrentPlayerNum();
-				board.movePlayer(currentPlayer,currentPosition, previousPosition);
-				if(currentPosition<previousPosition) {
-					JOptionPane.showMessageDialog(null,"Passed GO! Collect $200");
-					playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
-          updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
-				}
-        updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement
-                       + " and is now at "+game.board[currentPosition].name+".\n");
-				checkProperty(currentPosition);
-				hasrolled=true;
+					int previousPosition = game.getCurrentPlayerPosition();
+					int movement = game.move();
+					currentPosition = game.getCurrentPlayerPosition();
+					currentPlayer = game.getCurrentPlayerNum();
+					board.movePlayer(currentPlayer,currentPosition, previousPosition);
+					if(currentPosition<previousPosition) {
+						JOptionPane.showMessageDialog(null,"Passed GO! Collect $200");
+						playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
+						updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
+					}
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement
+							+ " and is now at "+game.board[currentPosition].name+".\n");
+					checkProperty(currentPosition);
+					hasrolled=true;
 				}
 			}
 
 			if(e.getSource() == endTurnButton) {
 				if(hasrolled == true) {
+					hasrolled = false;
 					game.nextTurn();
 					turn();
 				}
 			}
 		}
 	}
-	
+
 	private Color playerColor(int playernum) {
 		switch(playernum) {
-			case 1:
-				return Color.RED;
-			case 2: 
-				return Color.BLUE;
-			case 3:
-				return Color.GRAY;
-			case 4: 
-				return Color.BLACK;
+		case 1:
+			return Color.RED;
+		case 2: 
+			return Color.BLUE;
+		case 3:
+			return Color.GRAY;
+		case 4: 
+			return Color.BLACK;
 		}
 		return null;
 	}
