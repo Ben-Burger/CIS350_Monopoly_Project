@@ -38,7 +38,10 @@ public class MonopolyPanel extends JPanel {
 
 	private Game game;
 	private int numOfPlayers;
-	private boolean rolled;
+	private int currentPosition=0;
+	private int currentPlayer=0;
+	private boolean hasrolled=false;
+	private PropertyPanel[] ownedProperties;
 
 
 	/**
@@ -48,7 +51,7 @@ public class MonopolyPanel extends JPanel {
 
 		numOfPlayers = promptUser();
 		game = new Game(numOfPlayers);
-
+		ownedProperties = new PropertyPanel[4];
 
 		listener = new ButtonListener();
 
@@ -76,25 +79,34 @@ public class MonopolyPanel extends JPanel {
 		c.ipadx = 10;
 		c.insets = new Insets(0, 20, 0, 0);		// (top, left, bottom, right)
 		this.add(scrollPane, c);
+
 		
 		
-		bank = new JPanel();
-		playerbank = new JLabel[4];
-		for(int i = 0; i < numOfPlayers; i++) {
-			JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
-			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			label.setForeground(Color.BLUE);
-			playerbank[i]=label;
-			bank.add(label);
-		}
-		bank.setPreferredSize(new Dimension(200, 200));
+		playerbank = new JLabel[numOfPlayers];
 		c.gridx = 1;
-		c.gridy = 1;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(75, 20, 0, 0);		// (top, left, bottom, right)
-		this.add(bank, c);
-	
+		c.insets = new Insets(50,0,0,0);
+		for(int i=0; i<4; i++) {
+			c.gridy = 2+i;
+			if(i==3) c.insets = new Insets(50,0,0,0);
+			if(i<numOfPlayers) {
+				JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
+				label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+				label.setForeground(Color.BLUE);
+				playerbank[i]=label;
+				this.add(label, c);
+			}
+			else {
+			JLabel label = new JLabel(" ");
+			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+			label.setForeground(Color.BLUE);
+			this.add(label, c);
+			
+			}
+		}
+		
+
 		rollButton = new JButton("roll");
 		rollButton.addActionListener(listener);
 		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
@@ -102,7 +114,7 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 2;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(150, 20, 0, 0);	// (top, left, bottom, right)
+		c.insets = new Insets(100, 20, 0, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(rollButton, c);
 
@@ -114,11 +126,62 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 3;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(0, 20, 50, 0);	// (top, left, bottom, right)
+		c.insets = new Insets(50, 20, 50, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(endTurnButton, c);
-
 		
+		c.gridy=0;
+		c.gridx = 2;
+		c.gridwidth = 1;
+		c.gridheight = 4;
+		c.anchor = GridBagConstraints.NORTH;
+		c.insets = new Insets(0,100,0,0);
+		ownedProperties[0]=new PropertyPanel();
+		JLabel label = new JLabel("Player 1 Properties");
+		label.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		label.setForeground(Color.RED); //red,blue,gray,black
+		ownedProperties[0].add(label);
+		this.add(ownedProperties[0], c);
+		
+		c.gridy=0;
+		c.gridx = 3;
+		c.gridwidth = 1;
+		c.gridheight = 4;
+		c.insets = new Insets(0,50,0,0);
+		ownedProperties[1]=new PropertyPanel();
+		label = new JLabel("Player 2 Properties");
+		label.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		label.setForeground(Color.BLUE); //red,blue,gray,black
+		ownedProperties[1].add(label);
+		this.add(ownedProperties[1], c);
+		
+		if(numOfPlayers>2) {
+			c.gridy=1;
+			c.gridx = 2;
+			c.gridwidth = 1;
+			c.gridheight = 4;
+			c.insets = new Insets(0,100,0,0);
+			ownedProperties[2]=new PropertyPanel();
+			label = new JLabel("Player 3 Properties");
+			label.setFont(new Font("Times New Roman", Font.BOLD, 20));
+			label.setForeground(Color.GRAY); //red,blue,gray,black
+			ownedProperties[2].add(label);
+			this.add(ownedProperties[2], c);
+		}
+		
+		if(numOfPlayers>3) {
+			c.gridy=1;
+			c.gridx = 3;
+			c.gridwidth = 1;
+			c.gridheight = 4;
+			c.insets = new Insets(0,50,0,0);
+			ownedProperties[3]=new PropertyPanel();
+			label = new JLabel("Player 4 Properties");
+			label.setFont(new Font("Times New Roman", Font.BOLD, 20));
+			label.setForeground(Color.BLACK); //red,blue,gray,black
+			ownedProperties[3].add(label);
+			this.add(ownedProperties[3], c);
+		}
 		playGame();
 	}
 
@@ -137,9 +200,6 @@ public class MonopolyPanel extends JPanel {
 		for(int i=0; i<numOfPlayers; i++) {
 			board.movePlayer(i+1, 0, 0);
 		}
-
-
-
 
 		turn();		
 
@@ -175,18 +235,49 @@ public class MonopolyPanel extends JPanel {
 	}
 
 
-	private void showProperty(int propertyNum) {
-
-		int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?:",
-				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
-		if (reply == JOptionPane.YES_OPTION) {
-			int rent = game.buyProperty();
-			updateGameInfo("Player " + game.getCurrentPlayerNum() + " bought " + game.getPropertyName(game.getCurrentPlayerPosition()) + 
-					" for $" + rent + ".");
-			updateBank();
-		}
-	}
-	
+	private void checkProperty(int propertyNum) {
+		switch(game.propertyActions()){
+		case 0:
+			if(game.board[propertyNum].name.contentEquals("Go to Jail")) {
+				gameInfo.append("Player "+currentPlayer+" is sent to JAIL!\n");
+				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+				game.getCurrentPlayer().boardPosition=10;
+				board.movePlayer(currentPlayer,10, 30);
+				JOptionPane.showMessageDialog(null,
+						"Player "+currentPlayer+" GO TO JAIL!");
+			}
+			if(game.board[propertyNum].name.contentEquals("Free Parking")) {
+				gameInfo.append("Player "+currentPlayer+" won free parking!\n");
+				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+				JOptionPane.showMessageDialog(null,
+						"Player "+currentPlayer+", you get free parking!");
+			}
+			break;
+		case 1:
+			int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?: (cost:$"+game.board[propertyNum].price+")",
+					JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
+			if (reply == JOptionPane.YES_OPTION) {
+				game.buyProperty();
+				gameInfo.append("Player "+currentPlayer+" has bought "+game.board[propertyNum].name+"!\n");
+				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
+			
+				JLabel label = new JLabel(game.board[propertyNum].name+" (rent: $"+game.board[propertyNum].rent+")");
+				label.setFont(new Font("Times New Roman", Font.BOLD, 16));
+				label.setForeground(playerColor(currentPlayer)); //red,blue,gray,black
+				ownedProperties[currentPlayer-1].add(label);
+			}
+			break;
+		case 2:
+			if(game.board[propertyNum].price>0) {
+				JOptionPane.showMessageDialog(null,
+						"Player "+currentPlayer+" must pay $"+game.board[propertyNum].rent+"to Player"+
+								game.board[propertyNum].ownerNum+" for rent.");
+				game.payRent();
+				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
+			}
+			break;
+        
 	private void payRent() {
 		int rent = game.calculateRent();
 		int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
@@ -200,7 +291,7 @@ public class MonopolyPanel extends JPanel {
 		}
 		updateBank();
 	}
-	
+
 	private void updateGameInfo(String message) {
 		gameInfo.append(message + "\n");
 		gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
@@ -209,6 +300,7 @@ public class MonopolyPanel extends JPanel {
 	private void updateBank() {
 		for(int i=0; i<numOfPlayers; i++) {
 			playerbank[i].setText("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
+
 		}
 	}
 
@@ -224,41 +316,44 @@ public class MonopolyPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource() == rollButton) {
-				if(rolled == false) {
-					int previousPosition = game.getCurrentPlayerPosition();
-					int movement = game.move();
-					board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), previousPosition);
-	
-					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement + "."); 
-					
-					if( (previousPosition + movement) >= 40 ) {
-						updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
-						updateBank();
-					}
-	
-					rolled = true;
-					
-					if(game.getPropertyOwner(game.getCurrentPlayerPosition()) == 0) {
-						showProperty(game.getCurrentPlayerPosition());
-					}
-					else {
-						payRent();
-					}
+				if(!hasrolled) {
+				int previousPosition = game.getCurrentPlayerPosition();
+				int movement = game.move();
+				currentPosition = game.getCurrentPlayerPosition();
+				currentPlayer = game.getCurrentPlayerNum();
+				board.movePlayer(currentPlayer,currentPosition, previousPosition);
+				if(currentPosition<previousPosition) {
+					JOptionPane.showMessageDialog(null,"Passed GO! Collect $200");
+					playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
+          updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "Player " + game.getCurrentPlayerNum()+ " has already rolled!");
+        updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement
+                       + " and is now at "+game.board[currentPosition].name+".\n");
+				checkProperty(currentPosition);
+				hasrolled=true;
 				}
 			}
 
 			if(e.getSource() == endTurnButton) {
-				if(rolled == true) {
+				if(hasrolled == true) {
 					game.nextTurn();
 					turn();
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "Player " + game.getCurrentPlayerNum()+ " must roll before ending their turn!");
-				}
 			}
 		}
+	}
+	
+	private Color playerColor(int playernum) {
+		switch(playernum) {
+			case 1:
+				return Color.RED;
+			case 2: 
+				return Color.BLUE;
+			case 3:
+				return Color.GRAY;
+			case 4: 
+				return Color.BLACK;
+		}
+		return null;
 	}
 }
