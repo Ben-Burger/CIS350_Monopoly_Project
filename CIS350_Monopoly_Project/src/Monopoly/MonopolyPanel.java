@@ -34,7 +34,6 @@ public class MonopolyPanel extends JPanel {
 	private JButton rollButton;
 	private JButton endTurnButton;
 	private JLabel[] playerbank;
-	private GridBagConstraints c;
 
 	private Game game;
 	private int numOfPlayers;
@@ -47,12 +46,12 @@ public class MonopolyPanel extends JPanel {
 
 		numOfPlayers = promptUser();
 		game = new Game(numOfPlayers);
-		
-		
+
+
 		listener = new ButtonListener();
 
 		this.setLayout(new GridBagLayout());
-		c = new GridBagConstraints();
+		GridBagConstraints c = new GridBagConstraints();
 
 		board = new BoardPanel();
 		board.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.red));
@@ -60,18 +59,18 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 0;
 		c.gridwidth = 1;
 		c.gridheight = 8;
-//		c.fill = GridBagConstraints.VERTICAL;
-//		c.ipadx = 0;
-//		c.ipady = 0;
-//		c.insets = 0;
-//		c.anchor = GridBagConstraints.WEST;
-//		c.weightx = 1;
-//		c.weighty = 1;
+		//		c.fill = GridBagConstraints.VERTICAL;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
+		//		c.insets = 0;
+		//		c.anchor = GridBagConstraints.WEST;
+		//		c.weightx = 1;
+		//		c.weighty = 1;
 		this.add(board, c);
 
 		gameInfo = new JTextArea();
-//		for(int i=0; i<100;i++)
-//			gameInfo.append("\nHello!");
+		//		for(int i=0; i<100;i++)
+		//			gameInfo.append("\nHello!");
 		gameInfo.setEditable(false);
 		scrollPane = new JScrollPane(gameInfo);
 		scrollPane.setPreferredSize(new Dimension(200, 400));
@@ -80,13 +79,13 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-//		c.fill = NONE;
+		//		c.fill = NONE;
 		c.ipadx = 10;
-//		c.ipady = 0;
+		//		c.ipady = 0;
 		c.insets = new Insets(0, 20, 0, 0);			// (top, left, bottom, right)
-//		c.anchor = GridBagConstraints.NORTH;
-//		c.weightx = 0.5;
-//		c.weighty = 0.5;
+		//		c.anchor = GridBagConstraints.NORTH;
+		//		c.weightx = 0.5;
+		//		c.weighty = 0.5;
 		this.add(scrollPane, c);
 
 		rollButton = new JButton("roll");
@@ -96,13 +95,13 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 6;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-//		c.fill = NONE;
-//		c.ipadx = 0;
-//		c.ipady = 0;
+		//		c.fill = NONE;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
 		c.insets = new Insets(150, 20, 0, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
-//		c.weightx = 0.5;
-//		c.weighty = 0.5;
+		//		c.weightx = 0.5;
+		//		c.weighty = 0.5;
 		this.add(rollButton, c);
 
 		endTurnButton = new JButton("end turn");
@@ -112,21 +111,34 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 7;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-//		c.fill = NONE;
-//		c.ipadx = 0;
-//		c.ipady = 0;
+		//		c.fill = NONE;
+		//		c.ipadx = 0;
+		//		c.ipady = 0;
 		c.insets = new Insets(0, 20, 50, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
-//		c.weightx = 0.5;
-//		c.weighty = 0.5;
+		//		c.weightx = 0.5;
+		//		c.weighty = 0.5;
 		this.add(endTurnButton, c);
 		
-		
+		playerbank = new JLabel[numOfPlayers];
+		c.gridx = 1;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(50, 20, 0, 0);
+		for(int i=0; i<numOfPlayers; i++) {
+			c.gridy = 2+i;
+			JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
+			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+			label.setForeground(Color.BLUE);
+			playerbank[i]=label;
+			this.add(label, c);
+		}
+
+
 		playGame();
 	}
-	
+
 	public void playGame() {
-		
 
 		gameInfo.append("Starting game with " + numOfPlayers + " players!\n");
 
@@ -137,30 +149,18 @@ public class MonopolyPanel extends JPanel {
 			e.printStackTrace();
 		}
 
-		
+
 		for(int i=0; i<numOfPlayers; i++) {
 			board.movePlayer(i+1, 0, 0);
 		}
 
-		playerbank = new JLabel[numOfPlayers];
-		c.gridx = 1;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.insets = new Insets(50, 20, 0, 0);
-		for(int i=0; i<numOfPlayers; i++) {
-			c.gridy = 2+i;
-			JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i+1).money);
-		    label.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		    label.setForeground(Color.BLUE);
-		    playerbank[i]=label;
-		    this.add(label, c);
-		}
 		
-	    
+
+
 		turn();		
-		
+
 	}
-	
+
 	public int promptUser() {
 
 		boolean goodNum = false;
@@ -183,23 +183,20 @@ public class MonopolyPanel extends JPanel {
 		}
 		return numOfPlayers;
 	}
-	
+
 
 	private void turn() {
 		gameInfo.append("Player " + game.getCurrentPlayerNum() + "'s turn.\n");
 		gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
 	}
-	
 
-	private void showProperty() {
-		
+
+	private void showProperty(int propertyNum) {
+
 		int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?:",
-				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[3].propertycard);
-//		int reply = JOptionPane.showConfirmDialog(null, 
-//				 " Would you like to play again?","",
-//				JOptionPane.YES_NO_OPTION);
-       if (reply == JOptionPane.YES_OPTION) {
-	}
+				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
+		if (reply == JOptionPane.YES_OPTION) {
+		}
 	}
 
 	/**
@@ -219,6 +216,7 @@ public class MonopolyPanel extends JPanel {
 				board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), previousPosition);
 				gameInfo.append("Player " + game.getCurrentPlayerNum()+ " rolled a " + movement + ".\n");
 				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+				showProperty(game.getCurrentPlayerPosition());
 			}
 
 			if(e.getSource() == endTurnButton) {
