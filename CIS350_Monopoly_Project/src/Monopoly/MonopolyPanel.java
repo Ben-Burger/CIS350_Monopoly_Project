@@ -62,7 +62,7 @@ public class MonopolyPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.gridheight = 4;
+		c.gridheight = 8;
 		this.add(board, c);
 
 
@@ -109,7 +109,7 @@ public class MonopolyPanel extends JPanel {
 		rollButton.addActionListener(listener);
 		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 6;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.insets = new Insets(100, 20, 0, 0);		// (top, left, bottom, right)
@@ -121,7 +121,7 @@ public class MonopolyPanel extends JPanel {
 		endTurnButton.addActionListener(listener);
 		endTurnButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 7;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.insets = new Insets(50, 20, 50, 0);		// (top, left, bottom, right)
@@ -335,6 +335,7 @@ public class MonopolyPanel extends JPanel {
 
 			if(e.getSource() == endTurnButton) {
 				if(hasrolled == true) {
+					hasrolled = false;
 					game.nextTurn();
 					turn();
 				}
