@@ -119,7 +119,7 @@ public class MonopolyPanel extends JPanel {
 		//		c.weightx = 0.5;
 		//		c.weighty = 0.5;
 		this.add(endTurnButton, c);
-		
+
 		playerbank = new JLabel[numOfPlayers];
 		c.gridx = 1;
 		c.gridwidth = 1;
@@ -154,7 +154,7 @@ public class MonopolyPanel extends JPanel {
 			board.movePlayer(i+1, 0, 0);
 		}
 
-		
+
 
 
 		turn();		
@@ -186,8 +186,7 @@ public class MonopolyPanel extends JPanel {
 
 
 	private void turn() {
-		gameInfo.append("Player " + game.getCurrentPlayerNum() + "'s turn.\n");
-		gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+		updateGameInfo("Player " + game.getCurrentPlayerNum() + "'s turn.");
 	}
 
 
@@ -196,6 +195,19 @@ public class MonopolyPanel extends JPanel {
 		int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?:",
 				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
 		if (reply == JOptionPane.YES_OPTION) {
+			game.buyProperty();
+			updatePlayerTotals();
+		}
+	}
+	
+	private void updateGameInfo(String message) {
+		gameInfo.append(message + "\n");
+		gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+	}
+
+	private void updatePlayerTotals() {
+		for(int i=0; i<numOfPlayers; i++) {
+			playerbank[i].setText("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
 		}
 	}
 
@@ -214,9 +226,24 @@ public class MonopolyPanel extends JPanel {
 				int previousPosition = game.getCurrentPlayerPosition();
 				int movement = game.move();
 				board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), previousPosition);
-				gameInfo.append("Player " + game.getCurrentPlayerNum()+ " rolled a " + movement + ".\n");
-				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
-				showProperty(game.getCurrentPlayerPosition());
+
+				updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement + "."); 
+
+				if(game.getPropertyOwner(game.getCurrentPlayerPosition()) == 0) {
+					showProperty(game.getCurrentPlayerPosition());
+				}
+				else {
+					int rent = game.calculateRent();
+					
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + "payed " + rent + " in rent.");
+					
+					boolean bankrupt = game.payRent();
+					
+					if(bankrupt) {
+						updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
+					}
+					updatePlayerTotals();
+				}
 			}
 
 			if(e.getSource() == endTurnButton) {

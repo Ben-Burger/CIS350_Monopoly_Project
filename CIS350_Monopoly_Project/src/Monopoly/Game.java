@@ -23,6 +23,10 @@ public class Game {
     	return players.get(currentPlayer).boardPosition;
     }
     
+    public int getCurrentPlayerMoney() {
+    	return players.get(currentPlayer).money;
+    }
+    
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -31,7 +35,10 @@ public class Game {
     public Property[] getBoard() {
         return board;
     }
-
+    
+    public int getPropertyOwner(int property) {
+    	return board[property].ownerNum;
+    }
     public void setBoard(Property[] board) {
         this.board = board;
     }
@@ -47,7 +54,6 @@ public class Game {
     private int currentPlayer;
     public Property[] board;
     private ArrayList<Player> players;
-
 
     public Game() {
 
@@ -82,7 +88,8 @@ public class Game {
      * @return Number of spaces moved
      */
     public int move() {
-        int movement = rollDice();
+//        int movement = rollDice();	//TODO
+        int movement = 8;
         players.get(currentPlayer).boardPosition += movement;
         if (players.get(currentPlayer).boardPosition > 39) {
             players.get(currentPlayer).boardPosition -= 39;
@@ -100,8 +107,12 @@ public class Game {
     public void buyProperty() {
         players.get(currentPlayer).money -=
                 board[players.get(currentPlayer).boardPosition].price;
+        
+        
         board[players.get(currentPlayer).boardPosition].ownerNum =
-                currentPlayer;
+                currentPlayer + 1;
+        
+        
         players.get(currentPlayer).addProperty(
                 board[players.get(currentPlayer).boardPosition].color);
     }
