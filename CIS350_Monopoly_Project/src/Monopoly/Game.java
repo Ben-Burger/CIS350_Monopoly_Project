@@ -36,6 +36,10 @@ public class Game {
         return board;
     }
     
+    public String getPropertyName(int property) {
+    	return board[property].name;
+    }
+    
     public int getPropertyOwner(int property) {
     	return board[property].ownerNum;
     }
@@ -88,8 +92,8 @@ public class Game {
      * @return Number of spaces moved
      */
     public int move() {
-//        int movement = rollDice();	//TODO
-        int movement = 8;
+        int movement = rollDice();	//TODO
+//        int movement = 8;
         players.get(currentPlayer).boardPosition += movement;
         if (players.get(currentPlayer).boardPosition > 39) {
             players.get(currentPlayer).boardPosition -= 39;
@@ -104,17 +108,18 @@ public class Game {
      * The current player becomes the owner of the property that he is
      * currently on. That properties price is taken out of the player's money.
      */
-    public void buyProperty() {
-        players.get(currentPlayer).money -=
-                board[players.get(currentPlayer).boardPosition].price;
+    public int buyProperty() {
+    	int price =  board[players.get(currentPlayer).boardPosition].price;
         
+    	players.get(currentPlayer).money -= price;
         
         board[players.get(currentPlayer).boardPosition].ownerNum =
                 currentPlayer + 1;
         
-        
         players.get(currentPlayer).addProperty(
                 board[players.get(currentPlayer).boardPosition].color);
+        
+        return price;
     }
 
     /**
@@ -166,7 +171,7 @@ public class Game {
             return true;
         }
         if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
-            players.get(owner).money +=
+            players.get(owner - 1).money +=
                     board[players.get(currentPlayer).boardPosition].rent;
         }
         return false;
@@ -177,18 +182,18 @@ public class Game {
      * properties of one color or owning multiple railroads.
      * @return Total rent owed.
      */
-    private int calculateRent() {
+    public int calculateRent() {
         int owner = board[players.get(currentPlayer).boardPosition].ownerNum;
         char color = board[players.get(currentPlayer).boardPosition].color;
         int rent = board[players.get(currentPlayer).boardPosition].rent;
-        if ((color == 'b' || color == 'n' || color == 'u') &&
-                players.get(owner).properties.get(color) == 2) {
-            rent *= 2;
-        } else if (color == 'r') {
-            rent *= players.get(owner).properties.get(color);
-        } else if (players.get(owner).properties.get(color) == 3) {
-            rent *= 2;
-        }
+//        if ((color == 'b' || color == 'n' || color == 'u') &&
+//                players.get(owner).properties.get(color) == 2) {
+//            rent *= 2;
+//        } else if (color == 'r') {
+//            rent *= players.get(owner).properties.get(color);
+//        } else if (players.get(owner).properties.get(color) == 3) {
+//            rent *= 2;
+//        }
         return rent;
     }
 

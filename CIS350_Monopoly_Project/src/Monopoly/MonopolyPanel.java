@@ -22,7 +22,7 @@ import javax.swing.JTextArea;
  * Creates the panel for the Monopoly GUI.
  * 
  * @author	Ben Burger
- * @version	7/8/2019 
+ * @version	7/11/2019 
  */
 @SuppressWarnings("serial")
 public class MonopolyPanel extends JPanel {
@@ -33,10 +33,12 @@ public class MonopolyPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private JButton rollButton;
 	private JButton endTurnButton;
+	private JPanel bank;
 	private JLabel[] playerbank;
 
 	private Game game;
 	private int numOfPlayers;
+	private boolean rolled;
 
 
 	/**
@@ -54,87 +56,69 @@ public class MonopolyPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 
 		board = new BoardPanel();
-		board.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.red));
+		board.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.gridheight = 8;
-		//		c.fill = GridBagConstraints.VERTICAL;
-		//		c.ipadx = 0;
-		//		c.ipady = 0;
-		//		c.insets = 0;
-		//		c.anchor = GridBagConstraints.WEST;
-		//		c.weightx = 1;
-		//		c.weighty = 1;
+		c.gridheight = 4;
 		this.add(board, c);
 
+		
 		gameInfo = new JTextArea();
-		//		for(int i=0; i<100;i++)
-		//			gameInfo.append("\nHello!");
 		gameInfo.setEditable(false);
 		scrollPane = new JScrollPane(gameInfo);
-		scrollPane.setPreferredSize(new Dimension(200, 400));
+		scrollPane.setPreferredSize(new Dimension(300, 400));
 		scrollPane.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
 		c.gridy = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		//		c.fill = NONE;
 		c.ipadx = 10;
-		//		c.ipady = 0;
-		c.insets = new Insets(0, 20, 0, 0);			// (top, left, bottom, right)
-		//		c.anchor = GridBagConstraints.NORTH;
-		//		c.weightx = 0.5;
-		//		c.weighty = 0.5;
+		c.insets = new Insets(0, 20, 0, 0);		// (top, left, bottom, right)
 		this.add(scrollPane, c);
-
-		rollButton = new JButton("roll");
-		rollButton.addActionListener(listener);
-		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
-		c.gridx = 1;
-		c.gridy = 6;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		//		c.fill = NONE;
-		//		c.ipadx = 0;
-		//		c.ipady = 0;
-		c.insets = new Insets(150, 20, 0, 0);		// (top, left, bottom, right)
-		c.anchor = GridBagConstraints.SOUTH;
-		//		c.weightx = 0.5;
-		//		c.weighty = 0.5;
-		this.add(rollButton, c);
-
-		endTurnButton = new JButton("end turn");
-		endTurnButton.addActionListener(listener);
-		endTurnButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
-		c.gridx = 1;
-		c.gridy = 7;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		//		c.fill = NONE;
-		//		c.ipadx = 0;
-		//		c.ipady = 0;
-		c.insets = new Insets(0, 20, 50, 0);		// (top, left, bottom, right)
-		c.anchor = GridBagConstraints.SOUTH;
-		//		c.weightx = 0.5;
-		//		c.weighty = 0.5;
-		this.add(endTurnButton, c);
-
-		playerbank = new JLabel[numOfPlayers];
-		c.gridx = 1;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.insets = new Insets(50, 20, 0, 0);
-		for(int i=0; i<numOfPlayers; i++) {
-			c.gridy = 2+i;
+		
+		
+		bank = new JPanel();
+		playerbank = new JLabel[4];
+		for(int i = 0; i < numOfPlayers; i++) {
 			JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setForeground(Color.BLUE);
 			playerbank[i]=label;
-			this.add(label, c);
+			bank.add(label);
 		}
+		bank.setPreferredSize(new Dimension(200, 200));
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(75, 20, 0, 0);		// (top, left, bottom, right)
+		this.add(bank, c);
+	
+		rollButton = new JButton("roll");
+		rollButton.addActionListener(listener);
+		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(150, 20, 0, 0);	// (top, left, bottom, right)
+		c.anchor = GridBagConstraints.SOUTH;
+		this.add(rollButton, c);
 
+		
+		endTurnButton = new JButton("end turn");
+		endTurnButton.addActionListener(listener);
+		endTurnButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(0, 20, 50, 0);	// (top, left, bottom, right)
+		c.anchor = GridBagConstraints.SOUTH;
+		this.add(endTurnButton, c);
 
+		
 		playGame();
 	}
 
@@ -187,6 +171,7 @@ public class MonopolyPanel extends JPanel {
 
 	private void turn() {
 		updateGameInfo("Player " + game.getCurrentPlayerNum() + "'s turn.");
+		rolled = false;
 	}
 
 
@@ -195,9 +180,25 @@ public class MonopolyPanel extends JPanel {
 		int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?:",
 				JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
 		if (reply == JOptionPane.YES_OPTION) {
-			game.buyProperty();
-			updatePlayerTotals();
+			int rent = game.buyProperty();
+			updateGameInfo("Player " + game.getCurrentPlayerNum() + " bought " + game.getPropertyName(game.getCurrentPlayerPosition()) + 
+					" for $" + rent + ".");
+			updateBank();
 		}
+	}
+	
+	private void payRent() {
+		int rent = game.calculateRent();
+		int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
+		
+		updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner+ ".");
+		
+		boolean bankrupt = game.payRent();
+		
+		if(bankrupt) {
+			updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
+		}
+		updateBank();
 	}
 	
 	private void updateGameInfo(String message) {
@@ -205,7 +206,7 @@ public class MonopolyPanel extends JPanel {
 		gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
 	}
 
-	private void updatePlayerTotals() {
+	private void updateBank() {
 		for(int i=0; i<numOfPlayers; i++) {
 			playerbank[i].setText("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
 		}
@@ -223,32 +224,40 @@ public class MonopolyPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if(e.getSource() == rollButton) {
-				int previousPosition = game.getCurrentPlayerPosition();
-				int movement = game.move();
-				board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), previousPosition);
-
-				updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement + "."); 
-
-				if(game.getPropertyOwner(game.getCurrentPlayerPosition()) == 0) {
-					showProperty(game.getCurrentPlayerPosition());
+				if(rolled == false) {
+					int previousPosition = game.getCurrentPlayerPosition();
+					int movement = game.move();
+					board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), previousPosition);
+	
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement + "."); 
+					
+					if( (previousPosition + movement) >= 40 ) {
+						updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
+						updateBank();
+					}
+	
+					rolled = true;
+					
+					if(game.getPropertyOwner(game.getCurrentPlayerPosition()) == 0) {
+						showProperty(game.getCurrentPlayerPosition());
+					}
+					else {
+						payRent();
+					}
 				}
 				else {
-					int rent = game.calculateRent();
-					
-					updateGameInfo("Player " + game.getCurrentPlayerNum() + "payed " + rent + " in rent.");
-					
-					boolean bankrupt = game.payRent();
-					
-					if(bankrupt) {
-						updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
-					}
-					updatePlayerTotals();
+					JOptionPane.showMessageDialog(null, "Player " + game.getCurrentPlayerNum()+ " has already rolled!");
 				}
 			}
 
 			if(e.getSource() == endTurnButton) {
-				game.nextTurn();
-				turn();
+				if(rolled == true) {
+					game.nextTurn();
+					turn();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Player " + game.getCurrentPlayerNum()+ " must roll before ending their turn!");
+				}
 			}
 		}
 	}
