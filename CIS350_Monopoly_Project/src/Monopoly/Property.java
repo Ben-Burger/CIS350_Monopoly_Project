@@ -8,11 +8,11 @@ package Monopoly;
  */
 
 public class Property {
-    String name;
-    int price;
-    int rent;
-    int ownerNum;
-    char color;
+    private String name;
+    private int price;
+    private int rent;
+    private int ownerNum;
+    private char color;
 
     public Property() {
 
@@ -30,6 +30,46 @@ public class Property {
         this.price = price;
         this.rent = rent;
         this.ownerNum = ownerNum;
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getRent() {
+        return rent;
+    }
+
+    public void setRent(int rent) {
+        this.rent = rent;
+    }
+
+    public int getOwnerNum() {
+        return ownerNum;
+    }
+
+    public void setOwnerNum(int ownerNum) {
+        this.ownerNum = ownerNum;
+    }
+
+    public char getColor() {
+        return color;
+    }
+
+    public void setColor(char color) {
         this.color = color;
     }
 }

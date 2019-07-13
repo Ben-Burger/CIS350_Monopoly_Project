@@ -12,6 +12,10 @@ public class Game {
         return players.get(currentPlayer);
     }
 
+    public int getCurrentPlayerVar() {
+        return currentPlayer;
+    }
+
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -36,11 +40,6 @@ public class Game {
     private Property[] board;
     private ArrayList<Player> players;
 
-    public Game() {
-
-    }
-
-
     /**
      * Initializes game with given number of players
      * @param numPlayers 2 to 4 players in a game.
@@ -51,7 +50,7 @@ public class Game {
             players.add(new Player(i, 1500));
         }
         createProperties();
-        currentPlayer = 0;
+        currentPlayer = 1;
     }
 
     /**
@@ -69,11 +68,14 @@ public class Game {
      */
     public int move() {
         int movement = rollDice();
-        players.get(currentPlayer).boardPosition += movement;
-        if (players.get(currentPlayer).boardPosition > 39) {
-            players.get(currentPlayer).boardPosition -= 39;
+        players.get(currentPlayer).setBoardPosition(players.get(currentPlayer)
+                .getBoardPosition() + movement);
+        if (players.get(currentPlayer).getBoardPosition() > 39) {
+            players.get(currentPlayer).setBoardPosition(players.get(
+                    currentPlayer).getBoardPosition() - 39);
             // Plus $200 for passing GO
-            players.get(currentPlayer).money += 200;
+            players.get(currentPlayer).setMoney(players.get(currentPlayer)
+                    .getMoney() + 200);
         }
         // For future implementation of utilities costs
         return movement;
@@ -84,12 +86,14 @@ public class Game {
      * currently on. That properties price is taken out of the player's money.
      */
     public void buyProperty() {
-        players.get(currentPlayer).money -=
-                board[players.get(currentPlayer).boardPosition].price;
-        board[players.get(currentPlayer).boardPosition].ownerNum =
-                currentPlayer;
+        players.get(currentPlayer).setMoney(players.get(currentPlayer)
+                .getMoney() - board[players.get(currentPlayer)
+                .getBoardPosition()].getPrice());
+        board[players.get(currentPlayer).getBoardPosition()].setOwnerNum(
+                currentPlayer);
         players.get(currentPlayer).addProperty(
-                board[players.get(currentPlayer).boardPosition].color);
+                board[players.get(currentPlayer).getBoardPosition()]
+                        .getColor());
     }
 
     /**
@@ -110,14 +114,14 @@ public class Game {
      *         payment.
      */
     public int propertyActions() {
-        if ((board[players.get(currentPlayer).boardPosition].price == 0
-                && board[players.get(currentPlayer).boardPosition].rent == 0)
-                || board[players.get(currentPlayer).boardPosition].ownerNum
-                        == currentPlayer) {
+        if ((board[players.get(currentPlayer).getBoardPosition()].getPrice() == 0
+                && board[players.get(currentPlayer).getBoardPosition()]
+                .getRent() == 0) || board[players.get(currentPlayer)
+                .getBoardPosition()].getOwnerNum() == currentPlayer) {
             return 0;
-        } else if (board[players.get(currentPlayer).boardPosition].price != 0
-                && board[players.get(currentPlayer).boardPosition].ownerNum
-                == 0) {
+        } else if (board[players.get(currentPlayer).getBoardPosition()]
+                .getPrice() != 0 && board[players.get(currentPlayer)
+                .getBoardPosition()].getOwnerNum() == 0) {
             return 1;
         } else {
             return 2;
@@ -131,18 +135,24 @@ public class Game {
     public boolean payRent() {
         int rent = calculateRent();
         int owner =
-                board[players.get(currentPlayer).boardPosition].ownerNum;
-        players.get(currentPlayer).money -= rent;
-        if (players.get(currentPlayer).money < 0) {
-            if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
-                players.get(owner).money += rent
-                        + players.get(currentPlayer).money;
+                board[players.get(currentPlayer).getBoardPosition()]
+                        .getOwnerNum();
+        players.get(currentPlayer).setMoney(players.get(
+                currentPlayer).getMoney() - rent);
+        if (players.get(currentPlayer).getMoney() < 0) {
+            if (board[players.get(currentPlayer).getBoardPosition()]
+                    .getOwnerNum() != -1) {
+                players.get(currentPlayer).setMoney(players.get(currentPlayer)
+                        .getMoney() + rent + players.get(currentPlayer)
+                        .getMoney());
             }
             return true;
         }
-        if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
-            players.get(owner).money +=
-                    board[players.get(currentPlayer).boardPosition].rent;
+        if (board[players.get(currentPlayer).getBoardPosition()].getOwnerNum()
+                != -1) {
+            players.get(owner).setMoney(players.get(owner).getMoney()
+                    + board[players.get(currentPlayer).
+                    getBoardPosition()].getRent());
         }
         return false;
     }
@@ -153,9 +163,9 @@ public class Game {
      * @return Total rent owed.
      */
     private int calculateRent() {
-        int owner = board[players.get(currentPlayer).boardPosition].ownerNum;
-        char color = board[players.get(currentPlayer).boardPosition].color;
-        int rent = board[players.get(currentPlayer).boardPosition].rent;
+        int owner = board[players.get(currentPlayer).getBoardPosition()].getOwnerNum();
+        char color = board[players.get(currentPlayer).getBoardPosition()].getColor();
+        int rent = board[players.get(currentPlayer).getBoardPosition()].getRent();
         if ((color == 'b' || color == 'n' || color == 'u') &&
                 players.get(owner).properties.get(color) == 2) {
             rent *= 2;
