@@ -6,7 +6,7 @@ import java.util.TreeMap;
 public class Player {
     private int playerNum;
     private int money;
-    Map<Character, Integer> properties;
+    public Map<Character, Integer> properties;
     //tracks placement according to index of Board
     private int boardPosition;
 

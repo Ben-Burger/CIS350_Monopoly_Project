@@ -1,5 +1,7 @@
 package Monopoly;
 
+import javax.swing.*;
+
 /**
  * Each property which will be a single tile on the overall
  * game board.
@@ -13,6 +15,7 @@ public class Property {
     private int rent;
     private int ownerNum;
     private char color;
+    public ImageIcon propertycard;
 
     public Property() {
 
@@ -25,12 +28,13 @@ public class Property {
         this.ownerNum = ownerNum;
     }
 
-    public Property(String n, int price, int rent, int ownerNum, char color) {
+    public Property(String n, int price, int rent, int ownerNum, char color, ImageIcon card) {
         this.name = n;
         this.price = price;
         this.rent = rent;
         this.ownerNum = ownerNum;
         this.color = color;
+        this.propertycard = card;
     }
 
     public String getName() {

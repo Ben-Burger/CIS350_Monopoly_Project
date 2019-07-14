@@ -1,4 +1,4 @@
-package Monopoly;
+package monopoly_ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +25,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
 	/** 
 	 * Default constructor for a Monopoly GUI.
-	 * @param String frameLabel - label for the window
+	 * @param \String frameLabel - label for the window
 	 */
 	public MonopolyGUI(String frameLabel) {
 

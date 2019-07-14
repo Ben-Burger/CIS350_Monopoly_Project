@@ -1,4 +1,7 @@
-package Monopoly;
+package monopoly_ui;
+
+import Monopoly.Game;
+import monopoly_ui.BoardPanel;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -100,8 +103,8 @@ public class MonopolyPanel extends JPanel {
 		//		c.ipady = 0;
 		c.insets = new Insets(150, 20, 0, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
-		//		c.weightx = 0.5;
-		//		c.weighty = 0.5;
+//				c.weightx = 0.5;
+//				c.weighty = 0.5;
 		this.add(rollButton, c);
 
 		endTurnButton = new JButton("end turn");
@@ -111,13 +114,13 @@ public class MonopolyPanel extends JPanel {
 		c.gridy = 7;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		//		c.fill = NONE;
-		//		c.ipadx = 0;
-		//		c.ipady = 0;
+//				c.fill = NONE;
+//				c.ipadx = 0;
+//				c.ipady = 0;
 		c.insets = new Insets(0, 20, 50, 0);		// (top, left, bottom, right)
 		c.anchor = GridBagConstraints.SOUTH;
-		//		c.weightx = 0.5;
-		//		c.weighty = 0.5;
+//				c.weightx = 0.5;
+//				c.weighty = 0.5;
 		this.add(endTurnButton, c);
 
 		playerbank = new JLabel[numOfPlayers];
@@ -125,12 +128,13 @@ public class MonopolyPanel extends JPanel {
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.insets = new Insets(50, 20, 0, 0);
-		for(int i=0; i<numOfPlayers; i++) {
-			c.gridy = 2+i;
-			JLabel label = new JLabel("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
+		for (int i = 0; i < numOfPlayers; i++) {
+			c.gridy = 2 + i;
+			JLabel label = new JLabel("Player " + (i + 1) + " has $" + game
+					.getPlayers().get(i).getMoney());
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setForeground(Color.BLUE);
-			playerbank[i]=label;
+			playerbank[i] = label;
 			this.add(label, c);
 		}
 
@@ -142,15 +146,15 @@ public class MonopolyPanel extends JPanel {
 
 		gameInfo.append("Starting game with " + numOfPlayers + " players!\n");
 
-		try {
+		//try {
 			game = new Game(numOfPlayers);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 
-		for(int i=0; i<numOfPlayers; i++) {
+		for (int i = 0; i < numOfPlayers; i++) {
 			board.movePlayer(i+1, 0, 0);
 		}
 
@@ -189,7 +193,6 @@ public class MonopolyPanel extends JPanel {
 		updateGameInfo("Player " + game.getCurrentPlayerNum() + "'s turn.");
 	}
 
-
 	private void showProperty(int propertyNum) {
 
 		int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?:",
@@ -206,8 +209,8 @@ public class MonopolyPanel extends JPanel {
 	}
 
 	private void updatePlayerTotals() {
-		for(int i=0; i<numOfPlayers; i++) {
-			playerbank[i].setText("Player "+(i+1)+" has $"+game.getPlayers().get(i).money);
+		for(int i = 0; i < numOfPlayers; i++) {
+			playerbank[i].setText("Player "+(i+1)+" has $"+game.getPlayers().get(i).getMoney());
 		}
 	}
 
