@@ -1,57 +1,59 @@
 package Monopoly;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 /**
  * Covers game logic and turn order.
  */
 
 public class Game {
+
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
     }
 
     public int getCurrentPlayerNum() {
-        return players.get(currentPlayer).getPlayerNum();
+        return players.get(currentPlayer).playerNum;
     }
+
+    public int getCurrentPlayerPosition() {
+        return players.get(currentPlayer).boardPosition;
+    }
+
+    public int getCurrentPlayerMoney() {
+        return players.get(currentPlayer).money;
+    }
+
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public int getCurrentPlayerPosition() {
-        return players.get(currentPlayer).getBoardPosition();
-    }
-
-    public String getPropertyName(int property) {
-        return board[property].getName();
-    }
 
     public int getPropertyOwner(int property) {
-        return board[property].getOwnerNum();
+        return board[property].ownerNum;
     }
+
 
     public ArrayList<Player> getPlayers() {
         return players;
-    }
-
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
     }
 
     private int currentPlayer;
     public Property[] board;
     private ArrayList<Player> players;
 
+
     /**
      * Initializes game with given number of players
-     * @param numPlayers 2 to 4 players in a game.
+     * @param numPlayers Total number of players in the game.
      */
+
     public Game(int numPlayers) {
         players = new ArrayList<Player>();
-//        players.add(new Player());
         for (int i = 1; i <= numPlayers; i++) {
             players.add(new Player(i, 1500));
         }
@@ -73,15 +75,13 @@ public class Game {
      * @return Number of spaces moved
      */
     public int move() {
-        int movement = rollDice();
-        players.get(currentPlayer).setBoardPosition(players.get(currentPlayer)
-                .getBoardPosition() + movement);
-        if (players.get(currentPlayer).getBoardPosition() > 39) {
-            players.get(currentPlayer).setBoardPosition(players.get(
-                    currentPlayer).getBoardPosition() - 39);
+        int movement = rollDice();	//TODO
+//        int movement = 8;
+        players.get(currentPlayer).boardPosition += movement;
+        if (players.get(currentPlayer).boardPosition > 39) {
+            players.get(currentPlayer).boardPosition -= 39;
             // Plus $200 for passing GO
-            players.get(currentPlayer).setMoney(players.get(currentPlayer)
-                    .getMoney() + 200);
+            players.get(currentPlayer).money += 200;
         }
         // For future implementation of utilities costs
         return movement;
@@ -91,15 +91,17 @@ public class Game {
      * The current player becomes the owner of the property that he is
      * currently on. That properties price is taken out of the player's money.
      */
-    public void buyProperty() {
-        players.get(currentPlayer).setMoney(players.get(currentPlayer)
-                .getMoney() - board[players.get(currentPlayer)
-                .getBoardPosition()].getPrice());
-        board[players.get(currentPlayer).getBoardPosition()].setOwnerNum(
-                currentPlayer + 1);
+    public int buyProperty() {
+        int price =  board[players.get(currentPlayer).boardPosition].price;
+
+        players.get(currentPlayer).money -= price;
+
+        board[players.get(currentPlayer).boardPosition].ownerNum =
+                currentPlayer + 1;
         players.get(currentPlayer).addProperty(
-                board[players.get(currentPlayer).getBoardPosition()]
-                        .getColor());
+                board[players.get(currentPlayer).boardPosition].color);
+
+        return price;
     }
 
     /**
@@ -107,7 +109,7 @@ public class Game {
      */
     public void nextTurn() {
         currentPlayer++;
-        if (currentPlayer >= players.size()) {
+        if (currentPlayer > players.size() - 1) {
             currentPlayer = 0;
         }
     }
@@ -120,14 +122,15 @@ public class Game {
      *         payment.
      */
     public int propertyActions() {
-        if ((board[players.get(currentPlayer).getBoardPosition()].getPrice() == 0
-                && board[players.get(currentPlayer).getBoardPosition()]
-                .getRent() == 0) || board[players.get(currentPlayer)
-                .getBoardPosition()].getOwnerNum() == currentPlayer + 1) {
+        if ((board[players.get(currentPlayer).boardPosition].price == 0
+                && board[players.get(currentPlayer).boardPosition].rent == 0)
+                || board[players.get(currentPlayer).boardPosition].ownerNum
+                == getCurrentPlayerNum()) {
             return 0;
-        } else if (board[players.get(currentPlayer).getBoardPosition()]
-                .getPrice() != 0 && board[players.get(currentPlayer)
-                .getBoardPosition()].getOwnerNum() == 0) {
+        } else if ((board[players.get(currentPlayer).boardPosition].price != 0)
+                && (board[players.get(currentPlayer).boardPosition].ownerNum
+                == 0 || board[players.get(currentPlayer).boardPosition].ownerNum
+                == currentPlayer+1)) {
             return 1;
         } else {
             return 2;
@@ -141,24 +144,18 @@ public class Game {
     public boolean payRent() {
         int rent = calculateRent();
         int owner =
-                board[players.get(currentPlayer).getBoardPosition()]
-                        .getOwnerNum() - 1;
-        players.get(currentPlayer).setMoney(players.get(
-                currentPlayer).getMoney() - rent);
-        if (players.get(currentPlayer).getMoney() < 0) {
-            if (board[players.get(currentPlayer).getBoardPosition()]
-                    .getOwnerNum() != -1) {
-                players.get(currentPlayer).setMoney(players.get(currentPlayer)
-                        .getMoney() + rent + players.get(currentPlayer)
-                        .getMoney());
+                board[players.get(currentPlayer).boardPosition].ownerNum;
+        players.get(currentPlayer).money -= rent;
+        if (players.get(currentPlayer).money < 0) {
+            if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
+                players.get(owner).money += rent
+                        + players.get(currentPlayer).money;
             }
             return true;
         }
-        if (board[players.get(currentPlayer).getBoardPosition()].getOwnerNum()
-                != -1) {
-            players.get(owner).setMoney(players.get(owner).getMoney()
-                    + board[players.get(currentPlayer).
-                    getBoardPosition()].getRent());
+        if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
+            players.get(owner - 1).money +=
+                    board[players.get(currentPlayer).boardPosition].rent;
         }
         return false;
     }
@@ -169,9 +166,9 @@ public class Game {
      * @return Total rent owed.
      */
     public int calculateRent() {
-        int owner = board[players.get(currentPlayer).getBoardPosition()].getOwnerNum() - 1;
-        char color = board[players.get(currentPlayer).getBoardPosition()].getColor();
-        int rent = board[players.get(currentPlayer).getBoardPosition()].getRent();
+        int owner = board[players.get(currentPlayer).boardPosition].ownerNum;
+        char color = board[players.get(currentPlayer).boardPosition].color;
+        int rent = board[players.get(currentPlayer).boardPosition].rent;
 //        if ((color == 'b' || color == 'n' || color == 'u') &&
 //                players.get(owner).properties.get(color) == 2) {
 //            rent *= 2;

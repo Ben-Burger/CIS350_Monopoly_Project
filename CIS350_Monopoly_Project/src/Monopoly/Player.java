@@ -4,14 +4,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Player {
-    private int playerNum;
-    private int money;
-    public Map<Character, Integer> properties;
+    int playerNum;
+    public int money;
+    Map<Character, Integer> properties;
     //tracks placement according to index of Board
-    private int boardPosition;
+    public int boardPosition;
 
-    public Player() {
-    }
 
     /**
      * Creates a player in the game.
@@ -32,29 +30,5 @@ public class Player {
         } else {
             properties.put(color, 1);
         }
-    }
-
-    public int getPlayerNum() {
-        return playerNum;
-    }
-
-    public void setPlayerNum(int playerNum) {
-        this.playerNum = playerNum;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
-    public int getBoardPosition() {
-        return boardPosition;
-    }
-
-    public void setBoardPosition(int boardPosition) {
-        this.boardPosition = boardPosition;
     }
 }

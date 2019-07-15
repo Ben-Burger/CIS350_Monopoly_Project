@@ -1,6 +1,6 @@
 package Monopoly;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
 
 /**
  * Each property which will be a single tile on the overall
@@ -10,16 +10,13 @@ import javax.swing.*;
  */
 
 public class Property {
-    private String name;
-    private int price;
-    private int rent;
-    private int ownerNum;
-    private char color;
+    public String name;
+    public int price;
+    public int rent;
+    public int ownerNum;
+    char color;
     public ImageIcon propertycard;
 
-    public Property() {
-
-    }
 
     public Property(String n, int price, int rent, int ownerNum) {
         this.name = n;
@@ -36,44 +33,5 @@ public class Property {
         this.color = color;
         this.propertycard = card;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getRent() {
-        return rent;
-    }
-
-    public void setRent(int rent) {
-        this.rent = rent;
-    }
-
-    public int getOwnerNum() {
-        return ownerNum;
-    }
-
-    public void setOwnerNum(int ownerNum) {
-        this.ownerNum = ownerNum;
-    }
-
-    public char getColor() {
-        return color;
-    }
-
-    public void setColor(char color) {
-        this.color = color;
-    }
 }
+
