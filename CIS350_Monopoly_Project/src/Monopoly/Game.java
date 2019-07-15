@@ -16,17 +16,17 @@ public class Game {
     }
 
     public int getCurrentPlayerNum() {
-    	return players.get(currentPlayer).playerNum;
+        return players.get(currentPlayer).playerNum;
     }
-    
+
     public int getCurrentPlayerPosition() {
-    	return players.get(currentPlayer).boardPosition;
+        return players.get(currentPlayer).boardPosition;
     }
-    
+
     public int getCurrentPlayerMoney() {
-    	return players.get(currentPlayer).money;
+        return players.get(currentPlayer).money;
     }
-    
+
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -35,13 +35,13 @@ public class Game {
     public Property[] getBoard() {
         return board;
     }
-    
+
     public String getPropertyName(int property) {
-    	return board[property].name;
+        return board[property].name;
     }
-    
+
     public int getPropertyOwner(int property) {
-    	return board[property].ownerNum;
+        return board[property].ownerNum;
     }
     public void setBoard(Property[] board) {
         this.board = board;
@@ -109,15 +109,15 @@ public class Game {
      * currently on. That properties price is taken out of the player's money.
      */
     public int buyProperty() {
-    	int price =  board[players.get(currentPlayer).boardPosition].price;
-        
-    	players.get(currentPlayer).money -= price;
-        
+        int price =  board[players.get(currentPlayer).boardPosition].price;
+
+        players.get(currentPlayer).money -= price;
+
         board[players.get(currentPlayer).boardPosition].ownerNum =
                 currentPlayer + 1;
         players.get(currentPlayer).addProperty(
                 board[players.get(currentPlayer).boardPosition].color);
-        
+
         return price;
     }
 
@@ -142,7 +142,7 @@ public class Game {
         if ((board[players.get(currentPlayer).boardPosition].price == 0
                 && board[players.get(currentPlayer).boardPosition].rent == 0)
                 || board[players.get(currentPlayer).boardPosition].ownerNum
-                        == currentPlayer) {
+                == currentPlayer+1) {
             return 0;
         } else if ((board[players.get(currentPlayer).boardPosition].price != 0)
                 && (board[players.get(currentPlayer).boardPosition].ownerNum
@@ -186,14 +186,14 @@ public class Game {
         int owner = board[players.get(currentPlayer).boardPosition].ownerNum;
         char color = board[players.get(currentPlayer).boardPosition].color;
         int rent = board[players.get(currentPlayer).boardPosition].rent;
-//        if ((color == 'b' || color == 'n' || color == 'u') &&
-//                players.get(owner).properties.get(color) == 2) {
-//            rent *= 2;
-//        } else if (color == 'r') {
-//            rent *= players.get(owner).properties.get(color);
-//        } else if (players.get(owner).properties.get(color) == 3) {
-//            rent *= 2;
-//        }
+        if ((color == 'b' || color == 'n' || color == 'u') &&
+                players.get(owner-1).properties.get(color) == 2) {
+            rent *= 2;
+        } else if (color == 'r') {
+            rent *= players.get(owner-1).properties.get(color);
+        } else if (players.get(owner-1).properties.get(color) == 3) {
+            rent *= 2;
+        }
         return rent;
     }
 

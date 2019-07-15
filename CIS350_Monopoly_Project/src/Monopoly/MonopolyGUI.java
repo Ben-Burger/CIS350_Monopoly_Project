@@ -10,7 +10,7 @@ import javax.swing.JMenuItem;
 
 /**
  * GUI for the Monopoly game board.
- * 
+ *
  * @author	Ben Burger
  * @version	7/8/2019
  */
@@ -23,9 +23,9 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 	private JMenu mainMenu;
 	private JMenuItem exitItem;
 
-	/** 
+	/**
 	 * Default constructor for a Monopoly GUI.
-	 * @param String frameLabel - label for the window
+	 * @param \String frameLabel - label for the window
 	 */
 	public MonopolyGUI(String frameLabel) {
 
@@ -48,7 +48,7 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 
 		this.getContentPane().add(panel);
 
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setVisible(true);
 	}
 
@@ -59,11 +59,11 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		// MenuBar option of exiting
-		if(e.getSource() == exitItem) 
+		if(e.getSource() == exitItem)
 			System.exit(1);
 	}
 
-	/** 
+	/**
 	 * Main method that displays a Monopoly GUI.
 	 */
 	public static void main (String args[]) {

@@ -20,7 +20,7 @@ import javax.swing.JTextArea;
 
 /**
  * Creates the panel for the Monopoly GUI.
- * 
+ *
  * @author	Ben Burger
  * @version	7/11/2019 
  */
@@ -199,7 +199,7 @@ public class MonopolyPanel extends JPanel {
 			board.movePlayer(i+1, 0, 0);
 		}
 
-		turn();		
+		turn();
 
 	}
 
@@ -215,7 +215,7 @@ public class MonopolyPanel extends JPanel {
 				numOfPlayers = Integer.parseInt(num);
 			}
 			catch(Exception e) {
-				System.exit(0);   
+				System.exit(0);
 			}
 			if (numOfPlayers >= 2 && numOfPlayers <= 4)
 				goodNum = true;
@@ -234,61 +234,57 @@ public class MonopolyPanel extends JPanel {
 
 	private void checkProperty(int propertyNum) {
 		switch(game.propertyActions()){
-		case 0:
-			if(game.board[propertyNum].name.contentEquals("Go to Jail")) {
-				gameInfo.append("Player "+currentPlayer+" is sent to JAIL!\n");
-				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
-				game.getCurrentPlayer().boardPosition=10;
-				board.movePlayer(currentPlayer,10, 30);
-				JOptionPane.showMessageDialog(null,
-						"Player "+currentPlayer+" GO TO JAIL!");
-			}
-			if(game.board[propertyNum].name.contentEquals("Free Parking")) {
-				gameInfo.append("Player "+currentPlayer+" won free parking!\n");
-				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
-				JOptionPane.showMessageDialog(null,
-						"Player "+currentPlayer+", you get free parking!");
-			}
-			break;
-		case 1:
-			int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?: (cost:$"+game.board[propertyNum].price+")",
-					JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
-			if (reply == JOptionPane.YES_OPTION) {
-				game.buyProperty();
-				gameInfo.append("Player "+currentPlayer+" has bought "+game.board[propertyNum].name+"!\n");
-				gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
-				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
+			case 0:
+				if(game.board[propertyNum].name.contentEquals("Go to Jail")) {
+					gameInfo.append("Player "+currentPlayer+" is sent to JAIL!\n");
+					gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+					game.getCurrentPlayer().boardPosition=10;
+					board.movePlayer(currentPlayer,10, 30);
+					JOptionPane.showMessageDialog(null,
+							"Player "+currentPlayer+" GO TO JAIL!");
+				}
+				if(game.board[propertyNum].name.contentEquals("Free Parking")) {
+					gameInfo.append("Player "+currentPlayer+" won free parking!\n");
+					gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+					JOptionPane.showMessageDialog(null,
+							"Player "+currentPlayer+", you get free parking!");
+				}
+				break;
+			case 1:
+				int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location? (cost: $"+game.board[propertyNum].price+")",
+						JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
+				if (reply == JOptionPane.YES_OPTION) {
+					game.buyProperty();
+					gameInfo.append("Player "+currentPlayer+" has bought "+game.board[propertyNum].name+"!\n");
+					gameInfo.setCaretPosition(gameInfo.getDocument().getLength());
+					playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
 
-				JLabel label = new JLabel(game.board[propertyNum].name+" (rent: $"+game.board[propertyNum].rent+")");
-				label.setFont(new Font("Times New Roman", Font.BOLD, 16));
-				label.setForeground(playerColor(currentPlayer)); //red,blue,gray,black
-				ownedProperties[currentPlayer-1].add(label);
-			}
-			break;
-		case 2:
-			if(game.board[propertyNum].price>0) {
-				JOptionPane.showMessageDialog(null,
-						"Player "+currentPlayer+" must pay $"+game.board[propertyNum].rent+"to Player"+
-								game.board[propertyNum].ownerNum+" for rent.");
-				game.payRent();
-				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
-			}
-			break;
+					JLabel label = new JLabel(game.board[propertyNum].name+" (rent: $"+game.board[propertyNum].rent+")");
+					label.setFont(new Font("Times New Roman", Font.BOLD, 16));
+					label.setForeground(playerColor(currentPlayer)); //red,blue,gray,black
+					ownedProperties[currentPlayer-1].add(label);
+				}
+				break;
+			case 2:
+				int rent = game.calculateRent();
+				int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
+
+				if(game.board[propertyNum].price>0) {
+					JOptionPane.showMessageDialog(null,
+							"Player "+currentPlayer+" must pay $"+rent+" to Player "+
+									propertyOwner+" for rent.");
+				}
+
+				updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner+ ".");
+
+				boolean bankrupt = game.payRent();
+
+				if(bankrupt) {
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
+				}
+				updateBank();
+				break;
 		}
-	}
-
-	private void payRent() {
-		int rent = game.calculateRent();
-		int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
-
-		updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner+ ".");
-
-		boolean bankrupt = game.payRent();
-
-		if(bankrupt) {
-			updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
-		}
-		updateBank();
 	}
 
 	private void updateGameInfo(String message) {
@@ -327,7 +323,7 @@ public class MonopolyPanel extends JPanel {
 						updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
 					}
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement
-							+ " and is now at "+game.board[currentPosition].name+".\n");
+							+ " and is now at "+game.board[currentPosition].name+".");
 					checkProperty(currentPosition);
 					hasrolled=true;
 				}
@@ -345,14 +341,14 @@ public class MonopolyPanel extends JPanel {
 
 	private Color playerColor(int playernum) {
 		switch(playernum) {
-		case 1:
-			return Color.RED;
-		case 2: 
-			return Color.BLUE;
-		case 3:
-			return Color.GRAY;
-		case 4: 
-			return Color.BLACK;
+			case 1:
+				return Color.RED;
+			case 2:
+				return Color.BLUE;
+			case 3:
+				return Color.GRAY;
+			case 4:
+				return Color.BLACK;
 		}
 		return null;
 	}
