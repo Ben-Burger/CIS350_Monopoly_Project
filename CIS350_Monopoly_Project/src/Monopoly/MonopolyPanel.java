@@ -251,7 +251,7 @@ public class MonopolyPanel extends JPanel {
 			}
 			break;
 		case 1:
-			int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location?: (cost:$"+game.board[propertyNum].price+")",
+			int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location? (cost: $"+game.board[propertyNum].price+")",
 					JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.board[propertyNum].propertycard);
 			if (reply == JOptionPane.YES_OPTION) {
 				game.buyProperty();
@@ -266,29 +266,25 @@ public class MonopolyPanel extends JPanel {
 			}
 			break;
 		case 2:
+			int rent = game.calculateRent();
+			int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
+
 			if(game.board[propertyNum].price>0) {
 				JOptionPane.showMessageDialog(null,
-						"Player "+currentPlayer+" must pay $"+game.board[propertyNum].rent+"to Player"+
-								game.board[propertyNum].ownerNum+" for rent.");
-				game.payRent();
-				playerbank[currentPlayer-1].setText("Player "+(currentPlayer)+" has $"+game.getPlayers().get(currentPlayer-1).money);
+						"Player "+currentPlayer+" must pay $"+rent+" to Player "+
+								propertyOwner+" for rent.");
 			}
+			
+			updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner+ ".");
+
+			boolean bankrupt = game.payRent();
+
+			if(bankrupt) {
+				updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
+			}
+			updateBank();
 			break;
 		}
-	}
-
-	private void payRent() {
-		int rent = game.calculateRent();
-		int propertyOwner = game.getPropertyOwner(game.getCurrentPlayerPosition());
-
-		updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner+ ".");
-
-		boolean bankrupt = game.payRent();
-
-		if(bankrupt) {
-			updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
-		}
-		updateBank();
 	}
 
 	private void updateGameInfo(String message) {
@@ -327,7 +323,7 @@ public class MonopolyPanel extends JPanel {
 						updateGameInfo("Player " + game.getCurrentPlayerNum() + " collected $200 for passing GO.");
 					}
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement
-							+ " and is now at "+game.board[currentPosition].name+".\n");
+							+ " and is now at "+game.board[currentPosition].name+".");
 					checkProperty(currentPosition);
 					hasrolled=true;
 				}
