@@ -142,7 +142,7 @@ public class Game {
         if ((board[players.get(currentPlayer).boardPosition].price == 0
                 && board[players.get(currentPlayer).boardPosition].rent == 0)
                 || board[players.get(currentPlayer).boardPosition].ownerNum
-                        == currentPlayer) {
+                        == currentPlayer+1) {
             return 0;
         } else if ((board[players.get(currentPlayer).boardPosition].price != 0)
                 && (board[players.get(currentPlayer).boardPosition].ownerNum
@@ -186,14 +186,14 @@ public class Game {
         int owner = board[players.get(currentPlayer).boardPosition].ownerNum;
         char color = board[players.get(currentPlayer).boardPosition].color;
         int rent = board[players.get(currentPlayer).boardPosition].rent;
-//        if ((color == 'b' || color == 'n' || color == 'u') &&
-//                players.get(owner).properties.get(color) == 2) {
-//            rent *= 2;
-//        } else if (color == 'r') {
-//            rent *= players.get(owner).properties.get(color);
-//        } else if (players.get(owner).properties.get(color) == 3) {
-//            rent *= 2;
-//        }
+        if ((color == 'b' || color == 'n' || color == 'u') &&
+                players.get(owner-1).properties.get(color) == 2) {
+            rent *= 2;
+        } else if (color == 'r') {
+            rent *= players.get(owner-1).properties.get(color);
+        } else if (players.get(owner-1).properties.get(color) == 3) {
+            rent *= 2;
+        }
         return rent;
     }
 
