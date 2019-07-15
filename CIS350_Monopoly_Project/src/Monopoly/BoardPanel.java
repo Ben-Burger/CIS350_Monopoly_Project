@@ -15,21 +15,21 @@ import javax.swing.SwingConstants;
 public class BoardPanel extends JPanel{
 	/** Icon for a monopoly board. */
 	private ImageIcon boardpic = new ImageIcon("MonopolyImage5.png");
-	
+
 	/** Image for a monopoly board. */
 	private Image img = boardpic.getImage();
-	
-	private JLabel[][] matrix;
-	
-	private int playernumonproperty[] = new int[40];
-	
 
-    public PropertyPiecePlacement[] piecePlacements;
-	 
-	
-	
-	
-	
+	private JLabel[][] matrix;
+
+	private int playernumonproperty[] = new int[40];
+
+
+	public PropertyPiecePlacement[] piecePlacements;
+
+
+
+
+
 	/**
 	 * Default constructor for a Monopoly panel.
 	 */
@@ -38,113 +38,113 @@ public class BoardPanel extends JPanel{
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);
-		setSize(size);		
+		setSize(size);
 		setLayout(new GridLayout(50,50,1,1));
 		matrix = new JLabel[50][50];
-		
+
 		setPiecePlacements();
 		for (int row = 0; row < 50; row++) {
 			for (int col = 0; col < 50; col++) {
 				JLabel label = new JLabel("");
-			    label.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			    label.setForeground(Color.RED);
+				label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+				label.setForeground(Color.RED);
 				matrix[row][col] = label;
-				add(matrix[row][col]);					
+				add(matrix[row][col]);
 			}
-		}	
+		}
 	}
 
 	public void paintComponent(Graphics g) {
 		g.drawImage(img,0,0,null);
 	}
-	
+
 	public void movePlayer(int playernum, int toproperty, int fromproperty) {
 		int row = 0;
 		int col = 0;
-		
+
 		removePiece(piecePlacements[fromproperty],playernum);
 		placePiece(piecePlacements[toproperty],playernum);
-	
-		
+
+
 	}
-	
+
 	public void placePiece(PropertyPiecePlacement property, int playernum) {
 		if(matrix[property.getNoPieceRow()]
-		[property.getNoPieceCol()].getText().contentEquals("")) {
+				[property.getNoPieceCol()].getText().contentEquals("")) {
 			matrix[property.getNoPieceRow()]
-			[property.getNoPieceCol()].setForeground(playerColor(playernum));
+					[property.getNoPieceCol()].setForeground(playerColor(playernum));
 			matrix[property.getNoPieceRow()]
-				[property.getNoPieceCol()].setText(""+playernum);
+					[property.getNoPieceCol()].setText(""+playernum);
 		}
 		else if(matrix[property.getOnePieceRow()]
 				[property.getOnePieceCol()].getText().contentEquals("")) {
-					matrix[property.getOnePieceRow()]
+			matrix[property.getOnePieceRow()]
 					[property.getOnePieceCol()].setForeground(playerColor(playernum));
-					matrix[property.getOnePieceRow()]
-						[property.getOnePieceCol()].setText(""+playernum);
+			matrix[property.getOnePieceRow()]
+					[property.getOnePieceCol()].setText(""+playernum);
 		}
 		else if(matrix[property.getTwoPieceRow()]
 				[property.getTwoPieceCol()].getText().contentEquals("")) {
-					matrix[property.getTwoPieceRow()]
+			matrix[property.getTwoPieceRow()]
 					[property.getTwoPieceCol()].setForeground(playerColor(playernum));
-					matrix[property.getTwoPieceRow()]
-						[property.getTwoPieceCol()].setText(""+playernum);
+			matrix[property.getTwoPieceRow()]
+					[property.getTwoPieceCol()].setText(""+playernum);
 		}
 		else {
-					matrix[property.getThreePieceRow()]
+			matrix[property.getThreePieceRow()]
 					[property.getThreePieceCol()].setForeground(playerColor(playernum));
-					matrix[property.getThreePieceRow()]
-						[property.getThreePieceCol()].setText(""+playernum);
+			matrix[property.getThreePieceRow()]
+					[property.getThreePieceCol()].setText(""+playernum);
 		}
 	}
-	
+
 	public void removePiece(PropertyPiecePlacement property, int playernum) {
 		if(matrix[property.getNoPieceRow()]
-				[property.getNoPieceCol()].getText().contentEquals(""+playernum)) 
+				[property.getNoPieceCol()].getText().contentEquals(""+playernum))
 			matrix[property.getNoPieceRow()]
 					[property.getNoPieceCol()].setText("");
 		else if(matrix[property.getOnePieceRow()]
-				[property.getOnePieceCol()].getText().contentEquals(""+playernum)) 
+				[property.getOnePieceCol()].getText().contentEquals(""+playernum))
 			matrix[property.getOnePieceRow()]
 					[property.getOnePieceCol()].setText("");
 		else if(matrix[property.getTwoPieceRow()]
-				[property.getTwoPieceCol()].getText().contentEquals(""+playernum)) 
+				[property.getTwoPieceCol()].getText().contentEquals(""+playernum))
 			matrix[property.getTwoPieceRow()]
 					[property.getTwoPieceCol()].setText("");
 		else matrix[property.getThreePieceRow()]
-				[property.getThreePieceCol()].setText("");		
+					[property.getThreePieceCol()].setText("");
 	}
-	
+
 	private int findPlayersOnProperty(PropertyPiecePlacement property) {
 		if(matrix[property.getNoPieceRow()]
-				[property.getNoPieceCol()].getText().contentEquals("")) 
+				[property.getNoPieceCol()].getText().contentEquals(""))
 			return 0;
 		else if(matrix[property.getOnePieceRow()]
-				[property.getOnePieceCol()].getText().contentEquals("")) 
+				[property.getOnePieceCol()].getText().contentEquals(""))
 			return 1;
 		else if(matrix[property.getTwoPieceRow()]
-				[property.getTwoPieceCol()].getText().contentEquals("")) 
+				[property.getTwoPieceCol()].getText().contentEquals(""))
 			return 2;
-		
+
 		else return 3;
 	}
 	private Color playerColor(int playernum) {
 		switch(playernum) {
 			case 1:
 				return Color.RED;
-			case 2: 
+			case 2:
 				return Color.BLUE;
 			case 3:
 				return Color.GRAY;
-			case 4: 
+			case 4:
 				return Color.BLACK;
 		}
 		return null;
 	}
-	
+
 	void setPiecePlacements() {
 		piecePlacements = new PropertyPiecePlacement[40];
-	     // Manually create properties on the board.
+		// Manually create properties on the board.
 		piecePlacements[0] = new PropertyPiecePlacement(48, 44, 49, 44, 48, 49, 49, 49);
 		piecePlacements[1] = new PropertyPiecePlacement(48, 41, 48, 42, 49, 41, 49, 42);
 		piecePlacements[2] = new PropertyPiecePlacement(48, 37, 48, 38, 49, 37, 49, 38);
@@ -185,7 +185,7 @@ public class BoardPanel extends JPanel{
 		piecePlacements[37] = new PropertyPiecePlacement(33, 48, 33, 49, 34,48, 34, 49);
 		piecePlacements[38] = new PropertyPiecePlacement(36, 46, 37, 46, 38,46, 39, 46);
 		piecePlacements[39] = new PropertyPiecePlacement(41, 48, 41, 49, 42,48, 42, 49);
-		
-		
+
+
 	}
 }
