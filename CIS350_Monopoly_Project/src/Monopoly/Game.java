@@ -165,13 +165,13 @@ public class Game {
         players.get(currentPlayer).money -= rent;
         if (players.get(currentPlayer).money < 0) {
             if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
-                players.get(owner).money += rent
+                players.get(owner-1).money += rent
                         + players.get(currentPlayer).money;
             }
             return true;
         }
         if (board[players.get(currentPlayer).boardPosition].ownerNum != -1) {
-            players.get(owner - 1).money +=
+            players.get(owner-1).money +=
                     board[players.get(currentPlayer).boardPosition].rent;
         }
         return false;
