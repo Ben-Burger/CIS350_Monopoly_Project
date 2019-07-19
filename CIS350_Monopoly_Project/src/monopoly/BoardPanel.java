@@ -1,4 +1,4 @@
-package Monopoly;
+package monopoly;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,26 +10,32 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
-public class BoardPanel extends JPanel{
+
+/**
+ * Creates the Monopoly board. 
+ *
+ * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis 
+ * @version	7/18/2019 
+ */
+@SuppressWarnings("serial")
+public class BoardPanel extends JPanel {
 	/** Icon for a monopoly board. */
-	private ImageIcon boardpic = new ImageIcon("MonopolyImage5.png");
+	private ImageIcon boardpic = new ImageIcon("pictures/MonopolyImage5.png");
 
 	/** Image for a monopoly board. */
 	private Image img = boardpic.getImage();
 
+	/** Matrix used for player positions. */
 	private JLabel[][] matrix;
 
-	private int playernumonproperty[] = new int[40];
+	/** */
+	private int[] playernumonproperty = new int[40];
 
 
 	public PropertyPiecePlacement[] piecePlacements;
 
-
-
-
-
+	
 	/**
 	 * Default constructor for a Monopoly panel.
 	 */
@@ -68,7 +74,7 @@ public class BoardPanel extends JPanel{
 
 	}
 
-	public void placePiece(PropertyPiecePlacement property, int playernum) {
+	private void placePiece(PropertyPiecePlacement property, int playernum) {
 		if(matrix[property.getNoPieceRow()]
 				[property.getNoPieceCol()].getText().contentEquals("")) {
 			matrix[property.getNoPieceRow()]
@@ -98,7 +104,7 @@ public class BoardPanel extends JPanel{
 		}
 	}
 
-	public void removePiece(PropertyPiecePlacement property, int playernum) {
+	private void removePiece(PropertyPiecePlacement property, int playernum) {
 		if(matrix[property.getNoPieceRow()]
 				[property.getNoPieceCol()].getText().contentEquals(""+playernum))
 			matrix[property.getNoPieceRow()]
@@ -128,6 +134,7 @@ public class BoardPanel extends JPanel{
 
 		else return 3;
 	}
+	
 	private Color playerColor(int playernum) {
 		switch(playernum) {
 			case 1:
@@ -142,7 +149,7 @@ public class BoardPanel extends JPanel{
 		return null;
 	}
 
-	void setPiecePlacements() {
+	private void setPiecePlacements() {
 		piecePlacements = new PropertyPiecePlacement[40];
 		// Manually create properties on the board.
 		piecePlacements[0] = new PropertyPiecePlacement(48, 44, 49, 44, 48, 49, 49, 49);
