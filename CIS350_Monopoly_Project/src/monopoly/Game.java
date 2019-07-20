@@ -7,86 +7,137 @@ import javax.swing.ImageIcon;
 
 /**
  * Covers game logic and turn order.
+ * 
+ * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis 
+ * @version	7/20/2019 
  */
 public class Game {
 	
-	private int currentPlayerNum;
+	/** Player whose turn it currently is. */
 	private Player currentPlayer;
+	
+	/** Player number of the current player. */
+	private int currentPlayerNum;
+	
+	/** Current position of the current player. */
 	private int currentPosition;
+	
+	/** The game board consisting of all the properties. */
 	private Property[] board;
+	
+	/** All of the players in the game. */
 	private ArrayList<Player> players;
 
+	/**
+	 * Returns the current player.
+	 * @return Player - the current player
+	 */
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
 	
-	public void setCurrentPlayer(int playerNum) {
+	/**
+	 * Returns the current player.
+	 * @param playerNum - the player number
+	 * @return Player - the desired player
+	 */
+	public Player getPlayer(final int playerNum) {
+		return players.get(playerNum - 1);
+	}
+	
+	/**
+	 * Sets the current player.
+	 * @param playerNum - the player who will be the new current player
+	 */
+	public void setCurrentPlayer(final int playerNum) {
 		currentPlayer = players.get(playerNum - 1);
 		currentPlayerNum = playerNum - 1;
 	}
 	
+	/**
+	 * Returns the player number of the current player.
+	 * @return playerNum - the player number of the current player
+	 */
 	public int getCurrentPlayerNum() {
 		return currentPlayer.getPlayerNum();
 	}
 
+	/**
+	 * Returns the current position of the current player.
+	 * @return position - the current position of the current player
+	 */
 	public int getCurrentPlayerPosition() {
 		return currentPlayer.getPosition();
 	}
 
-	public void setCurrentPlayerPosition(int position) {
+	/**
+	 * Sets the current position of the current player.
+	 * @param position - the new position of the current player
+	 */
+	public void setCurrentPlayerPosition(final int position) {
 		currentPlayer.setPosition(position);
 		currentPosition = position;
 	}
 
-	public int getPlayerMoney(int playerNum) {
+	/**
+	 * Returns the amount of money owned by a player.
+	 * @param playerNum - a player's number 
+	 * @return money - the amount of money owned by a player
+	 */
+	public int getPlayerMoney(final int playerNum) {
 		return players.get(playerNum - 1).getMoney();
 	}
 
-	public void setcurrentPlayerNum(int currentPlayerNum) {
-		this.currentPlayerNum = currentPlayerNum;
-	}
-
-	public Property[] getBoard() {
-		return board;
-	}
-
-	public String getPropertyName(int propertyNum) {
+	/**
+	 * Returns the name of a property.
+	 * @param propertyNum - the number of the property
+	 * @return name - the name of the property
+	 */
+	public String getPropertyName(final int propertyNum) {
 		return board[propertyNum].getName();
 	}
 
-	public int getPropertyOwner(int propertyNum) {
+	/**
+	 * Returns the owner of a property.
+	 * @param propertyNum - the number of the property
+	 * @return owenrNum - the owner number of the property
+	 */
+	public int getPropertyOwner(final int propertyNum) {
 		return board[propertyNum].getOwnerNum();
 	}
 
-	public int getPropertyPrice(int propertyNum) {
+	/**
+	 * Returns the price of a property.
+	 * @param propertyNum - the number of the property
+	 * @return price - the price of the property
+	 */
+	public int getPropertyPrice(final int propertyNum) {
 		return board[propertyNum].getPrice();
 	}
 
-	public int getPropertyRent(int propertyNum) {
+	/**
+	 * Returns the rent for a property.
+	 * @param propertyNum - the number of the property
+	 * @return rent - the rent for the property
+	 */
+	public int getPropertyRent(final int propertyNum) {
 		return board[propertyNum].getRent();
 	}
 
-	public ImageIcon getPropertyImage(int propertyNum) {
+	/**
+	 * Returns the image for a property.
+	 * @param propertyNum - the number of the property
+	 * @return image - the image of the property
+	 */
+	public ImageIcon getPropertyImage(final int propertyNum) {
 		return board[propertyNum].getImage();
 	}
 
-	public void setBoard(Property[] board) {
-		this.board = board;
-	}
-
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
-	}
-
 	/**
-	 * Initializes game with given number of players
-	 * @param numPlayers Total number of players in the game.
+	 * Initializes game with given number of players.
+	 * @param numPlayers - Total number of players in the game.
 	 */
-	public Game(int numPlayers) {
+	public Game(final int numPlayers) {
 		players = new ArrayList<Player>();
 		for (int i = 1; i <= numPlayers; i++) {
 			players.add(new Player(i, 1500));
@@ -107,8 +158,8 @@ public class Game {
 	}
 
 	/**
-	 * Moves a player 2d6 spaces on the board
-	 * @return Number of spaces moved
+	 * Moves a player 2d6 spaces on the board.
+	 * @return number of spaces moved
 	 */
 	public int move() {
 		int movement = rollDice();	
@@ -127,6 +178,7 @@ public class Game {
 	/**
 	 * The current player becomes the owner of the property that he is
 	 * currently on. That properties price is taken out of the player's money.
+	 * @return price - the price for the property
 	 */
 	public int buyProperty() {
 		int price = board[currentPosition].getPrice();
@@ -206,8 +258,7 @@ public class Game {
 		char color = board[currentPosition].getColor();
 		int rent = board[currentPosition].getRent();
 
-		if ((color == 'b' || color == 'n' || color == 'u') &&
-				players.get(owner - 1).getProperties().get(color) == 2) {
+		if ((color == 'b' || color == 'n' || color == 'u') && players.get(owner - 1).getProperties().get(color) == 2) {
 			rent *= 2;
 		} else if (color == 'r') {
 			rent *= players.get(owner - 1).getProperties().get(color);
@@ -252,7 +303,7 @@ public class Game {
 		board[22] = new Property("Chance", 0, 0, 0);
 		board[23] = new Property("Indiana Avenue", 220, 18, 0, 'r', new ImageIcon("pictures/Indiana Ave.png"));
 		board[24] = new Property("Illinois Avenue", 240, 20, 0, 'r', new ImageIcon("pictures/Illinois Ave..png"));
-		board[25] = new Property("B & O Railroad", 200, 25, 0,'=', new ImageIcon("pictures/B. and O. Railroad.png"));
+		board[25] = new Property("B & O Railroad", 200, 25, 0, '=', new ImageIcon("pictures/B. and O. Railroad.png"));
 		board[26] = new Property("Atlantic Avenue", 260, 22, 0, 'y', new ImageIcon("pictures/Atlantic Ave.png"));
 		board[27] = new Property("Ventor Avenue", 260, 22, 0, 'y', new ImageIcon("pictures/Ventnor Ave.png"));
 		board[28] = new Property("Water Works", 150, 25, 0, 'u', new ImageIcon("pictures/Water Works.png"));
@@ -262,7 +313,7 @@ public class Game {
 		board[32] = new Property("North Carolina Avenue", 300, 26, 0, 'g', new ImageIcon("pictures/No. Carolina Ave.png"));
 		board[33] = new Property("Community Chest", 0, 0, 0);
 		board[34] = new Property("Pennsylvania Avenue", 320, 28, 0, 'g', new ImageIcon("pictures/Pennsylvania Ave.png"));
-		board[35] = new Property("Short Line", 200, 25, 0,'=', new ImageIcon("pictures/Short Line R.R.png"));
+		board[35] = new Property("Short Line", 200, 25, 0, '=', new ImageIcon("pictures/Short Line R.R.png"));
 		board[36] = new Property("Chance", 0, 0, 0);
 		board[37] = new Property("Park Place", 350, 35, 0, 'b', new ImageIcon("pictures/Park Place.png"));
 		board[38] = new Property("Luxury Tax", 0, 100, -1);
