@@ -3,25 +3,30 @@ package monopoly;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Player class for a monopoly game.
+ * 
+ * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
+ * @version	7/20/2019 
+ */
 public class Player {
 	
 	/** Player number. */
     private int playerNum;
     
-    private int money; 
+    /** Amount of money owned by a player. */
+    private int money;
+    
+    /** The amount of properties per color owned by a player. */
     private Map<Character, Integer> properties;
-    //tracks placement according to index of Board
+    
+    /** The position of the player. */
     private int boardPosition;
-
-
-    public Player() {
-    }
 
     /**
      * Creates a player in the game.
-     * @param playerNum Player number in the game such as Player 1, Player
-     *                  2, etc.
-     * @param money Total amount of money had by this player
+     * @param playerNum -player number in the game such as Player 1, Player 2, etc.
+     * @param money - total amount of money had by this player
      */
     public Player(final int playerNum, final int money) {
         properties = new TreeMap<>();
@@ -30,39 +35,76 @@ public class Player {
         boardPosition = 0;
     }
 
+    /**
+     * Returns the player number.
+     * @return playerNum - the player number
+     */
     public int getPlayerNum() {
     	return playerNum;
     }
     
-    public void setPosition(int boardPosition) {
+    /**
+     * Sets the player's board position.
+     * @param boardPosition - the new baord position
+     */
+    public void setPosition(final int boardPosition) {
     	this.boardPosition = boardPosition;
     }
     
+    /**
+     * Returns the position of the player.
+     * @return boardPosition - the position of the player
+     */
     public int getPosition() {
     	return boardPosition;
     }
     
+    /**
+     * Returns the amount of money owned by the player.
+     * @return money - the amount of money 
+     */
     public int getMoney() {
     	return money;
     }
     
-    public void setMoney(int amount) {
+    /**
+     * Sets the amount of money owned by the player.
+     * @param amount - the new amount of money
+     */
+    public void setMoney(final int amount) {
     	this.money = amount;
     }
     
-    public void addMoney(int amount) {
+    /**
+     * Adds money to the current amount owned by the player.
+     * @param amount - the amount to be added
+     */
+    public void addMoney(final int amount) {
     	money += amount;
     }
     
-    public void subtractMoney(int amount) {
+    /**
+     * Subtracts money from the current amount owned by the player.
+     * @param amount - the amount to be subtracted
+     */
+    public void subtractMoney(final int amount) {
     	money -= amount;
     }
     
+    
+    /**
+     * Returns the number of properties by color owned by the player.
+     * @return properties - the map of properties by color
+     */
     public Map<Character, Integer> getProperties() {
     	return properties;
     }
     
-    public void addProperty(char color) {
+    /**
+     * Adds a property to the player.
+     * @param color - the color of the property
+     */
+    public void addProperty(final char color) {
         if (properties.containsKey(color)) {
             properties.replace(color, properties.get(color) + 1);
         } else {
