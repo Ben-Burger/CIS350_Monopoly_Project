@@ -1,4 +1,4 @@
-package Monopoly;
+package monopoly;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,26 +8,30 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+
 /**
  * GUI for the Monopoly game board.
  *
- * @author	Ben Burger
- * @version	7/8/2019
+ * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
+ * @version	7/20/2019
  */
 @SuppressWarnings("serial")
-public class MonopolyGUI extends JFrame implements ActionListener {
+public final class MonopolyGUI extends JFrame implements ActionListener {
 
-	//	private static final long serialVersionUID = 1L; 
-
+	/** Menu bar for main menu. */
 	private JMenuBar menus;
+
+	/** Main menu. */
 	private JMenu mainMenu;
+
+	/** Exit button for main menu. */
 	private JMenuItem exitItem;
 
 	/**
 	 * Default constructor for a Monopoly GUI.
-	 * @param \String frameLabel - label for the window
+	 * @param frameLabel - label for the window
 	 */
-	public MonopolyGUI(String frameLabel) {
+	private MonopolyGUI(final String frameLabel) {
 
 		super(frameLabel);
 
@@ -56,17 +60,18 @@ public class MonopolyGUI extends JFrame implements ActionListener {
 	 * Tells the GUI what to do when an action happens.
 	 * @param e - ActionEvent used to indicate action happened
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
-		// MenuBar option of exiting
-		if(e.getSource() == exitItem)
+		if (e.getSource() == exitItem) {
 			System.exit(1);
+		}
 	}
 
 	/**
 	 * Main method that displays a Monopoly GUI.
+	 * @param args - arguments for main method
 	 */
-	public static void main (String args[]) {
+	public static void main(final String[] args) {
 		new MonopolyGUI("Monopoly Game");
 	}
 }
