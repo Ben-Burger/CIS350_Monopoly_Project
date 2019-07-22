@@ -283,7 +283,7 @@ public class Game {
 		board[2] = new Property("Community Chest", 0, 0, 0);
 		board[3] = new Property("Baltic Avenue", 60, 4, 0, 'n', new ImageIcon("pictures/Baltic Ave.png"));
 		board[4] = new Property("Income Tax", 0, 200, -1);
-		board[5] = new Property("Reading Railroad", 200, 25, 0, '=', new ImageIcon("pictures/Reading Railroad.png"));
+		board[5] = new Property("Reading Railroad", 200, 25, 0, 'r', new ImageIcon("pictures/Reading Railroad.png"));
 		board[6] = new Property("Oriental Avenue", 100, 6, 0, 't', new ImageIcon("pictures/Oriental Ave.png"));
 		board[7] = new Property("Chance", 0, 0, 0);
 		board[8] = new Property("Vermont Avenue", 100, 6, 0, 't', new ImageIcon("pictures/Vermont Ave.png"));
@@ -293,7 +293,7 @@ public class Game {
 		board[12] = new Property("Electric Company", 150, 25, 0, 'u', new ImageIcon("pictures/Electric Company.png"));
 		board[13] = new Property("States Avenue", 140, 10, 0, 'p', new ImageIcon("pictures/States Ave.png"));
 		board[14] = new Property("Virginia Avenue", 160, 12, 0, 'p', new ImageIcon("pictures/Virginia Ave.png"));
-		board[15] = new Property("Pennsylvania Railroad", 200, 25, 0, '=', new ImageIcon("pictures/Pennsylvania R.R.png"));
+		board[15] = new Property("Pennsylvania Railroad", 200, 25, 0, 'r', new ImageIcon("pictures/Pennsylvania R.R.png"));
 		board[16] = new Property("St. James Place", 180, 14, 0, 'o', new ImageIcon("pictures/St. James Place.png"));
 		board[17] = new Property("Community Chest", 0, 0, 0);
 		board[18] = new Property("Tennessee Avenue", 180, 14, 0, 'o', new ImageIcon("pictures/Tennessee Avenue.png"));
@@ -303,7 +303,7 @@ public class Game {
 		board[22] = new Property("Chance", 0, 0, 0);
 		board[23] = new Property("Indiana Avenue", 220, 18, 0, 'r', new ImageIcon("pictures/Indiana Ave.png"));
 		board[24] = new Property("Illinois Avenue", 240, 20, 0, 'r', new ImageIcon("pictures/Illinois Ave..png"));
-		board[25] = new Property("B & O Railroad", 200, 25, 0, '=', new ImageIcon("pictures/B. and O. Railroad.png"));
+		board[25] = new Property("B & O Railroad", 200, 25, 0, 'r', new ImageIcon("pictures/B. and O. Railroad.png"));
 		board[26] = new Property("Atlantic Avenue", 260, 22, 0, 'y', new ImageIcon("pictures/Atlantic Ave.png"));
 		board[27] = new Property("Ventor Avenue", 260, 22, 0, 'y', new ImageIcon("pictures/Ventnor Ave.png"));
 		board[28] = new Property("Water Works", 150, 25, 0, 'u', new ImageIcon("pictures/Water Works.png"));
@@ -313,7 +313,7 @@ public class Game {
 		board[32] = new Property("North Carolina Avenue", 300, 26, 0, 'g', new ImageIcon("pictures/No. Carolina Ave.png"));
 		board[33] = new Property("Community Chest", 0, 0, 0);
 		board[34] = new Property("Pennsylvania Avenue", 320, 28, 0, 'g', new ImageIcon("pictures/Pennsylvania Ave.png"));
-		board[35] = new Property("Short Line", 200, 25, 0, '=', new ImageIcon("pictures/Short Line R.R.png"));
+		board[35] = new Property("Short Line", 200, 25, 0, 'r', new ImageIcon("pictures/Short Line R.R.png"));
 		board[36] = new Property("Chance", 0, 0, 0);
 		board[37] = new Property("Park Place", 350, 35, 0, 'b', new ImageIcon("pictures/Park Place.png"));
 		board[38] = new Property("Luxury Tax", 0, 100, -1);
