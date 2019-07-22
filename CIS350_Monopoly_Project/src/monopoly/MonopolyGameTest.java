@@ -157,39 +157,43 @@ public class MonopolyGameTest {
         assertEquals(1484, test.getPlayerMoney(2));
     }
 
-//    /**
-//     * Testing that three property colors will charge double when monopolized.
-//     */
-//    @Test
-//    public void chargeForTwoRailroadsOwned() {
-//        test.setCurrentPlayerPosition(6);
-//        test.buyProperty();
-//        test.setCurrentPlayerPosition(8);
-//        test.buyProperty();
-//        test.setCurrentPlayerPosition(9);
-//        test.buyProperty();
-//        test.nextTurn();
-//        test.setCurrentPlayerPosition(9);
-//        test.payRent();
-//        assertEquals(1484, test.getPlayerMoney(2));
-//    }
-//
-//    /**
-//     * Testing that three property colors will charge double when monopolized.
-//     */
-//    @Test
-//    public void chargeForThreeRailroadsOwned() {
-//        test.setCurrentPlayerPosition(6);
-//        test.buyProperty();
-//        test.setCurrentPlayerPosition(8);
-//        test.buyProperty();
-//        test.setCurrentPlayerPosition(9);
-//        test.buyProperty();
-//        test.nextTurn();
-//        test.setCurrentPlayerPosition(9);
-//        test.payRent();
-//        assertEquals(1484, test.getPlayerMoney(2));
-//    }
+    /**
+     * Testing that three property colors will charge double when monopolized.
+     */
+    @Test
+    public void chargeForTwoRailroadsOwned() {
+        test.setCurrentPlayerPosition(5);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(15);
+        test.buyProperty();
+        test.nextTurn();
+        test.setCurrentPlayerPosition(5);
+        test.payRent();
+        test.setCurrentPlayerPosition(15);
+        test.payRent();
+        assertEquals(1400, test.getPlayerMoney(2));
+    }
+
+    /**
+     * Testing that three property colors will charge double when monopolized.
+     */
+    @Test
+    public void chargeForThreeRailroadsOwned() {
+        test.setCurrentPlayerPosition(5);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(15);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(25);
+        test.buyProperty();
+        test.nextTurn();
+        test.setCurrentPlayerPosition(5);
+        test.payRent();
+        test.setCurrentPlayerPosition(15);
+        test.payRent();
+        test.setCurrentPlayerPosition(25);
+        test.payRent();
+        assertEquals(1275, test.getPlayerMoney(2));
+    }
 
     /**
      * Testing that all railroads will charge $100 when monopolized
