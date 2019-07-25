@@ -22,6 +22,9 @@ public class Player {
     
     /** The position of the player. */
     private int boardPosition;
+    
+    /** If the player is bankrupt or not. */
+    private boolean bankrupt;
 
     /**
      * Creates a player in the game.
@@ -33,6 +36,7 @@ public class Player {
         this.playerNum = playerNum;
         this.money = money;
         boardPosition = 0;
+        bankrupt = false;
     }
 
     /**
@@ -111,4 +115,20 @@ public class Player {
             properties.put(color, 1);
         }
     }
+
+	/**
+	 * Checks if a player is bankrupt.
+	 * @return bankrupt - true or false
+	 */
+	public boolean isBankrupt() {
+		return bankrupt;
+	}
+
+	/**
+	 * Set the player bankrupt or not bankrupt.
+	 * @param bankrupt - true or false
+	 */
+	public void setBankrupt(final boolean bankrupt) {
+		this.bankrupt = bankrupt;
+	}
 }

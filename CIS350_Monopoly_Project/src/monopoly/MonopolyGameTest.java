@@ -196,7 +196,7 @@ public class MonopolyGameTest {
     }
 
     /**
-     * Testing that all railroads will charge $100 when monopolized
+     * Testing that all railroads will charge $100 when monopolized.
      */
     @Test
     public void chargeForFourRailroadsOwned() {
