@@ -12,7 +12,10 @@ import javax.swing.ImageIcon;
  * @version	7/20/2019 
  */
 public class Game {
-	
+
+	/** Chance and Community Chest cards. */
+	private CardDecks decks;
+
 	/** Player whose turn it currently is. */
 	private Player currentPlayer;
 	
@@ -162,7 +165,7 @@ public class Game {
 	 * @param numPlayers - Total number of players in the game.
 	 */
 	public Game(final int numPlayers) {
-		players = new ArrayList<Player>();
+		players = new ArrayList<>();
 		for (int i = 1; i <= numPlayers; i++) {
 			players.add(new Player(i, 100));		//TODO for testing
 		}
@@ -170,6 +173,7 @@ public class Game {
 		currentPlayerNum = 0;
 		currentPlayer = players.get(0);
 		currentPosition = 0;
+		decks = new CardDecks();
 	}
 
 	/**
@@ -197,6 +201,14 @@ public class Game {
 		currentPlayer.setPosition(newPosition);
 		currentPosition = newPosition;
 		return movement;
+	}
+
+	public void chestCard() {
+		Card c = decks.drawChest();
+	}
+
+	public void chanceCard() {
+		Card c = decks.drawChance();
 	}
 
 	/**
@@ -326,6 +338,33 @@ public class Game {
 		}
 		
 		return 0;
+	}
+
+	/**
+	 * Takes the given property and removes any owner attached to it. Removes
+	 * appropriate property count from current player's property Map. Increases
+	 * current players money by half the properties price (its mortgage value).
+	 * @param name Player input of the property name
+	 * @return false if property not found. Otherwise true.
+	 */
+	public boolean sellProperty(String name) {
+		int index = -1;
+		for (int i = 0; i < board.length; i++) {
+				if (board[i].getName().equalsIgnoreCase(name)) {
+					index = i;
+					break;
+			}
+		}
+
+		if (index == -1) {
+			return false;
+		}
+
+		currentPlayer.removeProperty(board[index].getColor());
+		board[index].setOwnerNum(0);
+		currentPlayer.setMoney(currentPlayer.getMoney() + (board[index].getPrice() / 2));
+
+		return true;
 	}
 
 	/**
