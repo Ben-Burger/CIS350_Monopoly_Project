@@ -19,7 +19,7 @@ public class Game {
 	/** Player whose turn it currently is. */
 	private Player currentPlayer;
 	
-	/** Player number of the current player. */
+	/** Player number of the current player. (0-3) */
 	private int currentPlayerNum;
 	
 	/** Current position of the current player. */
@@ -64,6 +64,14 @@ public class Game {
 	public int getCurrentPlayerNum() {
 		return currentPlayer.getPlayerNum();
 	}
+	
+	/**
+	 * Returns the amount of money owned by the current player.
+	 * @return money - the amount of money owned
+	 */
+	public int getCurrentPlayerMoney() {
+		return currentPlayer.getMoney();
+	}
 
 	/**
 	 * Returns the current position of the current player.
@@ -80,6 +88,22 @@ public class Game {
 	public void setCurrentPlayerPosition(final int position) {
 		currentPlayer.setPosition(position);
 		currentPosition = position;
+	}
+	
+	/**
+	 * Checks if the current player is bankrupt.
+	 * @return bankrupt - true or false
+	 */
+	public boolean checkCurrentPlayerBankrupt() {
+		return currentPlayer.isBankrupt();
+	}
+	
+	/**
+	 * Set the current player bankrupt or not bankrupt.
+	 * @param bankrupt - true or false
+	 */
+	public void setCurrentPlayerBankrupt(final boolean bankrupt) {
+		currentPlayer.setBankrupt(bankrupt);
 	}
 
 	/**
@@ -143,7 +167,7 @@ public class Game {
 	public Game(final int numPlayers) {
 		players = new ArrayList<>();
 		for (int i = 1; i <= numPlayers; i++) {
-			players.add(new Player(i, 1500));
+			players.add(new Player(i, 100));		//TODO for testing
 		}
 		createProperties();
 		currentPlayerNum = 0;
@@ -166,8 +190,8 @@ public class Game {
 	 * @return number of spaces moved
 	 */
 	public int move() {
-		int movement = rollDice();	
-		//        int movement = 1;		//TODO for testing
+//		int movement = rollDice();	
+		        int movement = 4;		//TODO for testing
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
@@ -209,9 +233,20 @@ public class Game {
 	 */
 	public void nextTurn() {
 		currentPlayerNum++;
-		if (currentPlayerNum > players.size() - 1) {
+		if (currentPlayerNum >= players.size()) {
 			currentPlayerNum = 0;
 		}
+		
+		currentPlayer = players.get(currentPlayerNum);
+		currentPosition = currentPlayer.getPosition();
+		
+		if (currentPlayer.isBankrupt()) {
+			currentPlayerNum++;
+			if (currentPlayerNum >= players.size()) {
+				currentPlayerNum = 0;
+			}
+		}
+		
 		currentPlayer = players.get(currentPlayerNum);
 		currentPosition = currentPlayer.getPosition();
 	}
@@ -247,14 +282,14 @@ public class Game {
 		int currentPlayerMoney = currentPlayer.getMoney();
 
 		currentPlayer.subtractMoney(rent);
-
+		
 		if (currentPlayer.getMoney() < 0) {
-			if (board[currentPosition].getOwnerNum() != -1) {
+			currentPlayer.setMoney(0);
+			if (owner != -1) {
 				players.get(owner - 1).addMoney(currentPlayerMoney);
 			}
 			return true;
-		}
-		if (board[currentPosition].getOwnerNum() != -1) {
+		} else if (owner != -1) {
 			players.get(owner - 1).addMoney(rent);
 		}
 		return false;
@@ -270,14 +305,39 @@ public class Game {
 		char color = board[currentPosition].getColor();
 		int rent = board[currentPosition].getRent();
 
-		if ((color == 'b' || color == 'n' || color == 'u') && players.get(owner - 1).getProperties().get(color) == 2) {
-			rent *= 2;
-		} else if (color == 'r') {
-			rent *= players.get(owner - 1).getProperties().get(color);
-		} else if (players.get(owner - 1).getProperties().get(color) == 3) {
-			rent *= 2;
+		if (owner != -1) {
+			if ((color == 'b' || color == 'n' || color == 'u')
+					&& players.get(owner - 1).getProperties().get(color) == 2) {
+				rent *= 2;
+			} else if (color == 'r') {
+				rent *= players.get(owner - 1).getProperties().get(color);
+			} else if (players.get(owner - 1).getProperties().get(color) == 3) {
+				rent *= 2;
+			} 
 		}
 		return rent;
+	}
+	
+	/**
+	 * Checks if the game is over.
+	 * @return playerNum - the winner's player number, or 0 if the game is still going
+	 */
+	public int checkForGameEnd() {
+		int numActivePlayers = 0;
+		int activePlayer = 0;
+		
+		for (int i = 0; i < players.size(); i++) {
+			if (!players.get(i).isBankrupt()) {
+				numActivePlayers++;
+				activePlayer = i + 1;
+			}
+		}
+		
+		if (numActivePlayers == 1) {
+			return activePlayer;
+		}
+		
+		return 0;
 	}
 
 	/**
