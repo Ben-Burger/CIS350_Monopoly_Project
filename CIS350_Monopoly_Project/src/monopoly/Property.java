@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
  * @version	7/20/2019 
  */
 public class Property {
-	
 	/** Name of the property. */
     private String name;
     
