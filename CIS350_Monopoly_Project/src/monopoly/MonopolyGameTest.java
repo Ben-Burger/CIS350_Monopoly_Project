@@ -219,4 +219,16 @@ public class MonopolyGameTest {
         test.payRent();
         assertEquals(1100, test.getPlayerMoney(2));
     }
+
+    /**
+     *
+     */
+    @Test
+    public void cardThatPaysToEveryone() {
+        test.drawSpecificCard('a', 12);
+        assertEquals(1350, test.getCurrentPlayerMoney());
+        assertEquals(1550, test.getPlayerMoney(2));
+        assertEquals(1550, test.getPlayerMoney(3));
+        assertEquals(1550, test.getPlayerMoney(4));
+    }
 }

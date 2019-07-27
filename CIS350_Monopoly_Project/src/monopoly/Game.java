@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+
 /**
  * Covers game logic and turn order.
  * 
@@ -167,7 +168,7 @@ public class Game {
 	public Game(final int numPlayers) {
 		players = new ArrayList<>();
 		for (int i = 1; i <= numPlayers; i++) {
-			players.add(new Player(i, 100));		//TODO for testing
+			players.add(new Player(i, 1500));		//TODO for testing
 		}
 		createProperties();
 		currentPlayerNum = 0;
@@ -190,8 +191,8 @@ public class Game {
 	 * @return number of spaces moved
 	 */
 	public int move() {
-//		int movement = rollDice();	
-		        int movement = 4;		//TODO for testing
+		int movement = rollDice();
+//		        int movement = 4;		//TODO for testing
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
@@ -203,12 +204,96 @@ public class Game {
 		return movement;
 	}
 
-	public void chestCard() {
-		Card c = decks.drawChest();
+	public void moveTo(int spot) {
+		int tmp = currentPosition;
+		setCurrentPlayerPosition(spot);
+		if (spot != 10 && spot < tmp) {
+			currentPlayer.addMoney(200);
+		}
 	}
 
+	/**
+	 * Draws a card from the Community Chest deck and performs the necessary
+	 * actions required by the card.
+	 */
+	public void drawChest() {
+		useCard(decks.drawChest());
+	}
+
+	/**
+	 * Draws a card from the Chance deck and performs the necessary actions
+	 * required by the card.
+	 */
 	public void chanceCard() {
-		Card c = decks.drawChance();
+		useCard(decks.drawChance());
+	}
+
+	public void drawSpecificCard(final char c, final int index) {
+		useCard(decks.getCard(c, index));
+	}
+
+	/**
+	 * Uses the parameters on the given card to enact the correct consequences
+	 * of the card.
+	 * @param c Card drawn from either Community Chest or Chance deck.
+	 */
+	private void useCard(Card c) {
+		switch (c.getType()) {
+			case JAIL_FREE:
+				currentPlayer.addProperty('j');
+				break;
+			case PAY_TO_BANK:
+				currentPlayer.setMoney(currentPlayer.getMoney() - c.getNum());
+				break;
+			case MOVE_BACK_SPACES:
+				currentPlayer.setPosition(currentPosition - c.getNum());
+				break;
+			case MOVE_TO_NEAREST:
+				if (c.getNum() == 5) {
+					if (currentPosition > 35 || currentPosition < 5) {
+						moveTo(5);
+					} else if (currentPosition > 5 && currentPosition < 15) {
+						setCurrentPlayerPosition(15);
+					} else if (currentPosition > 15 && currentPosition < 25) {
+						setCurrentPlayerPosition(25);
+					} else {
+						setCurrentPlayerPosition(35);
+					}
+				} else {
+					if (currentPosition > 12 && currentPosition < 28) {
+						setCurrentPlayerPosition(28);
+					} else {
+						moveTo(12);
+					}
+				}
+				break;
+			case PAY_TO_EVERYONE:
+				int payment = c.getNum() * (players.size() - 1);
+				currentPlayer.subtractMoney(payment);
+				int max = players.size();
+				for (int i = 0; i < max; i++) {
+					if (i + 1 != getCurrentPlayerNum()) {
+						players.get(i).addMoney(c.getNum());
+					}
+				}
+				break;
+			case MOVE_TO_POSITION:
+				setCurrentPlayerPosition(c.getNum());
+				break;
+			case RECEIVE_FROM_BANK:
+				currentPlayer.setMoney(currentPlayer.getMoney() + c.getNum());
+				break;
+			case RECEIVE_FROM_EVERYONE:
+				int received = c.getNum() * (players.size() - 1);
+				currentPlayer.addMoney(received);
+				int mx = players.size();
+				for (int i = 0; i < mx; i++) {
+					if (i + 1 != getCurrentPlayerNum()) {
+						players.get(i).subtractMoney(c.getNum());
+					}
+				}
+				break;
+		}
 	}
 
 	/**

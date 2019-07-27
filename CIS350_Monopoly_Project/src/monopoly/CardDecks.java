@@ -34,7 +34,7 @@ public class CardDecks {
     /**
      * Clears and populates Chance card deck.
      */
-    private void makeChance() {
+    public void makeChance() {
         chanceDeck.clear();
 
         chanceDeck.add(new Card("Advance to Go (Collect $200)", Card.Type.MOVE_TO_POSITION,
@@ -131,5 +131,20 @@ public class CardDecks {
         Card tmp = chanceDeck.get(draw);
         chanceDeck.remove(draw);
         return tmp;
+    }
+
+    /**
+     *
+     * @param c 'a' for a Chance card. 'e' (or anything else) for a Chest card.
+     * @param index Index of card in its ArrayList.
+     * @return Requested Card.
+     */
+    public Card getCard(final char c, final int index) {
+        if (c == 'a') {
+            return chanceDeck.get(index);
+        } else {
+            return communityChestDeck.get(index);
+        }
+
     }
 }
