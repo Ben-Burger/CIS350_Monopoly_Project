@@ -22,7 +22,7 @@ public class Player {
     
     /** The position of the player. */
     private int boardPosition;
-    
+
     /** If the player is bankrupt or not. */
     private boolean bankrupt;
 
@@ -106,7 +106,7 @@ public class Player {
     
     /**
      * Adds a property to the player.
-     * @param color - the color of the property
+     * @param color the color of the property
      */
     public void addProperty(final char color) {
         if (properties.containsKey(color)) {
@@ -131,4 +131,16 @@ public class Player {
 	public void setBankrupt(final boolean bankrupt) {
 		this.bankrupt = bankrupt;
 	}
+
+    /**
+     * Removes a property of the given color.
+     * @param color the color of the property
+     */
+    public void removeProperty(final char color) {
+        if (properties.get(color) == 1) {
+            properties.remove(color);
+        } else {
+            properties.replace(color, properties.get(color) - 1);
+        }
+    }
 }
