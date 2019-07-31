@@ -31,7 +31,7 @@ public final class MonopolyGUI extends JFrame implements ActionListener {
 	 * Default constructor for a Monopoly GUI.
 	 * @param frameLabel - label for the window
 	 */
-	private MonopolyGUI(final String frameLabel) {
+	public MonopolyGUI(final String frameLabel) {
 
 		super(frameLabel);
 
@@ -65,13 +65,5 @@ public final class MonopolyGUI extends JFrame implements ActionListener {
 		if (e.getSource() == exitItem) {
 			System.exit(1);
 		}
-	}
-
-	/**
-	 * Main method that displays a Monopoly GUI.
-	 * @param args - arguments for main method
-	 */
-	public static void main(final String[] args) {
-		new MonopolyGUI("Monopoly Game");
 	}
 }

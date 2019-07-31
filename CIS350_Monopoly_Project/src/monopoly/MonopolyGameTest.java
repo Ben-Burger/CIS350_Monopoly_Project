@@ -196,7 +196,7 @@ public class MonopolyGameTest {
     }
 
     /**
-     * Testing that all railroads will charge $100 when monopolized
+     * Testing that all railroads will charge $100 when monopolized.
      */
     @Test
     public void chargeForFourRailroadsOwned() {
@@ -218,5 +218,17 @@ public class MonopolyGameTest {
         test.setCurrentPlayerPosition(35);
         test.payRent();
         assertEquals(1100, test.getPlayerMoney(2));
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void cardThatPaysToEveryone() {
+        test.drawSpecificCard('a', 12);
+        assertEquals(1350, test.getCurrentPlayerMoney());
+        assertEquals(1550, test.getPlayerMoney(2));
+        assertEquals(1550, test.getPlayerMoney(3));
+        assertEquals(1550, test.getPlayerMoney(4));
     }
 }

@@ -259,19 +259,95 @@ public class MonopolyPanel extends JPanel {
 	 */
 	private void checkProperty(final int propertyNum) {
 		switch (game.propertyActions()) {
-		case 0:
-			if (game.getPropertyName(propertyNum).contentEquals("Go to Jail")) {
-				updateGameInfo("Player " + currentPlayer + " is sent to JAIL!");
-				game.setCurrentPlayerPosition(10);
-				board.movePlayer(currentPlayer, 10, 30);
-				JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " GO TO JAIL!");
-			}
-			if (game.getPropertyName(propertyNum).contentEquals("Free Parking")) {
-				updateGameInfo("Player " + currentPlayer + " won free parking!");
-				JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you get free parking!");
-			}
+		case -1:
+			specialProperty(propertyNum);
 			break;
-		case 1:
+		case 0:
+			unownedProperty(propertyNum);
+			break;
+		case 1:		// owned property
+			ownedProperty(propertyNum);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void specialProperty(int propertyNum) {
+		boolean bankrupt;
+		String cardMessage;
+		int previousPosition;
+
+		switch (game.getPropertyName(propertyNum)) {
+		case "Community Chest":
+			previousPosition = currentPosition;
+
+			cardMessage= game.drawChest();
+			
+			JOptionPane.showMessageDialog(null, cardMessage, "COMMUNITY CHEST",  JOptionPane.INFORMATION_MESSAGE);
+
+			currentPosition = game.getCurrentPlayerPosition();
+			if (currentPosition != previousPosition) {
+				board.movePlayer(currentPlayer, currentPosition, previousPosition);
+			}
+			
+			updateBank();
+			break;
+		case "Income Tax":
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $200 for Income Tax.");
+			updateGameInfo("Player " + currentPlayer + " paid $200 for Income Tax.");
+
+			bankrupt = game.subtractMoney(currentPlayer, 200);
+
+			if (bankrupt) {
+				game.setCurrentPlayerBankrupt(true);
+				updateGameInfo("Player " + game.getCurrentPlayerNum() + " went bankrupt!");
+			}
+			updateBank();
+			break;
+		case "Chance":
+			previousPosition = currentPosition;
+
+			cardMessage= game.drawChance();
+			
+			JOptionPane.showMessageDialog(null, cardMessage, "CHANCE",  JOptionPane.INFORMATION_MESSAGE);
+
+			currentPosition = game.getCurrentPlayerPosition();
+			if (currentPosition != previousPosition) {
+				board.movePlayer(currentPlayer, currentPosition, previousPosition);
+			}
+
+			updateBank();
+			break;
+		case "Free Parking":
+			updateGameInfo("Player " + currentPlayer + " won free parking!");
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you get free parking!");
+			break;
+		case "Go to Jail":
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " GO TO JAIL!");
+			game.setCurrentPlayerPosition(10);
+			board.movePlayer(currentPlayer, 10, 30);
+			updateGameInfo("Player " + currentPlayer + " is sent to JAIL!");
+			break;
+		case "Luxury Tax":
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $100 for Luxury Tax.");
+			updateGameInfo("Player " + currentPlayer + " paid $100 for Luxury Tax.");
+
+			bankrupt = game.subtractMoney(currentPlayer, 200);
+
+			if (bankrupt) {
+				game.setCurrentPlayerBankrupt(true);
+				updateGameInfo("Player " + game.getCurrentPlayerNum() + " went bankrupt!");
+			}
+			updateBank();
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void unownedProperty(int propertyNum) {
+		if (game.getCurrentPlayerMoney() >= game.getPropertyPrice(currentPosition)) {
 			int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location? (cost: $" + game.getPropertyPrice(propertyNum) + ")",
 					JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.getPropertyImage(propertyNum));
 			if (reply == JOptionPane.YES_OPTION) {
@@ -283,28 +359,25 @@ public class MonopolyPanel extends JPanel {
 				label.setForeground(playerColor(currentPlayer)); //red,blue,gray,black
 				ownedProperties[currentPlayer - 1].add(label);
 			}
-			break;
-		case 2:
+		} else {
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " cannot afford to buy " + game.getPropertyName(currentPosition) + ".");
+		}
+	}
+
+	private void ownedProperty(int propertyNum) {
+		if (game.getPropertyOwner(currentPosition) != game.getCurrentPlayerNum()) {	
 			int rent = game.calculateRent();
 			int propertyOwner = game.getPropertyOwner(propertyNum);
 
-			if (game.getPropertyPrice(propertyNum) > 0) {
-				JOptionPane.showMessageDialog(null,
-						"Player " + currentPlayer + " must pay $" + rent + " to Player "
-								+ propertyOwner + " for rent.");
-			}
-
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " must pay $" + rent + " to Player " + propertyOwner + " for rent.");
 			updateGameInfo("Player " + game.getCurrentPlayerNum() + " payed $" + rent + " in rent to Player " + propertyOwner + ".");
 
 			boolean bankrupt = game.payRent();
-
 			if (bankrupt) {
-				updateGameInfo("Player " + game.getCurrentPlayerNum() + "went bankrupt!");
+				game.setCurrentPlayerBankrupt(true);
+				updateGameInfo("Player " + game.getCurrentPlayerNum() + " went bankrupt!");
 			}
 			updateBank();
-			break;
-		default:
-			break;
 		}
 	}
 
@@ -322,10 +395,14 @@ public class MonopolyPanel extends JPanel {
 	 */
 	private void updateBank() {
 		for (int i = 0; i < numOfPlayers; i++) {
-			playerBank[i].setText("Player " + (i + 1) + " has $" + game.getPlayerMoney(i + 1));
-		}
+			if (!game.getPlayer(i + 1).isBankrupt()) {
+				playerBank[i].setText("Player " + (i + 1) + " has $" + game.getPlayerMoney(i + 1));
+			} else {
+				playerBank[i].setText("Player " + (i + 1) + " is bankrupt!");
+			}
+		}	
 	}
-	
+
 	/**
 	 * Returns the color of the player.
 	 * @param playernum - player number
@@ -363,9 +440,9 @@ public class MonopolyPanel extends JPanel {
 					int previousPosition = game.getCurrentPlayerPosition();
 
 					int movement = game.move();
-					
+
 					currentPosition = game.getCurrentPlayerPosition();
-					
+
 					currentPlayer = game.getCurrentPlayerNum();
 					board.movePlayer(currentPlayer, currentPosition, previousPosition);
 					if (currentPosition < previousPosition) {
@@ -375,7 +452,7 @@ public class MonopolyPanel extends JPanel {
 					}
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + movement
 							+ " and is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
-			
+
 					checkProperty(currentPosition);
 					hasRolled = true;
 				}
@@ -385,7 +462,20 @@ public class MonopolyPanel extends JPanel {
 				if (hasRolled) {
 					hasRolled = false;
 					game.nextTurn();
-					updateGameInfo("Player " + game.getCurrentPlayerNum() + "'s turn.");
+
+					int winner = game.checkForGameEnd();
+					if (winner == 0) {
+						updateGameInfo("Player " + game.getCurrentPlayerNum() + "'s turn.");
+					} else {
+						updateGameInfo("Player " + winner + " won!");
+						int reply = JOptionPane.showConfirmDialog(null, "Player " + winner + " won the game.\nWould you like to play again?", 
+								"", JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION);
+						if (reply == JOptionPane.YES_OPTION) {
+							Main.newGame();
+						} else {
+							System.exit(0);
+						}
+					}
 				}
 			}
 		}

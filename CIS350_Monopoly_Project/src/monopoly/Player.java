@@ -23,6 +23,9 @@ public class Player {
     /** The position of the player. */
     private int boardPosition;
 
+    /** If the player is bankrupt or not. */
+    private boolean bankrupt;
+
     /**
      * Creates a player in the game.
      * @param playerNum -player number in the game such as Player 1, Player 2, etc.
@@ -33,6 +36,7 @@ public class Player {
         this.playerNum = playerNum;
         this.money = money;
         boardPosition = 0;
+        bankrupt = false;
     }
 
     /**
@@ -102,13 +106,41 @@ public class Player {
     
     /**
      * Adds a property to the player.
-     * @param color - the color of the property
+     * @param color the color of the property
      */
     public void addProperty(final char color) {
         if (properties.containsKey(color)) {
             properties.replace(color, properties.get(color) + 1);
         } else {
             properties.put(color, 1);
+        }
+    }
+
+	/**
+	 * Checks if a player is bankrupt.
+	 * @return bankrupt - true or false
+	 */
+	public boolean isBankrupt() {
+		return bankrupt;
+	}
+
+	/**
+	 * Set the player bankrupt or not bankrupt.
+	 * @param bankrupt - true or false
+	 */
+	public void setBankrupt(final boolean bankrupt) {
+		this.bankrupt = bankrupt;
+	}
+
+    /**
+     * Removes a property of the given color.
+     * @param color the color of the property
+     */
+    public void removeProperty(final char color) {
+        if (properties.get(color) == 1) {
+            properties.remove(color);
+        } else {
+            properties.replace(color, properties.get(color) - 1);
         }
     }
 }
