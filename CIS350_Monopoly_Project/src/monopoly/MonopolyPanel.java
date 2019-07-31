@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 
+
 /**
  * Creates the panel for the Monopoly GUI.
  *
@@ -65,6 +66,12 @@ public class MonopolyPanel extends JPanel {
 
 	/** Panels to display which players own which properties. */
 	private PropertyPanel[] ownedProperties;
+	
+	/** Visual representation of the dice. */
+    private GVdie die1, die2;
+    
+    /** Panel to hold dice. */
+    private DicePanel dice = new DicePanel();
 
 
 	/**
@@ -87,7 +94,7 @@ public class MonopolyPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.gridheight = 8;
+		c.gridheight = 9;
 		this.add(board, c);
 
 
@@ -113,7 +120,7 @@ public class MonopolyPanel extends JPanel {
 		c.gridheight = 1;
 		c.insets = new Insets(50, 0, 0, 0); 
 		for (int i = 0; i < 4; i++) {
-			c.gridy = 2 + i;
+			c.gridy = 3 + i;
 			if (i == 3) {
 				c.insets = new Insets(50, 0, 0, 0);
 			}
@@ -136,10 +143,10 @@ public class MonopolyPanel extends JPanel {
 		rollButton.addActionListener(listener);
 		rollButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 6;
+		c.gridy = 7;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		c.insets = new Insets(100, 20, 0, 0);	
+		c.insets = new Insets(50, 20, 0, 0);	
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(rollButton, c);
 
@@ -148,13 +155,24 @@ public class MonopolyPanel extends JPanel {
 		endTurnButton.addActionListener(listener);
 		endTurnButton.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 		c.gridx = 1;
-		c.gridy = 7;
+		c.gridy = 8;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.insets = new Insets(50, 20, 50, 0);
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(endTurnButton, c);
 
+		
+		die1 = game.getDie(1);
+		die2 = game.getDie(2);
+		dice.add(die1);
+		dice.add(die2);
+	    c.gridx = 1;
+	    c.gridy = 2;
+	    c.gridwidth = 1;
+	    c.insets = new Insets(5,10,5,10);
+	    this.add(dice, c);
+	    
 		c.gridy = 0;
 		c.gridx = 2;
 		c.gridwidth = 1;
@@ -445,6 +463,13 @@ public class MonopolyPanel extends JPanel {
 
 					currentPlayer = game.getCurrentPlayerNum();
 					board.movePlayer(currentPlayer, currentPosition, previousPosition);
+					
+					dice.removeAll();
+					die1 = game.getDie(1);
+					die2 = game.getDie(2);
+					dice.add(die1);
+					dice.add(die2);
+					
 					if (currentPosition < previousPosition) {
 						JOptionPane.showMessageDialog(null, "Passed GO! Collect $200");
 						updateBank();						
@@ -454,7 +479,12 @@ public class MonopolyPanel extends JPanel {
 							+ " and is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
 
 					checkProperty(currentPosition);
-					hasRolled = true;
+					if(die1.getValue() != die2.getValue())
+						hasRolled = true;
+					else {
+						updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled doubles, and gets to go again.");
+						JOptionPane.showMessageDialog(null, "Rolled doubles! Roll again.");
+					}
 				}
 			}
 
