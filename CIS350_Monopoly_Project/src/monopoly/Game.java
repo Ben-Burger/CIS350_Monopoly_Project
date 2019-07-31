@@ -31,6 +31,12 @@ public class Game {
 	
 	/** All of the players in the game. */
 	private ArrayList<Player> players;
+	
+	/** Represents one of the two dice. */
+	GVdie die1 = new GVdie(80);
+
+	/** Represents one of the two dice. */
+	GVdie die2 = new GVdie(80);
 
 	public boolean subtractMoney(int playerNum, int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
@@ -194,8 +200,12 @@ public class Game {
 	 * @return Total of two six sided dice rolls
 	 */
 	public int rollDice() {
-		Random d6 = new Random();
-		return d6.nextInt(6) + d6.nextInt(6) + 2;
+//		Random d6 = new Random();
+//		return d6.nextInt(6) + d6.nextInt(6) + 2;
+		die1.roll();
+		die2.roll();
+
+		return die1.getValue() + die2.getValue();
 	}
 
 	/**
@@ -203,8 +213,8 @@ public class Game {
 	 * @return number of spaces moved
 	 */
 	public int move() {
-//		int movement = rollDice();
-		        int movement = 1;		//TODO for testing
+		int movement = rollDice();
+//		        int movement = 1;		//TODO for testing
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
@@ -458,6 +468,18 @@ public class Game {
 		currentPlayer.setMoney(currentPlayer.getMoney() + (board[index].getPrice() / 2));
 
 		return true;
+	}
+	
+	/*******************************************************************
+	 * Returns the requested die. Legal values for num are 1 and 2.
+	 * @param num the number of the desired die
+	 * @return the requested die value
+	 ******************************************************************/
+	public GVdie getDie(int num) {
+		if (num == 1)
+			return die1;
+		else
+			return die2;
 	}
 
 	/**
