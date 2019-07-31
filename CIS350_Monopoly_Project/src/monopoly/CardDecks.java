@@ -39,9 +39,9 @@ public class CardDecks {
 
         chanceDeck.add(new Card("Advance to Go (Collect $200)", Card.Type.MOVE_TO_POSITION,
                 0));
-        chanceDeck.add(new Card("Advance to Illinois Ave—If you pass Go, collect $200",
+        chanceDeck.add(new Card("Advance to Illinois Ave - If you pass Go, collect $200",
                 Card.Type.MOVE_TO_POSITION, 24));
-        chanceDeck.add(new Card("Advance to St. Charles Place – If you pass Go, collect $200",
+        chanceDeck.add(new Card("Advance to St. Charles Place - If you pass Go, collect $200",
                 Card.Type.MOVE_TO_POSITION, 11));
         chanceDeck.add(new Card("Advance token to nearest Utility.",
                 Card.Type.MOVE_TO_NEAREST, 12));
@@ -53,19 +53,19 @@ public class CardDecks {
                 0));
         chanceDeck.add(new Card("Go Back Three Spaces",
                 Card.Type.MOVE_BACK_SPACES, 3));
-        chanceDeck.add(new Card("Go to Jail–Go directly to Jail–Do not pass Go, do not collect $200",
+        chanceDeck.add(new Card("Go to Jail - Go directly to Jail - Do not pass Go, do not collect $200",
                 Card.Type.MOVE_TO_POSITION, 10));
         chanceDeck.add(new Card("Pay poor tax of $15", Card.Type.PAY_TO_BANK,
                 15));
-        chanceDeck.add(new Card("Take a trip to Reading Railroad–If you pass Go, collect $200",
+        chanceDeck.add(new Card("Take a trip to Reading Railroad - If you pass Go, collect $200",
                 Card.Type.MOVE_TO_POSITION, 5));
-        chanceDeck.add(new Card("Take a walk on the Boardwalk–Advance token to Boardwalk",
+        chanceDeck.add(new Card("Take a walk on the Boardwalk - Advance token to Boardwalk",
                 Card.Type.MOVE_TO_POSITION, 39));
-        chanceDeck.add(new Card("You have been elected Chairman of the Board–Pay each player $50",
+        chanceDeck.add(new Card("You have been elected Chairman of the Board - Pay each player $50",
                 Card.Type.PAY_TO_EVERYONE, 50));
-        chanceDeck.add(new Card("Your building and loan matures—Collect $150",
+        chanceDeck.add(new Card("Your building and loan matures - Collect $150",
                 Card.Type.RECEIVE_FROM_BANK, 150));
-        chanceDeck.add(new Card("You have won a crossword competition—Collect $100",
+        chanceDeck.add(new Card("You have won a crossword competition - Collect $100",
                 Card.Type.RECEIVE_FROM_BANK, 100));
     }
 
@@ -77,25 +77,25 @@ public class CardDecks {
 
         communityChestDeck.add(new Card("Advance to Go (Collect $200)",
                 Card.Type.MOVE_TO_POSITION, 0));
-        communityChestDeck.add(new Card("Bank error in your favor—Collect $200",
+        communityChestDeck.add(new Card("Bank error in your favor - Collect $200",
                 Card.Type.RECEIVE_FROM_BANK, 200));
         communityChestDeck.add(new Card("From sale of stock you get $50",
                 Card.Type.RECEIVE_FROM_BANK, 50));
-        communityChestDeck.add(new Card("Doctor's fee—Pay $50", Card.Type.PAY_TO_BANK,
+        communityChestDeck.add(new Card("Doctor's fee - Pay $50", Card.Type.PAY_TO_BANK,
                 50));
         communityChestDeck.add(new Card("Get out of Jail Free", Card.Type.JAIL_FREE,
                 0));
-        communityChestDeck.add(new Card("Go to Jail–Go directly to jail–Do not pass Go–Do not collect $200",
+        communityChestDeck.add(new Card("Go to Jail - Go directly to jail - Do not pass Go - Do not collect $200",
                 Card.Type.MOVE_TO_POSITION, 10));
-        communityChestDeck.add(new Card("Grand Opera Night—Collect $50 from every player for opening night seats",
+        communityChestDeck.add(new Card("Grand Opera Night - Collect $50 from every player for opening night seats",
                 Card.Type.RECEIVE_FROM_EVERYONE, 50));
-        communityChestDeck.add(new Card("Holiday Fund matures—Receive $100",
+        communityChestDeck.add(new Card("Holiday Fund matures - Receive $100",
                 Card.Type.RECEIVE_FROM_BANK, 100));
-        communityChestDeck.add(new Card("Income tax refund–Collect $20",
+        communityChestDeck.add(new Card("Income tax refund - Collect $20",
                 Card.Type.RECEIVE_FROM_BANK, 20));
-        communityChestDeck.add(new Card("It is your birthday—Collect $10 from everyone",
+        communityChestDeck.add(new Card("It is your birthday - Collect $10 from everyone",
                 Card.Type.RECEIVE_FROM_EVERYONE, 10));
-        communityChestDeck.add(new Card("Life insurance matures–Collect $100",
+        communityChestDeck.add(new Card("Life insurance matures - Collect $100",
                 Card.Type.RECEIVE_FROM_BANK, 100));
         communityChestDeck.add(new Card("Pay hospital fees of $100",
                 Card.Type.PAY_TO_BANK, 50));
@@ -103,7 +103,7 @@ public class CardDecks {
                 Card.Type.PAY_TO_BANK, 100));
         communityChestDeck.add(new Card("Receive $25 consultancy fee",
                 Card.Type.RECEIVE_FROM_BANK, 25));
-        communityChestDeck.add(new Card("You have won second prize in a beauty contest-Collect $10",
+        communityChestDeck.add(new Card("You have won second prize in a beauty contest - Collect $10",
                 Card.Type.RECEIVE_FROM_BANK, 10));
         communityChestDeck.add(new Card("You inherit $100",
                 Card.Type.RECEIVE_FROM_BANK, 100));
