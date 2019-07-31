@@ -13,7 +13,6 @@ import javax.swing.ImageIcon;
  * @version	7/20/2019 
  */
 public class Game {
-
 	/** Chance and Community Chest cards. */
 	private CardDecks decks;
 

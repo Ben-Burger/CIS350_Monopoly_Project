@@ -9,24 +9,27 @@ import javax.swing.ImageIcon;
  * will be identified with a price and rent of $0.
  * 
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019 
+ * @version	7/20/2019
  */
 public class Property {
+    /** Number of houses on property. 5 houses means 1 hotel */
+    private int houses;
+
 	/** Name of the property. */
     private String name;
-    
+
     /** Price of the property. */
     private int price;
-    
+
     /** Rent for the property. */
     private int rent;
-    
+
     /** Owner number of the property. */
     private int ownerNum;
-    
+
     /** Color of the property. */
     private char color;
-    
+
     /** Image of the property, pops up when player lands on it. */
     private ImageIcon image;
 
@@ -42,6 +45,7 @@ public class Property {
         this.price = price;
         this.rent = rent;
         this.ownerNum = ownerNum;
+        this.color = '0';
     }
 
     /**
@@ -61,7 +65,7 @@ public class Property {
         this.color = color;
         this.image = image;
     }
-    
+
     /**
 	 * Returns the name of the property.
 	 * @return name - name of the property
@@ -70,14 +74,14 @@ public class Property {
 		return name;
 	}
 
-	/**
-	 * Sets the name of the property.
-	 * @param name - name of the property
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-    
+    /**
+     * Sets the name of the property.
+     * @param name - name of the property
+     */
+    public void setName(final String name) {
+    	this.name = name;
+    }
+
     /**
      * Returns price of the property.
      * @return price - price of the property
@@ -85,7 +89,7 @@ public class Property {
     public int getPrice() {
     	return price;
     }
-    
+
     /**
      * Sets the price of the property.
      * @param price - price of the property
@@ -93,8 +97,8 @@ public class Property {
     public void setPrice(final int price) {
     	this.price = price;
     }
-    
-	/**
+
+    /**
 	 * Returns the rent for the property.
 	 * @return rent - rent for the property
 	 */
@@ -125,36 +129,32 @@ public class Property {
 	public void setOwnerNum(final int ownerNum) {
 		this.ownerNum = ownerNum;
 	}
-	
-	/**
-	 * Returns the color of the property. 
-	 * @return color - color of the property
-	 */
+
+    /**
+    * * Returns the color of the property.
+    * @return color - color of the property
+    */
 	public char getColor() {
 		return color;
 	}
 
 	/**
-	 * Sets the color of the property.
-	 * @param color - color of the property
-	 */
-	public void setColor(final char color) {
+    * Sets the color of the property.
+    * @param color - color of the property
+    */
+    public void setColor(final char color) {
 		this.color = color;
 	}
-	
+
+	public int getHouses() {
+        return houses;
+    }
+
     /**
      * Returns the image of the property.
      * @return image - image for the property
      */
 	public ImageIcon getImage() {
 		return image;
-	}
-
-	/**
-	 * Sets the image for the property.
-	 * @param image - image for the property
-	 */
-	public void setimage(final ImageIcon image) {
-		this.image = image;
 	}
 }

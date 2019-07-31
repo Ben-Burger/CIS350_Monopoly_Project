@@ -5,9 +5,8 @@ import java.util.TreeMap;
 
 /**
  * Player class for a monopoly game.
- * 
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019 
+ * @version	7/20/2019
  */
 public class Player {
 	
@@ -28,7 +27,8 @@ public class Player {
 
     /**
      * Creates a player in the game.
-     * @param playerNum -player number in the game such as Player 1, Player 2, etc.
+     * @param playerNum -player number in the game such as Player 1,
+     *                  Player 2, etc.
      * @param money - total amount of money had by this player
      */
     public Player(final int playerNum, final int money) {
