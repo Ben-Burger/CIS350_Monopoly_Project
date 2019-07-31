@@ -8,14 +8,19 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ListModel;
 
 
 
@@ -318,6 +323,41 @@ public class MonopolyPanel extends JPanel {
 			bankrupt = game.subtractMoney(currentPlayer, 200);
 
 			if (bankrupt) {
+		
+				ArrayList<Property> properties = game.getProperties(currentPlayer);
+				
+				if (properties.size() > 0) {
+					
+					ArrayList<Object> params = new ArrayList<Object>();
+					params.add("You are at $" + game.getCurrentPlayerMoney() + "\nSelect properties to sell:");
+
+					for(int i = 0; i < properties.size(); i++)
+					{
+					    JCheckBox checkbox = new JCheckBox();
+					    checkbox.setText(properties.get(i).getName() + ": $" + (properties.get(i).getPrice()/2));
+					    checkbox.setSelected(false);
+					    params.add(checkbox);
+					}
+					
+					Object[] realParams = new Object[params.size()];
+					realParams = params.toArray(realParams);
+					
+				
+					int n = JOptionPane.showConfirmDialog(null, realParams, "title", JOptionPane.OK_CANCEL_OPTION);
+
+					
+					if (n == JOptionPane.OK_OPTION) {
+						for(int i = 1; i < realParams.length; i++)
+						{
+					        boolean selected = ((JCheckBox) realParams[i]).isSelected();
+					        if(selected) {
+					        	System.out.println("Check box " + i + " selected.");
+					        }
+					    }
+					}
+				}
+				
+				
 				game.setCurrentPlayerBankrupt(true);
 				updateGameInfo("Player " + game.getCurrentPlayerNum() + " went bankrupt!");
 			}
