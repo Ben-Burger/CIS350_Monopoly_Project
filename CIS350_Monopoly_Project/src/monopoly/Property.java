@@ -22,7 +22,7 @@ public class Property {
     private int price;
 
     /** Rent for the property. */
-    private int rent;
+    private int[] rent;
 
     /** Owner number of the property. */
     private int ownerNum;
@@ -37,33 +37,40 @@ public class Property {
      * Creates a special property without color or an image.
      * @param name - name of the property
      * @param price - price of the property
-     * @param rent - rent for the property
+     * @param r - rent for the property
      * @param ownerNum - owner number for the property
      */
-    public Property(final String name, final int price, final int rent, final int ownerNum) {
+    public Property(final String name, final int price, final int[] r, final int ownerNum) {
     	this.name = name;
         this.price = price;
-        this.rent = rent;
         this.ownerNum = ownerNum;
         this.color = '0';
+        this.rent = new int[r.length];
+        this.rent = new int[r.length];
+        for (int i = 0; i < r.length; i++) {
+            this.rent[i] = r[i];
+        }
     }
 
     /**
      * Creates a special property without color or an image.
      * @param name - name of the property
      * @param price - price of the property
-     * @param rent - rent for the property
+     * @param r - rent for the property
      * @param ownerNum - owner number for the property
      * @param color - color of the property
      * @param image - image of the property
      */
-    public Property(final String name, final int price, final int rent, final int ownerNum, final char color, final ImageIcon image) {
+    public Property(final String name, final int price, final int[] r, final int ownerNum, final char color, final ImageIcon image) {
         this.name = name;
         this.price = price;
-        this.rent = rent;
         this.ownerNum = ownerNum;
         this.color = color;
         this.image = image;
+        this.rent = new int[r.length];
+        for (int i = 0; i < r.length; i++) {
+            this.rent[i] = r[i];
+        }
     }
 
     /**
@@ -103,15 +110,7 @@ public class Property {
 	 * @return rent - rent for the property
 	 */
 	public int getRent() {
-		return rent;
-	}
-
-	/**
-	 * Sets the rent for the property.
-	 * @param rent - rent for the property
-	 */
-	public void setRent(final int rent) {
-		this.rent = rent;
+		return rent[houses];
 	}
 
 	/**
@@ -131,7 +130,7 @@ public class Property {
 	}
 
     /**
-    * * Returns the color of the property.
+    * Returns the color of the property.
     * @return color - color of the property
     */
 	public char getColor() {
@@ -146,8 +145,35 @@ public class Property {
 		this.color = color;
 	}
 
+    /**
+     * Increments houses by one.
+     */
+    public void addHouse() {
+        houses++;
+    }
+
+    /**
+     * Decrements houses by one.
+     */
+    public void removeHouse() {
+        houses--;
+    }
+
 	public int getHouses() {
         return houses;
+    }
+
+    /**
+     * Sets the houses on a property to be equal to a number within 0 and 5.
+     * @param num New number of houses on property within 0 and 5
+     * @return true if an acceptable number, false otherwise.
+     */
+    public boolean setHouses(final int num) {
+        if (num >= 0 && num <= 5) {
+            houses = num;
+            return true;
+        }
+        return false;
     }
 
     /**
