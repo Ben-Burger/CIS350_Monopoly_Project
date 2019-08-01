@@ -37,6 +37,11 @@ public class Game {
 	/** Represents one of the two dice. */
 	private GVdie die2 = new GVdie(80);
 
+
+	public ArrayList<Property> getProperties(int playerNum) {
+		return players.get(playerNum - 1).getPropertiesList();
+	}
+
 	public boolean subtractMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
 		if (getPlayerMoney(playerNum) <= 0) {
@@ -333,7 +338,7 @@ public class Game {
 
 		board[currentPosition].setOwnerNum(currentPlayerNum + 1);
 
-		currentPlayer.addProperty(board[currentPosition].getColor());
+		currentPlayer.addProperty(board[currentPosition]);
 
 		return price;
 	}
@@ -424,7 +429,7 @@ public class Game {
 
 		return false;
 	}
-	
+
 	/**
 	 * Checks if the game is over.
 	 * @return playerNum - the winner's player number, or 0 if the game is still going
@@ -467,7 +472,7 @@ public class Game {
 			return false;
 		}
 
-		currentPlayer.removeProperty(board[index].getColor());
+		currentPlayer.removeProperty(board[index]);
 		board[index].setOwnerNum(0);
 		currentPlayer.setMoney(currentPlayer.getMoney() + (board[index].getPrice() / 2));
 

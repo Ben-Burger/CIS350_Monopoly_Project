@@ -1,5 +1,6 @@
 package monopoly;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -24,6 +25,8 @@ public class Player {
 
     /** If the player is bankrupt or not. */
     private boolean bankrupt;
+    
+    private ArrayList<Property> propertiesList;
 
     /**
      * Creates a player in the game.
@@ -37,6 +40,8 @@ public class Player {
         this.money = money;
         boardPosition = 0;
         bankrupt = false;
+        
+        propertiesList = new ArrayList<Property>();
     }
 
     /**
@@ -108,6 +113,20 @@ public class Player {
      * Adds a property to the player.
      * @param color the color of the property
      */
+    public void addProperty(final Property property) {
+    	char color = property.getColor();
+        if (properties.containsKey(color)) {
+            properties.replace(color, properties.get(color) + 1);
+        } else {
+            properties.put(color, 1);
+        }
+        propertiesList.add(property);
+    }
+    
+    /**
+     * Adds a property to the player.
+     * @param color the color of the property
+     */
     public void addProperty(final char color) {
         if (properties.containsKey(color)) {
             properties.replace(color, properties.get(color) + 1);
@@ -136,11 +155,29 @@ public class Player {
      * Removes a property of the given color.
      * @param color the color of the property
      */
-    public void removeProperty(final char color) {
-        if (properties.get(color) == 1) {
+    public void removeProperty(final Property property) {
+        char color = property.getColor();
+    	if (properties.get(color) == 1) {
             properties.remove(color);
         } else {
             properties.replace(color, properties.get(color) - 1);
         }
+    	propertiesList.remove(property);
+    }
+    
+    /**
+     * Removes a property of the given color.
+     * @param color the color of the property
+     */
+    public void removeProperty(final char color) {
+    	if (properties.get(color) == 1) {
+            properties.remove(color);
+        } else {
+            properties.replace(color, properties.get(color) - 1);
+        }
+    }
+    
+    public ArrayList<Property> getPropertiesList() {
+    	return propertiesList;
     }
 }
