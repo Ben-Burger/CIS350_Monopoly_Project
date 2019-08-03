@@ -27,9 +27,14 @@ public class Player {
     /** If the player is bankrupt or not. */
     private boolean bankrupt;
     
+
     private ArrayList<Property> propertiesList;
 
-    /**
+    /** How many turns the player has been in jail. */
+    private int jailturns;
+
+
+	/**
      * Creates a player in the game.
      * @param playerNum -player number in the game such as Player 1, Player 2, etc.
      * @param money - total amount of money had by this player
@@ -40,8 +45,12 @@ public class Player {
         this.money = money;
         boardPosition = 0;
         bankrupt = false;
+
         
         propertiesList = new ArrayList<Property>();
+
+        jailturns = 0;
+
     }
 
     /**
@@ -149,6 +158,22 @@ public class Player {
 	 */
 	public void setBankrupt(final boolean bankrupt) {
 		this.bankrupt = bankrupt;
+	}
+	
+	/**
+	 * Returns the number of turns in jail
+	 * @return jailturns - integer 0-3
+	 */
+	public int getJailturns() {
+		return jailturns;
+	}
+
+	/**
+	 * Set the player number of jail turns.
+	 * @param jailturns - integer value
+	 */
+	public void setJailturns(int jailturns) {
+		this.jailturns = jailturns;
 	}
 
     /**

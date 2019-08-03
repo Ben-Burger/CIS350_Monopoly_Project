@@ -221,6 +221,7 @@ public class Game {
 //		int movement = rollDice();
 		        int movement = 1;		//TODO for testing
 
+
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
 			newPosition -= 39;
