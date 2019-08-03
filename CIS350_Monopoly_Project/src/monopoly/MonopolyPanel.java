@@ -519,6 +519,11 @@ public class MonopolyPanel extends JPanel {
 
 					currentPlayer = game.getCurrentPlayerNum();
 					board.movePlayer(currentPlayer, currentPosition, previousPosition);
+//					for(int j=0;j<4;j++) {
+//						board.addHouse(game.getCurrentPlayerPosition());
+//					}
+//					if(game.getCurrentPlayerPosition()>1)
+//					board.placeHotel(game.getCurrentPlayerPosition()-1);
 					
 					dice.removeAll();
 					die1 = game.getDie(1);

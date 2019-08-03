@@ -213,8 +213,8 @@ public class Game {
 	 * @return number of spaces moved
 	 */
 	public int move() {
-		int movement = rollDice();
-//		        int movement = 10;		//TODO for testing
+//		int movement = rollDice();
+		        int movement = 10;		//TODO for testing
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
