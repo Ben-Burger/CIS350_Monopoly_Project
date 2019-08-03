@@ -7,13 +7,13 @@ import javax.swing.ImageIcon;
 
 /**
  * Covers game logic and turn order.
- * 
+ *
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
  * @version	7/20/2019
  */
 public class Game {
-	/** Chance and Community Chest cards. */
-	private CardDecks decks;
+    /** Chance and Community Chest cards. */
+    private CardDecks decks;
 
 	/** Player whose turn it currently is. */
 	private Player currentPlayer;
@@ -36,11 +36,21 @@ public class Game {
 	/** Represents one of the two dice. */
 	private GVdie die2 = new GVdie(80);
 
-
-	public ArrayList<Property> getProperties(int playerNum) {
+	/**
+	 * Returns properties for given player.
+	 * @param playerNum requested player
+	 * @return ArrayList of properties of player
+	 */
+	public ArrayList<Property> getProperties(final int playerNum) {
 		return players.get(playerNum - 1).getPropertiesList();
 	}
 
+	/**
+	 * Subtracts money from total money
+	 * @param playerNum Number of requested player
+	 * @param amount Amount of money to be removed
+	 * @return True if money being removed results in player being bankrupt.
+	 */
 	public boolean subtractMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
 		if (getPlayerMoney(playerNum) <= 0) {
@@ -49,7 +59,12 @@ public class Game {
 		return false;
 	}
 
-	public void addMoney(int playerNum, int amount) {
+	/**
+	 * Adds money to total money
+	 * @param playerNum Number of requested player
+	 * @param amount Amount of money to be added
+	 */
+	public void addMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).addMoney(amount);
 	}
 	
@@ -457,12 +472,64 @@ public class Game {
 		return rent;
 	}
 
-	public void buyHouse(int space) {
-	    // TODO: add Pricing for houses.
-	    board[space].addHouse();
+	/**
+	 * Buys a house on the given space. Removes the cost of the house from
+	 * currentPlayer's money and adds house to the property.
+	 * @param space The property space being requested.
+	 * @return True if player has the money to buy the property,
+	 * false otherwise.
+	 */
+	public boolean buyHouse(int space) {
+		int cost = 0;
+		switch (board[space].getColor()) {
+			case 'n':
+			case 't':
+				cost = 50;
+				break;
+			case 'p':
+			case 'o':
+				cost = 100;
+				break;
+			case 'r':
+			case 'y':
+				cost = 150;
+				break;
+			case 'g':
+			case 'b':
+				cost = 200;
+		}
+		if (getCurrentPlayerMoney() >= cost) {
+			board[space].addHouse();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void sellHouse(int space) {
+	/**
+	 * Sells a house on the given space. Gives currentPlayer appropriate money
+	 * for the house.
+	 * @param space Which space is to be sold.
+	 */
+	public void sellHouse(final int space) {
+		int sale = 0;
+		switch (board[space].getColor()) {
+			case 'n':
+			case 't':
+				sale = 25;
+				break;
+			case 'p':
+			case 'o':
+				sale = 50;
+				break;
+			case 'r':
+			case 'y':
+				sale = 75;
+				break;
+			case 'g':
+			case 'b':
+				sale = 100;
+		}
 	    board[space].removeHouse();
     }
 
@@ -515,11 +582,11 @@ public class Game {
 		return true;
 	}
 	
-	/*******************************************************************
+	/**
 	 * Returns the requested die. Legal values for num are 1 and 2.
 	 * @param num the number of the desired die
 	 * @return the requested die value
-	 ******************************************************************/
+	 */
 	public GVdie getDie(int num) {
 		if (num == 1)
 			return die1;
