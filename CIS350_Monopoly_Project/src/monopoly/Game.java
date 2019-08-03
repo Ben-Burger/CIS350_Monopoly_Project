@@ -38,6 +38,11 @@ public class Game {
 	/** Represents one of the two dice. */
 	GVdie die2 = new GVdie(80);
 
+	
+	public ArrayList<Property> getProperties(int playerNum) {
+		return players.get(playerNum - 1).getPropertiesList();
+	}
+	
 	public boolean subtractMoney(int playerNum, int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
 		if (getPlayerMoney(playerNum) <= 0) {
@@ -186,7 +191,7 @@ public class Game {
 	public Game(final int numPlayers) {
 		players = new ArrayList<>();
 		for (int i = 1; i <= numPlayers; i++) {
-			players.add(new Player(i, 1500));		//TODO for testing
+			players.add(new Player(i, 200));		//TODO for testing
 		}
 		createProperties();
 		currentPlayerNum = 0;
@@ -214,7 +219,8 @@ public class Game {
 	 */
 	public int move() {
 //		int movement = rollDice();
-		        int movement = 10;		//TODO for testing
+		        int movement = 1;		//TODO for testing
+
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
@@ -334,7 +340,7 @@ public class Game {
 
 		board[currentPosition].setOwnerNum(currentPlayerNum + 1);
 
-		currentPlayer.addProperty(board[currentPosition].getColor());
+		currentPlayer.addProperty(board[currentPosition]);
 
 		return price;
 	}
@@ -463,7 +469,7 @@ public class Game {
 			return false;
 		}
 
-		currentPlayer.removeProperty(board[index].getColor());
+		currentPlayer.removeProperty(board[index]);
 		board[index].setOwnerNum(0);
 		currentPlayer.setMoney(currentPlayer.getMoney() + (board[index].getPrice() / 2));
 
