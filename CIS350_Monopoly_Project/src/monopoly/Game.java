@@ -1,7 +1,6 @@
 package monopoly;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 
@@ -379,6 +378,39 @@ public class Game {
 		return board[currentPosition].getOwnerNum();
 	}
 
+	public ArrayList<Property> canGetHouse() {
+	    ArrayList<Property> eligible = new ArrayList<>();
+	    Map<Character, Integer> colorHouse = new TreeMap<Character, Integer>();
+        for (Property p: currentPlayer.getPropertiesList()) {
+            if (p.getColor() == 'n' || p.getColor() == 'b') {
+                if (currentPlayer.getProperties().get(p.getColor()) == 2) {
+                    eligible.add(p);
+                    if (colorHouse.containsKey(p.getColor())){
+                        if (colorHouse.get(p.getColor()) < p.getHouses()) {
+                            colorHouse.replace(p.getColor(), p.getHouses());
+                        }
+                    } else {
+                        colorHouse.put(p.getColor(), p.getHouses());
+                    }
+                }
+            } else if (p.getColor() != 'r' && p.getColor() != 'u') {
+                if (currentPlayer.getProperties().get(p.getColor()) == 3) {
+                    eligible.add(p);
+                    if (colorHouse.containsKey(p.getColor())) {
+                        if (colorHouse.get(p.getColor()) < p.getHouses()) {
+                            colorHouse.replace(p.getColor(), p.getHouses());
+                        }
+                    } else {
+                        colorHouse.put(p.getColor(), p.getHouses());
+                    }
+                }
+            }
+        }
+        eligible.removeIf(p -> colorHouse.get(p.getColor()) <= p.getHouses());
+
+	    return eligible;
+    }
+
 	/**
 	 * Current player pays rent of landed property.
 	 * @return True if player goes bankrupt. False otherwise.
@@ -425,10 +457,14 @@ public class Game {
 		return rent;
 	}
 
-	public boolean buyHouse(int space) {
-
-		return false;
+	public void buyHouse(int space) {
+	    // TODO: add Pricing for houses.
+	    board[space].addHouse();
 	}
+
+	public void sellHouse(int space) {
+	    board[space].removeHouse();
+    }
 
 	/**
 	 * Checks if the game is over.
