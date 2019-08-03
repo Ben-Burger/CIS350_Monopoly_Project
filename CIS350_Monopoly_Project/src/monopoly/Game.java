@@ -219,7 +219,8 @@ public class Game {
 	 */
 	public int move() {
 //		int movement = rollDice();
-		        int movement = 1;		//TODO for testing
+		        int movement = 10;		//TODO for testing
+		currentPlayer.addProperty('j');
 
 
 		int newPosition = currentPlayer.getPosition() + movement;
@@ -311,6 +312,9 @@ public class Game {
 				break;
 			case MOVE_TO_POSITION:
 				setCurrentPlayerPosition(c.getNum());
+				if(c.getNum()==10) {
+					currentPlayer.setJailturns(1);
+				}
 				break;
 			case RECEIVE_FROM_BANK:
 				currentPlayer.setMoney(currentPlayer.getMoney() + c.getNum());

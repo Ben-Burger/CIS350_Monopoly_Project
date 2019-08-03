@@ -467,53 +467,61 @@ public class MonopolyPanel extends JPanel {
 	 * If the player is in jail, displays the player's options.
 	 */
 	private void displayJailOptions() {
-		String [] options=new String[]{"Try for doubles", "Pay $50 Bail"};
-		int response =JOptionPane.showOptionDialog(null,
-				"You are in Jail. What do you want to do?",
-				"IN JAIL!", 
-				JOptionPane.DEFAULT_OPTION, 
-				JOptionPane.PLAIN_MESSAGE,
-				null, options, null);
-		switch(response) {
-		case 0:
-			int possiblemove = game.rollDice();
-			if(die1.getValue() == die2.getValue()) {
-				updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled doubles and got out of jail!");
-				game.moveTo(possiblemove+10);
-				board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), 10);
-				updateGameInfo("Player " + game.getCurrentPlayerNum() + " is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
-
-				JOptionPane.showMessageDialog(null, "Double " + die1.getValue()+"'s! You're free!");
-				
-				checkProperty(game.getCurrentPlayerPosition());
-				hasRolled = true;
-				game.getCurrentPlayer().setJailturns(0);
-			}
-			else if(game.getCurrentPlayer().getJailturns()>2) {
+		if(game.getCurrentPlayer().getProperties().containsKey('j')) {
+			JOptionPane.showMessageDialog(null, "Jail free card used! You're free! Roll to continue");
+			game.getCurrentPlayer().removeProperty('j');
+			game.getCurrentPlayer().setJailturns(0);
+			updateGameInfo("Player " + game.getCurrentPlayerNum() + " used a card to get out of jail.");
+		}
+		else {
+			String [] options=new String[]{"Try for doubles", "Pay $50 Bail"};
+			int response =JOptionPane.showOptionDialog(null,
+					"You are in Jail. What do you want to do?",
+					"IN JAIL!", 
+					JOptionPane.DEFAULT_OPTION, 
+					JOptionPane.PLAIN_MESSAGE,
+					null, options, null);
+			switch(response) {
+			case 0:
+				int possiblemove = game.rollDice();
+				if(die1.getValue() == die2.getValue()) {
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled doubles and got out of jail!");
+					game.moveTo(possiblemove+10);
+					board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), 10);
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
+	
+					JOptionPane.showMessageDialog(null, "Double " + die1.getValue()+"'s! You're free!");
+					
+					checkProperty(game.getCurrentPlayerPosition());
+					hasRolled = true;
+					game.getCurrentPlayer().setJailturns(0);
+				}
+				else if(game.getCurrentPlayer().getJailturns()>2) {
+					game.getCurrentPlayer().setMoney(game.getCurrentPlayerMoney()-50);
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " paid $50 dollars to get out of jail.");
+					updateBank();
+					JOptionPane.showMessageDialog(null, "You've ran out of attempts and paid $50. Press roll button.");
+					game.getCurrentPlayer().setJailturns(0);
+					
+				}
+				else {
+					game.getCurrentPlayer().setJailturns(game.getCurrentPlayer().getJailturns()+1);
+					hasRolled = true;
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + die1.getValue() + " and a " + die2.getValue() + " and  did not get out of jail!");
+				}
+					
+				break;
+			case 1:
 				game.getCurrentPlayer().setMoney(game.getCurrentPlayerMoney()-50);
 				updateGameInfo("Player " + game.getCurrentPlayerNum() + " paid $50 dollars to get out of jail.");
 				updateBank();
-				JOptionPane.showMessageDialog(null, "You've ran out of attempts and paid $50. Press roll button.");
 				game.getCurrentPlayer().setJailturns(0);
-				
+				break;
+	
+			default:
+	
+				break;
 			}
-			else {
-				game.getCurrentPlayer().setJailturns(game.getCurrentPlayer().getJailturns()+1);
-				hasRolled = true;
-				updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + die1.getValue() + " and a " + die2.getValue() + " and  did not get out of jail!");
-			}
-				
-			break;
-		case 1:
-			game.getCurrentPlayer().setMoney(game.getCurrentPlayerMoney()-50);
-			updateGameInfo("Player " + game.getCurrentPlayerNum() + " paid $50 dollars to get out of jail.");
-			updateBank();
-			game.getCurrentPlayer().setJailturns(0);
-			break;
-
-		default:
-
-			break;
 		}
 	}
 	
