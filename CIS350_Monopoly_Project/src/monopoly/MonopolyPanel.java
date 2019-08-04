@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -51,6 +52,12 @@ public class MonopolyPanel extends JPanel {
 
 	/** Button to end turn. */
 	private JButton endTurnButton;
+	
+	/** Button to sell property. */
+	private JButton sellproperty;
+	
+	/** Button to buy house. */
+	private JButton buyhouse;
 
 	/** Labels for current players' money totals. */
 	private JLabel[] playerBank;
@@ -167,6 +174,29 @@ public class MonopolyPanel extends JPanel {
 		c.insets = new Insets(50, 20, 50, 0);
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(endTurnButton, c);
+		
+		
+		sellproperty = new JButton("Sell Property");
+		sellproperty.addActionListener(listener);
+		sellproperty.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
+		c.gridx = 2;
+		c.gridy = 8;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(50, 20, 50, 0);
+		c.anchor = GridBagConstraints.SOUTH;
+		this.add(sellproperty, c);
+		
+		buyhouse = new JButton("Buy house/hotel");
+		buyhouse.addActionListener(listener);
+		buyhouse.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
+		c.gridx = 3;
+		c.gridy = 8;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.insets = new Insets(50, 20, 50, 0);
+		c.anchor = GridBagConstraints.SOUTH;
+		this.add(buyhouse, c);
 
 		
 		die1 = game.getDie(1);
@@ -297,7 +327,7 @@ public class MonopolyPanel extends JPanel {
 		}
 	}
 
-	private void specialProperty(int propertyNum) {
+	private void specialProperty(final int propertyNum) {
 		boolean bankrupt;
 		String cardMessage;
 		int previousPosition;
@@ -306,7 +336,7 @@ public class MonopolyPanel extends JPanel {
 		case "Community Chest":
 			previousPosition = currentPosition;
 
-			cardMessage= game.drawChest();
+			cardMessage = game.drawChest();
 			
 			JOptionPane.showMessageDialog(null, cardMessage, "COMMUNITY CHEST",  JOptionPane.INFORMATION_MESSAGE);
 
@@ -320,8 +350,9 @@ public class MonopolyPanel extends JPanel {
 		case "Income Tax":
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $200 for Income Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $200 for Income Tax.");
-
+			
 			bankrupt = game.subtractMoney(currentPlayer, 200);
+			game.setFreeParkingfund(game.getFreeParkingfund() + 200);
 
 			if (bankrupt) {
 		
@@ -332,10 +363,9 @@ public class MonopolyPanel extends JPanel {
 					ArrayList<Object> params = new ArrayList<Object>();
 					params.add("You are at $" + game.getCurrentPlayerMoney() + "\nSelect properties to sell:");
 
-					for(int i = 0; i < properties.size(); i++)
-					{
+					for (int i = 0; i < properties.size(); i++) {
 					    JCheckBox checkbox = new JCheckBox();
-					    checkbox.setText(properties.get(i).getName() + ": $" + (properties.get(i).getPrice()/2));
+					    checkbox.setText(properties.get(i).getName() + ": $" + (properties.get(i).getPrice() / 2));
 					    checkbox.setSelected(false);
 					    params.add(checkbox);
 					}
@@ -348,10 +378,9 @@ public class MonopolyPanel extends JPanel {
 
 					
 					if (n == JOptionPane.OK_OPTION) {
-						for(int i = 1; i < realParams.length; i++)
-						{
+						for (int i = 1; i < realParams.length; i++) {
 					        boolean selected = ((JCheckBox) realParams[i]).isSelected();
-					        if(selected) {
+					        if (selected) {
 					        	System.out.println("Check box " + i + " selected.");
 					        }
 					    }
@@ -367,7 +396,7 @@ public class MonopolyPanel extends JPanel {
 		case "Chance":
 			previousPosition = currentPosition;
 
-			cardMessage= game.drawChance();
+			cardMessage = game.drawChance();
 			
 			JOptionPane.showMessageDialog(null, cardMessage, "CHANCE",  JOptionPane.INFORMATION_MESSAGE);
 
@@ -380,7 +409,11 @@ public class MonopolyPanel extends JPanel {
 			break;
 		case "Free Parking":
 			updateGameInfo("Player " + currentPlayer + " won free parking!");
-			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you get free parking!");
+			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you get $" + game.getFreeParkingfund() + " from free parking!");
+			updateGameInfo("Player " + currentPlayer + " received $" + game.getFreeParkingfund() + " from free parking.");
+			game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() + game.getFreeParkingfund());
+			game.setFreeParkingfund(0);
+			updateBank();
 			break;
 		case "Go to Jail":
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " GO TO JAIL!");
@@ -393,6 +426,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $100 for Luxury Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $100 for Luxury Tax.");
 
+			game.setFreeParkingfund(game.getFreeParkingfund() + 100);
 			bankrupt = game.subtractMoney(currentPlayer, 200);
 
 			if (bankrupt) {
@@ -406,7 +440,7 @@ public class MonopolyPanel extends JPanel {
 		}
 	}
 
-	private void unownedProperty(int propertyNum) {
+	private void unownedProperty(final int propertyNum) {
 		if (game.getCurrentPlayerMoney() >= game.getPropertyPrice(currentPosition)) {
 			int reply = JOptionPane.showConfirmDialog(null, "", "Would you like to buy this location? (cost: $" + game.getPropertyPrice(propertyNum) + ")",
 					JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, game.getPropertyImage(propertyNum));
@@ -414,7 +448,7 @@ public class MonopolyPanel extends JPanel {
 				game.buyProperty();
 				updateGameInfo("Player " + currentPlayer + " has bought " + game.getPropertyName(propertyNum) + "!");
 				updateBank();
-				JLabel label = new JLabel(game.getPropertyName(propertyNum) + " (rent: $" + game.getPropertyRent(propertyNum) + ")");
+				JLabel label = new JLabel(game.getPropertyName(propertyNum));// + " (rent: $" + game.getPropertyRent(propertyNum) + ")");
 				label.setFont(new Font("Times New Roman", Font.BOLD, 16));
 				label.setForeground(playerColor(currentPlayer)); //red,blue,gray,black
 				ownedProperties[currentPlayer - 1].add(label);
@@ -424,7 +458,7 @@ public class MonopolyPanel extends JPanel {
 		}
 	}
 
-	private void ownedProperty(int propertyNum) {
+	private void ownedProperty(final int propertyNum) {
 		if (game.getPropertyOwner(currentPosition) != game.getCurrentPlayerNum()) {	
 			int rent = game.calculateRent();
 			int propertyOwner = game.getPropertyOwner(propertyNum);
@@ -617,6 +651,51 @@ public class MonopolyPanel extends JPanel {
 							System.exit(0);
 						}
 					}
+				}
+			}
+			
+			if (e.getSource() == sellproperty) {
+				
+			}
+			
+			if (e.getSource() == buyhouse) {
+				ArrayList<Property> optionList = game.canGetHouse();
+				if (optionList.size() > 0) {
+					Object[] options = optionList.toArray();
+					Object value = JOptionPane.showInputDialog(null, 
+					                                           "Property", 
+					                                           "Eligible Properties", 
+					                                            JOptionPane.QUESTION_MESSAGE, 
+					                                            null,
+					                                            options, 
+					                                            options[0].toString());
+	
+					int index = optionList.indexOf(value);
+					
+					if (optionList.get(index).getHouses() < 4) {
+						int dialogButton = JOptionPane.YES_NO_OPTION;
+						int dialogResult = JOptionPane.showConfirmDialog(null, "Additional houses on " + optionList.get(index).getName() + " cost $" + game.houseCost(optionList.get(index).getPosition()) + ". Would you like to continue?" , "Warning" , dialogButton);
+						if (dialogResult == JOptionPane.YES_OPTION) {
+							board.addHouse(optionList.get(index).getPosition());
+							game.buyHouse(optionList.get(index).getPosition());
+							updateBank();
+							updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a house on " + optionList.get(index).getName() + ".");
+						}
+					}
+					else {
+						int dialogButton = JOptionPane.YES_NO_OPTION;
+						int dialogResult = JOptionPane.showConfirmDialog(null, "A hotel on " + optionList.get(index).getName() + " costs $" + game.houseCost(optionList.get(index).getPosition()) + ". Would you like to continue?" , "Warning" , dialogButton);
+						if (dialogResult == JOptionPane.YES_OPTION) {
+							board.placeHotel(optionList.get(index).getPosition());
+							game.buyHouse(optionList.get(index).getPosition());
+							updateBank();
+							updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a hotel on " + optionList.get(index).getName() + ".");
+					
+						}
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "You do not have any eligible properties.");
 				}
 			}
 		}
