@@ -231,8 +231,11 @@ public class Game {
 	 * @return number of spaces moved
 	 */
 	public int move() {
-		int movement = rollDice();
-//		        int movement = 1;		//TODO for testing
+
+//		int movement = rollDice();
+		        int movement = 10;		//TODO for testing
+		currentPlayer.addProperty('j');
+
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {
@@ -323,6 +326,9 @@ public class Game {
 				break;
 			case MOVE_TO_POSITION:
 				setCurrentPlayerPosition(c.getNum());
+				if(c.getNum()==10) {
+					currentPlayer.setJailturns(1);
+				}
 				break;
 			case RECEIVE_FROM_BANK:
 				currentPlayer.setMoney(currentPlayer.getMoney() + c.getNum());
