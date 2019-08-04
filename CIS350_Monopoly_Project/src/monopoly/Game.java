@@ -1,44 +1,41 @@
 package monopoly;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 
 
 /**
  * Covers game logic and turn order.
- * 
- * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis 
- * @version	7/20/2019 
+ *
+ * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
+ * @version	7/20/2019
  */
 public class Game {
-
-	/** Chance and Community Chest cards. */
-	private CardDecks decks;
+    /** Chance and Community Chest cards. */
+    private CardDecks decks;
 
 	/** Player whose turn it currently is. */
 	private Player currentPlayer;
-	
+
 	/** Player number of the current player. (0-3) */
 	private int currentPlayerNum;
-	
+
 	/** Current position of the current player. */
 	private int currentPosition;
-	
+
 	/** The game board consisting of all the properties. */
 	private Property[] board;
-	
+
 	/** All of the players in the game. */
 	private ArrayList<Player> players;
-	
-	/** Represents one of the two dice. */
-	GVdie die1 = new GVdie(80);
 
 	/** Represents one of the two dice. */
-	GVdie die2 = new GVdie(80);
+	private GVdie die1 = new GVdie(80);
 
-	
+	/** Represents one of the two dice. */
+	private GVdie die2 = new GVdie(80);
+
 	public boolean checkBankrupt(int playerNum) {
 		if (players.get(playerNum - 1).getMoney() <= 0) {
 			return true;
@@ -52,10 +49,19 @@ public class Game {
 	}
 	
 	public void subtractMoney(int playerNum, int amount) {
+
+	/** Represents the money received if player lands on free parking. */
+	private int freeParkingfund = 0;
+
 		getPlayer(playerNum).subtractMoney(amount);
 	}
-	
-	public void addMoney(int playerNum, int amount) {
+
+	/**
+	 * Adds money to total money
+	 * @param playerNum Number of requested player
+	 * @param amount Amount of money to be added
+	 */
+	public void addMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).addMoney(amount);
 	}
 	
@@ -133,6 +139,22 @@ public class Game {
 	public void setCurrentPlayerBankrupt(final boolean bankrupt) {
 		currentPlayer.setBankrupt(bankrupt);
 	}
+	
+	/**
+	 * Returns the free Parking amount.
+	 * @return freeParkingfund - int of the amount in free Parking
+	 */
+	public int getFreeParkingfund() {
+		return freeParkingfund;
+	}
+
+	/**
+	 * Set the free Parking amount.
+	 * @param freeParkingfund - amount in free Parking
+	 */
+	public void setFreeParkingfund(final int freeParkingfund) {
+		this.freeParkingfund = freeParkingfund;
+	}
 
 	/**
 	 * Returns the amount of money owned by a player.
@@ -195,8 +217,9 @@ public class Game {
 	public Game(final int numPlayers) {
 		players = new ArrayList<>();
 		for (int i = 1; i <= numPlayers; i++) {
-			players.add(new Player(i, 200));		//TODO for testing
+			players.add(new Player(i, 1500));		//TODO for testing
 		}
+		
 		createProperties();
 		currentPlayerNum = 0;
 		currentPlayer = players.get(0);
@@ -222,8 +245,10 @@ public class Game {
 	 * @return number of spaces moved
 	 */
 	public int move() {
+
 //		int movement = rollDice();
 		        int movement = 1;		//TODO for testing
+		        
 
 
 		int newPosition = currentPlayer.getPosition() + movement;
@@ -280,6 +305,7 @@ public class Game {
 				break;
 			case PAY_TO_BANK:
 				currentPlayer.setMoney(currentPlayer.getMoney() - c.getNum());
+				freeParkingfund += c.getNum();
 				break;
 			case MOVE_BACK_SPACES:
 				setCurrentPlayerPosition(currentPosition - c.getNum());
@@ -315,6 +341,12 @@ public class Game {
 				break;
 			case MOVE_TO_POSITION:
 				setCurrentPlayerPosition(c.getNum());
+				if (c.getNum() == 10) {
+					currentPlayer.setJailturns(1);
+				}
+				if(c.getNum()==0) {
+					currentPlayer.addMoney(200);
+				}
 				break;
 			case RECEIVE_FROM_BANK:
 				currentPlayer.setMoney(currentPlayer.getMoney() + c.getNum());
@@ -385,6 +417,41 @@ public class Game {
 		return board[currentPosition].getOwnerNum();
 	}
 
+	public ArrayList<Property> canGetHouse() {
+	    ArrayList<Property> eligible = new ArrayList<>();
+	    Map<Character, Integer> colorHouse = new TreeMap<Character, Integer>();
+        for (Property p: currentPlayer.getPropertiesList()) {
+        	if (p.getHouses() < 5) {
+	            if (p.getColor() == 'n' || p.getColor() == 'b') {
+	                if (currentPlayer.getProperties().get(p.getColor()) == 2) {
+	                    eligible.add(p);
+	                    if (colorHouse.containsKey(p.getColor())){
+	                        if (colorHouse.get(p.getColor()) < p.getHouses()) {
+	                            colorHouse.replace(p.getColor(), p.getHouses());
+	                        }
+	                    } else {
+	                        colorHouse.put(p.getColor(), p.getHouses());
+	                    }
+	                }
+	            } else if (p.getColor() != 'r' && p.getColor() != 'u') {
+	                if (currentPlayer.getProperties().get(p.getColor()) == 3) {
+	                    eligible.add(p);
+	                    if (colorHouse.containsKey(p.getColor())) {
+	                        if (colorHouse.get(p.getColor()) < p.getHouses()) {
+	                            colorHouse.replace(p.getColor(), p.getHouses());
+	                        }
+	                    } else {
+	                        colorHouse.put(p.getColor(), p.getHouses());
+	                    }
+	                }
+	            }
+	        }
+        }
+//        eligible.removeIf(p -> colorHouse.get(p.getColor()) <= p.getHouses());
+
+	    return eligible;
+    }
+
 	/**
 	 * Current player pays rent of landed property.
 	 * @return True if player goes bankrupt. False otherwise.
@@ -418,7 +485,7 @@ public class Game {
 		char color = board[currentPosition].getColor();
 		int rent = board[currentPosition].getRent();
 
-		if (owner != -1) {
+		if (owner != -1 && board[currentPosition].getHouses() == 0) {
 			if ((color == 'b' || color == 'n' || color == 'u')
 					&& players.get(owner - 1).getProperties().get(color) == 2) {
 				rent *= 2;
@@ -430,7 +497,98 @@ public class Game {
 		}
 		return rent;
 	}
+
+	/**
+	 * Returns the cost of a house at particular space.
+	 * @param space The property space being requested.
+	 * @return The cost of a house on that space
+	 */
+	public int houseCost(final int space) {
+		int cost = 0;
+		switch (board[space].getColor()) {
+			case 'n':
+			case 't':
+				cost = 50;
+				break;
+			case 'p':
+			case 'o':
+				cost = 100;
+				break;
+			case 'r':
+			case 'y':
+				cost = 150;
+				break;
+			case 'g':
+			case 'b':
+				cost = 200;
+			default:
+		}
+
+		return cost;
+	}
 	
+	/**
+	 * Buys a house on the given space. Removes the cost of the house from
+	 * currentPlayer's money and adds house to the property.
+	 * @param space The property space being requested.
+	 * @return True if player has the money to buy the property,
+	 * false otherwise.
+	 */
+	public boolean buyHouse(int space) {
+		int cost = 0;
+		switch (board[space].getColor()) {
+			case 'n':
+			case 't':
+				cost = 50;
+				break;
+			case 'p':
+			case 'o':
+				cost = 100;
+				break;
+			case 'r':
+			case 'y':
+				cost = 150;
+				break;
+			case 'g':
+			case 'b':
+				cost = 200;
+		}
+		if (getCurrentPlayerMoney() >= cost) {
+			board[space].addHouse();
+			currentPlayer.setMoney(getCurrentPlayerMoney()-cost);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Sells a house on the given space. Gives currentPlayer appropriate money
+	 * for the house.
+	 * @param space Which space is to be sold.
+	 */
+	public void sellHouse(final int space) {
+		int sale = 0;
+		switch (board[space].getColor()) {
+			case 'n':
+			case 't':
+				sale = 25;
+				break;
+			case 'p':
+			case 'o':
+				sale = 50;
+				break;
+			case 'r':
+			case 'y':
+				sale = 75;
+				break;
+			case 'g':
+			case 'b':
+				sale = 100;
+		}
+	    board[space].removeHouse();
+    }
+
 	/**
 	 * Checks if the game is over.
 	 * @return playerNum - the winner's player number, or 0 if the game is still going
@@ -480,11 +638,11 @@ public class Game {
 		return true;
 	}
 	
-	/*******************************************************************
+	/**
 	 * Returns the requested die. Legal values for num are 1 and 2.
 	 * @param num the number of the desired die
 	 * @return the requested die value
-	 ******************************************************************/
+	 */
 	public GVdie getDie(int num) {
 		if (num == 1)
 			return die1;
@@ -502,45 +660,45 @@ public class Game {
 		board = new Property[40];
 
 		// Manually create properties on the board.
-		board[0] = new Property("GO", 0, 0, -1);
-		board[1] = new Property("Mediterranean Avenue", 60, 2, 0, 'n', new ImageIcon("pictures/Mediterranean Ave.png"));
-		board[2] = new Property("Community Chest", 0, 0, -1);
-		board[3] = new Property("Baltic Avenue", 60, 4, 0, 'n', new ImageIcon("pictures/Baltic Ave.png"));
-		board[4] = new Property("Income Tax", 0, 200, -1);
-		board[5] = new Property("Reading Railroad", 200, 25, 0, 'r', new ImageIcon("pictures/Reading Railroad.png"));
-		board[6] = new Property("Oriental Avenue", 100, 6, 0, 't', new ImageIcon("pictures/Oriental Ave.png"));
-		board[7] = new Property("Chance", 0, 0, -1);
-		board[8] = new Property("Vermont Avenue", 100, 6, 0, 't', new ImageIcon("pictures/Vermont Ave.png"));
-		board[9] = new Property("Connecticut Avenue", 120, 8, 0, 't', new ImageIcon("pictures/Connecticut Ave.png"));
-		board[10] = new Property("Jail", 0, 0, -1);
-		board[11] = new Property("St. Charles Place", 140, 10, 0, 'p', new ImageIcon("pictures/St. Charles Place.png"));
-		board[12] = new Property("Electric Company", 150, 25, 0, 'u', new ImageIcon("pictures/Electric Company.png"));
-		board[13] = new Property("States Avenue", 140, 10, 0, 'p', new ImageIcon("pictures/States Ave.png"));
-		board[14] = new Property("Virginia Avenue", 160, 12, 0, 'p', new ImageIcon("pictures/Virginia Ave.png"));
-		board[15] = new Property("Pennsylvania Railroad", 200, 25, 0, 'r', new ImageIcon("pictures/Pennsylvania R.R.png"));
-		board[16] = new Property("St. James Place", 180, 14, 0, 'o', new ImageIcon("pictures/St. James Place.png"));
-		board[17] = new Property("Community Chest", 0, 0, -1);
-		board[18] = new Property("Tennessee Avenue", 180, 14, 0, 'o', new ImageIcon("pictures/Tennessee Avenue.png"));
-		board[19] = new Property("New York Avenue", 200, 16, 0, 'o', new ImageIcon("pictures/New York Avenue.png"));
-		board[20] = new Property("Free Parking", 0, 0, -1);
-		board[21] = new Property("Kentucky Avenue", 220, 18, 0, 'r', new ImageIcon("pictures/Kentucky Ave.png"));
-		board[22] = new Property("Chance", 0, 0, -1);
-		board[23] = new Property("Indiana Avenue", 220, 18, 0, 'r', new ImageIcon("pictures/Indiana Ave.png"));
-		board[24] = new Property("Illinois Avenue", 240, 20, 0, 'r', new ImageIcon("pictures/Illinois Ave..png"));
-		board[25] = new Property("B & O Railroad", 200, 25, 0, 'r', new ImageIcon("pictures/B. and O. Railroad.png"));
-		board[26] = new Property("Atlantic Avenue", 260, 22, 0, 'y', new ImageIcon("pictures/Atlantic Ave.png"));
-		board[27] = new Property("Ventor Avenue", 260, 22, 0, 'y', new ImageIcon("pictures/Ventnor Ave.png"));
-		board[28] = new Property("Water Works", 150, 25, 0, 'u', new ImageIcon("pictures/Water Works.png"));
-		board[29] = new Property("Marvin Gardens", 280, 24, 0, 'y', new ImageIcon("pictures/Marvin Gardens.png"));
-		board[30] = new Property("Go to Jail", 0, 0, -1);
-		board[31] = new Property("Pacific Avenue", 300, 26, 0, 'g', new ImageIcon("pictures/Pacific Ave.png"));
-		board[32] = new Property("North Carolina Avenue", 300, 26, 0, 'g', new ImageIcon("pictures/No. Carolina Ave.png"));
-		board[33] = new Property("Community Chest", 0, 0, -1);
-		board[34] = new Property("Pennsylvania Avenue", 320, 28, 0, 'g', new ImageIcon("pictures/Pennsylvania Ave.png"));
-		board[35] = new Property("Short Line", 200, 25, 0, 'r', new ImageIcon("pictures/Short Line R.R.png"));
-		board[36] = new Property("Chance", 0, 0, -1);
-		board[37] = new Property("Park Place", 350, 35, 0, 'b', new ImageIcon("pictures/Park Place.png"));
-		board[38] = new Property("Luxury Tax", 0, 100, -1);
-		board[39] = new Property("Boardwalk", 400, 50, 0, 'b', new ImageIcon("pictures/Boardwalk.png"));
+		board[0] = new Property("GO", 0, new int[] {0}, -1, 0);
+		board[1] = new Property("Mediterranean Avenue", 60, new int[]{2, 10, 30, 90, 16, 250}, 0, 'n', new ImageIcon("pictures/Mediterranean Ave.png"), 1);
+		board[2] = new Property("Community Chest", 0, new int[] {0}, -1, 2);
+		board[3] = new Property("Baltic Avenue", 60, new int[] {4, 20, 60, 180, 320, 450}, 0, 'n', new ImageIcon("pictures/Baltic Ave.png"), 3);
+		board[4] = new Property("Income Tax", 0, new int[] {200}, -1, 4);
+		board[5] = new Property("Reading Railroad", 200, new int[] {25}, 0, 'r', new ImageIcon("pictures/Reading Railroad.png"), 5);
+		board[6] = new Property("Oriental Avenue", 100, new int[] {6, 30, 90, 170, 400, 550}, 0, 't', new ImageIcon("pictures/Oriental Ave.png"), 6);
+		board[7] = new Property("Chance", 0, new int[] {0}, -1, 7);
+		board[8] = new Property("Vermont Avenue", 100, new int[] {6, 30, 90, 270, 400, 550}, 0, 't', new ImageIcon("pictures/Vermont Ave.png"), 8);
+		board[9] = new Property("Connecticut Avenue", 120, new int[] {8, 40, 100, 300, 450, 600}, 0, 't', new ImageIcon("pictures/Connecticut Ave.png"), 9);
+		board[10] = new Property("Jail", 0, new int[] {0}, -1, 10);
+		board[11] = new Property("St. Charles Place", 140, new int[] {10, 50, 150, 450, 625, 750}, 0, 'p', new ImageIcon("pictures/St. Charles Place.png"), 11);
+		board[12] = new Property("Electric Company", 150, new int[] {25}, 0, 'u', new ImageIcon("pictures/Electric Company.png"), 12);
+		board[13] = new Property("States Avenue", 140, new int[] {10, 50, 150, 450, 625, 750}, 0, 'p', new ImageIcon("pictures/States Ave.png"), 13);
+		board[14] = new Property("Virginia Avenue", 160, new int[] {12, 60, 180, 500, 700, 900}, 0, 'p', new ImageIcon("pictures/Virginia Ave.png"), 14);
+		board[15] = new Property("Pennsylvania Railroad", 200, new int[] {25}, 0, 'r', new ImageIcon("pictures/Pennsylvania R.R.png"), 15);
+		board[16] = new Property("St. James Place", 180, new int[] {14, 70, 200, 550, 750, 950}, 0, 'o', new ImageIcon("pictures/St. James Place.png"), 16);
+		board[17] = new Property("Community Chest", 0, new int[] {0}, -1, 17);
+		board[18] = new Property("Tennessee Avenue", 180, new int[] {14, 70, 200, 550, 750, 950}, 0, 'o', new ImageIcon("pictures/Tennessee Avenue.png"), 18);
+		board[19] = new Property("New York Avenue", 200, new int[] {16, 80, 220, 600, 800, 1000}, 0, 'o', new ImageIcon("pictures/New York Avenue.png"), 19);
+		board[20] = new Property("Free Parking", 0, new int[] {0}, -1, 20);
+		board[21] = new Property("Kentucky Avenue", 220, new int[] {18, 90, 250, 700, 875, 1050}, 0, 'r', new ImageIcon("pictures/Kentucky Ave.png"), 21);
+		board[22] = new Property("Chance", 0, new int[] {0}, -1, 22);
+		board[23] = new Property("Indiana Avenue", 220, new int[] {18, 90, 250, 700, 875, 1050}, 0, 'r', new ImageIcon("pictures/Indiana Ave.png"), 23);
+		board[24] = new Property("Illinois Avenue", 240, new int[] {20, 100, 300, 750, 925, 1100}, 0, 'r', new ImageIcon("pictures/Illinois Ave..png"), 24);
+		board[25] = new Property("B & O Railroad", 200, new int[] {25}, 0, 'r', new ImageIcon("pictures/B. and O. Railroad.png"), 25);
+		board[26] = new Property("Atlantic Avenue", 260, new int[] {22, 110, 330, 800, 975, 1150}, 0, 'y', new ImageIcon("pictures/Atlantic Ave.png"), 26);
+		board[27] = new Property("Ventor Avenue", 260, new int[] {22, 110, 330, 800, 975, 1150}, 0, 'y', new ImageIcon("pictures/Ventnor Ave.png"), 27);
+		board[28] = new Property("Water Works", 150, new int[] {25}, 0, 'u', new ImageIcon("pictures/Water Works.png"), 28);
+		board[29] = new Property("Marvin Gardens", 280, new int[] {24, 120, 360, 850, 1025, 1200}, 0, 'y', new ImageIcon("pictures/Marvin Gardens.png"), 29);
+		board[30] = new Property("Go to Jail", 0, new int[] {0}, -1, 30);
+		board[31] = new Property("Pacific Avenue", 300, new int[] {26, 130, 390, 900, 1100, 1275}, 0, 'g', new ImageIcon("pictures/Pacific Ave.png"), 31);
+		board[32] = new Property("North Carolina Avenue", 300, new int[] {26, 130, 390, 900, 1100, 1275}, 0, 'g', new ImageIcon("pictures/No. Carolina Ave.png"), 32);
+		board[33] = new Property("Community Chest", 0, new int[] {0}, -1, 33);
+		board[34] = new Property("Pennsylvania Avenue", 320, new int[] {28, 150, 450, 1000, 1200, 1400}, 0, 'g', new ImageIcon("pictures/Pennsylvania Ave.png"), 34);
+		board[35] = new Property("Short Line", 200, new int[] {25}, 0, 'r', new ImageIcon("pictures/Short Line R.R.png"), 35);
+		board[36] = new Property("Chance", 0, new int[] {0}, -1, 36);
+		board[37] = new Property("Park Place", 350, new int[] {35, 175, 500, 1100, 1300, 1500}, 0, 'b', new ImageIcon("pictures/Park Place.png"), 37);
+		board[38] = new Property("Luxury Tax", 0, new int[] {100}, -1, 38);
+		board[39] = new Property("Boardwalk", 400, new int[] {50, 200, 600, 1400, 1700, 2000}, 0, 'b', new ImageIcon("pictures/Boardwalk.png"), 39);
 	}
 }

@@ -137,7 +137,6 @@ public class BoardPanel extends JPanel {
 	/**
 	 * Clears button position.
 	 * @param position - the property number that the player is moving to
-	 * @return true if the position is empty
 	 */
 	private void clearPosition(final JButton position){
 		position.setBorderPainted(false);
