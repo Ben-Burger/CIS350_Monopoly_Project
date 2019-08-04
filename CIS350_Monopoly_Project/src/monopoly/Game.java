@@ -39,16 +39,20 @@ public class Game {
 	GVdie die2 = new GVdie(80);
 
 	
+	public boolean checkBankrupt(int playerNum) {
+		if (players.get(playerNum - 1).getMoney() <= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public ArrayList<Property> getProperties(int playerNum) {
 		return players.get(playerNum - 1).getPropertiesList();
 	}
 	
-	public boolean subtractMoney(int playerNum, int amount) {
+	public void subtractMoney(int playerNum, int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
-		if (getPlayerMoney(playerNum) <= 0) {
-			return true;
-		}
-		return false;
 	}
 	
 	public void addMoney(int playerNum, int amount) {
