@@ -342,6 +342,7 @@ public class MonopolyPanel extends JPanel {
 			currentPosition = game.getCurrentPlayerPosition();
 			if (currentPosition != previousPosition) {
 				board.movePlayer(currentPlayer, currentPosition, previousPosition);
+				checkProperty(currentPosition);
 			}
 
 			if (game.checkBankrupt(currentPlayer)) {
@@ -354,6 +355,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $200 for Income Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $200 for Income Tax.");
 			game.subtractMoney(currentPlayer, 200);
+			updateBank();
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
 			}
@@ -369,6 +371,7 @@ public class MonopolyPanel extends JPanel {
 			currentPosition = game.getCurrentPlayerPosition();
 			if (currentPosition != previousPosition) {
 				board.movePlayer(currentPlayer, currentPosition, previousPosition);
+				checkProperty(currentPosition);
 			}
 
 			if (game.checkBankrupt(currentPlayer)) {
@@ -396,6 +399,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $100 for Luxury Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $100 for Luxury Tax.");
 			game.subtractMoney(currentPlayer, 200);
+			updateBank();
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
 			}
@@ -565,7 +569,7 @@ public class MonopolyPanel extends JPanel {
 								sellPrice = 100;
 								break;
 							}
-							if (properties.get(i - 1).getHouses() == 5) {
+							if (properties.get(i - 1).getHouses() == 4) {
 								updateGameInfo("Player " + currentPlayer + " sold " + properties.get(i - 1).getName()
 										+ " hotel for $" + sellPrice);
 								board.removeHotel(properties.get(i - 1).getPosition());
@@ -723,7 +727,7 @@ public class MonopolyPanel extends JPanel {
 							+ " and is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
 
 					checkProperty(currentPosition);
-					if(die1.getValue() != die2.getValue())
+					if((die1.getValue() != die2.getValue()) || (game.getCurrentPlayer().getJailturns() > 0))
 						hasRolled = true;
 					else {
 						updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled doubles, and gets to go again.");
@@ -780,20 +784,28 @@ public class MonopolyPanel extends JPanel {
 						int dialogResult = JOptionPane.showConfirmDialog(null, "Additional houses on " + optionList.get(index).getName() + " cost $" + game.houseCost(optionList.get(index).getPosition()) + ". Would you like to continue?" , "Warning" , dialogButton);
 						if (dialogResult == JOptionPane.YES_OPTION) {
 							board.addHouse(optionList.get(index).getPosition());
-							game.buyHouse(optionList.get(index).getPosition());
-							updateBank();
-							updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a house on " + optionList.get(index).getName() + ".");
+							if (game.buyHouse(optionList.get(index).getPosition())) {
+								updateBank();
+								updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a house on " + optionList.get(index).getName() + ".");
+							}
+							else {
+								JOptionPane.showMessageDialog(null, "You do not have any sufficient funding for a house.");
+							}
 						}
 					}
 					else {
 						int dialogButton = JOptionPane.YES_NO_OPTION;
 						int dialogResult = JOptionPane.showConfirmDialog(null, "A hotel on " + optionList.get(index).getName() + " costs $" + game.houseCost(optionList.get(index).getPosition()) + ". Would you like to continue?" , "Warning" , dialogButton);
 						if (dialogResult == JOptionPane.YES_OPTION) {
-							board.placeHotel(optionList.get(index).getPosition());
-							game.buyHouse(optionList.get(index).getPosition());
-							updateBank();
-							updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a hotel on " + optionList.get(index).getName() + ".");
-
+							
+							if (game.buyHouse(optionList.get(index).getPosition())) {
+								board.placeHotel(optionList.get(index).getPosition());
+								updateBank();
+								updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a hotel on " + optionList.get(index).getName() + ".");
+							}
+							else {
+								JOptionPane.showMessageDialog(null, "You do not have any sufficient funding for a hotel.");
+							}
 						}
 					}
 				}

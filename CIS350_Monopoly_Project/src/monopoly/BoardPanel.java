@@ -177,14 +177,24 @@ public class BoardPanel extends JPanel {
 	 */
 	public void removeHouse(final int propertyNum) {
 		PropertyPiecePlacement property = piecePlacements[propertyNum];
-		if (!positionEmpty(matrix[property.getNoHouseRow()][property.getNoHouseCol()])) {
-			clearPosition(matrix[property.getNoHouseRow()][property.getNoHouseCol()]);
-		} else if (!positionEmpty(matrix[property.getOneHouseRow()][property.getOneHouseCol()])) {
-			clearPosition(matrix[property.getOneHouseRow()][property.getOneHouseCol()]);
+//		if (!positionEmpty(matrix[property.getNoHouseRow()][property.getNoHouseCol()])) {
+//			clearPosition(matrix[property.getNoHouseRow()][property.getNoHouseCol()]);
+//		} else if (!positionEmpty(matrix[property.getOneHouseRow()][property.getOneHouseCol()])) {
+//			clearPosition(matrix[property.getOneHouseRow()][property.getOneHouseCol()]);
+//		} else if (!positionEmpty(matrix[property.getTwoHouseRow()][property.getTwoHouseCol()])) {
+//			clearPosition(matrix[property.getTwoHouseRow()][property.getTwoHouseCol()]);
+//		} else {
+//			clearPosition(matrix[property.getThreeHouseRow()][property.getThreeHouseCol()]);
+//		}
+		
+		if (!positionEmpty(matrix[property.getThreeHouseRow()][property.getThreeHouseCol()])) {
+			clearPosition(matrix[property.getThreeHouseRow()][property.getThreeHouseCol()]);
 		} else if (!positionEmpty(matrix[property.getTwoHouseRow()][property.getTwoHouseCol()])) {
 			clearPosition(matrix[property.getTwoHouseRow()][property.getTwoHouseCol()]);
+		} else if (!positionEmpty(matrix[property.getOneHouseRow()][property.getOneHouseCol()])) {
+			clearPosition(matrix[property.getOneHouseRow()][property.getOneHouseCol()]);
 		} else {
-			clearPosition(matrix[property.getThreeHouseRow()][property.getThreeHouseCol()]);
+			clearPosition(matrix[property.getNoHouseRow()][property.getNoHouseCol()]);
 		}
 		
 		
@@ -215,19 +225,26 @@ public class BoardPanel extends JPanel {
 	 * @param propertyNum - the property number that the player is moving from
 	 */
 	public void removeHotel(final int propertyNum) {
+		System.out.println("INHERE");
 		PropertyPiecePlacement property = piecePlacements[propertyNum];
-		if (matrix[property.getNoHouseRow()][property.getNoHouseCol()].getText().contentEquals("2")) {
-			matrix[property.getNoHouseRow()][property.getNoHouseCol()].setText("");
-		} else if (matrix[property.getOneHouseRow()][property.getOneHouseCol()].getText().contentEquals("2")) {
-			matrix[property.getOneHouseRow()][property.getOneHouseCol()].setText("");
-		} else if (matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].getText().contentEquals("2")) {
-			matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].setText("");
-		} else {
-			matrix[property.getThreeHouseRow()][property.getThreeHouseCol()].setText("");
-		}
+		clearPosition(matrix[property.getHotelRow1()][property.getHotelCol1()]);
+		clearPosition(matrix[property.getHotelRow2()][property.getHotelCol2()]);
 		
-		revalidate();
-		repaint();
+		for (int i = 0; i < 4; i++) {
+			addHouse(propertyNum);
+		}
+//		if (matrix[property.getNoHouseRow()][property.getNoHouseCol()].getText().contentEquals("2")) {
+//			matrix[property.getNoHouseRow()][property.getNoHouseCol()].setText("");
+//		} else if (matrix[property.getOneHouseRow()][property.getOneHouseCol()].getText().contentEquals("2")) {
+//			matrix[property.getOneHouseRow()][property.getOneHouseCol()].setText("");
+//		} else if (matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].getText().contentEquals("2")) {
+//			matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].setText("");
+//		} else {
+//			matrix[property.getThreeHouseRow()][property.getThreeHouseCol()].setText("");
+//		}
+//		
+//		revalidate();
+//		repaint();
 	}
 
 	// is this method used??
