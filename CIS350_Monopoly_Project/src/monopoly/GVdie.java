@@ -1,7 +1,6 @@
 package monopoly;
 
 
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -20,6 +19,7 @@ int result = die1.getValue();
 @author Scott Grissom
 @version 1.4 October 10, 2006
 *****************************************************************/
+@SuppressWarnings("serial")
 public class GVdie extends JPanel implements MouseListener, Comparable{
 /** current value of the die */
 private int myValue, displayValue; 

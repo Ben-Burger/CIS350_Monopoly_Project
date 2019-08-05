@@ -201,6 +201,12 @@ public class Player {
     }
     
     public ArrayList<Property> getPropertiesList() {
-    	return propertiesList;
+    	ArrayList<Property> list = new ArrayList<Property>();
+    	
+    	for (Property p : propertiesList) {
+    		list.add(p);
+    	}
+    	
+    	return list;
     }
 }
