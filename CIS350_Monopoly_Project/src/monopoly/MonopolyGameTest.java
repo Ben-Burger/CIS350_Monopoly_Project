@@ -51,7 +51,7 @@ public class MonopolyGameTest {
     @Test
     public void propertyActionForNothing() {
         test.setCurrentPlayerPosition(10);
-        assertEquals(0, test.propertyActions());
+        assertEquals(-1, test.propertyActions());
     }
 
     /**
@@ -61,7 +61,7 @@ public class MonopolyGameTest {
     public void propertyActionForAlreadyOwnedProperty() {
         test.setCurrentPlayerPosition(9);
         test.buyProperty();
-        assertEquals(0, test.propertyActions());
+        assertTrue(test.propertyActions() > 0);
     }
 
     /**
@@ -70,19 +70,7 @@ public class MonopolyGameTest {
     @Test
     public void propertyActionForUnownedProperty() {
         test.setCurrentPlayerPosition(9);
-        assertEquals(1, test.propertyActions());
-    }
-
-    /**
-     * Test that an owned property will report as being owned by a different player.
-     */
-    @Test
-    public void propertyActionForOtherPlayerOwnedProperty() {
-        test.setCurrentPlayerPosition(9);
-        test.buyProperty();
-        test.nextTurn();
-        test.setCurrentPlayerPosition(9);
-        assertEquals(2, test.propertyActions());
+        assertEquals(0, test.propertyActions());
     }
 
     /**
@@ -221,7 +209,7 @@ public class MonopolyGameTest {
     }
 
     /**
-     *
+     *Tests cards that pay out to everyone.
      */
     @Test
     public void cardThatPaysToEveryone() {
@@ -230,5 +218,56 @@ public class MonopolyGameTest {
         assertEquals(1550, test.getPlayerMoney(2));
         assertEquals(1550, test.getPlayerMoney(3));
         assertEquals(1550, test.getPlayerMoney(4));
+    }
+
+    @Test
+    public void cardThatReceivesFromEveryone() {
+        test.drawSpecificCard('e', 9);
+        assertEquals(1530, test.getCurrentPlayerMoney());
+        assertEquals(1490, test.getPlayerMoney(2));
+        assertEquals(1490, test.getPlayerMoney(3));
+        assertEquals(1490, test.getPlayerMoney(4));
+    }
+
+    @Test
+    public void cardThatMovesBackSpaces() {
+        test.moveTo(7);
+        test.drawSpecificCard('a', 7);
+        assertEquals(4, test.getCurrentPlayerPosition());
+        assertEquals(1500, test.getCurrentPlayerMoney());
+    }
+
+    @Test
+    public void cardThatSendsYouToGo() {
+        test.moveTo(7);
+        test.drawSpecificCard('a', 0);
+        assertEquals(0, test.getCurrentPlayerPosition());
+        assertEquals(1700, test.getCurrentPlayerMoney());
+    }
+
+    @Test
+    public void buyHouse() {
+        test.setCurrentPlayerPosition(1);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(3);
+        test.buyProperty();
+        test.buyHouse(1);
+        assertEquals(1, test.getPropertyHouses(1));
+    }
+
+    @Test
+    public void chargesRentForHouse() {
+        test.setCurrentPlayerPosition(6);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(8);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(9);
+        test.buyProperty();
+        test.buyHouse(6);
+        test.nextTurn();
+        test.moveTo(6);
+        test.payRent();
+        assertEquals(1, test.getPropertyHouses(6));
+        assertEquals(1470, test.getCurrentPlayerMoney());
     }
 }
