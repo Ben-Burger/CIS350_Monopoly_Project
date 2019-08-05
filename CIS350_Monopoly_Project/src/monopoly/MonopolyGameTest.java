@@ -39,11 +39,11 @@ public class MonopolyGameTest {
      * Test the move feature.
      * Making sure the player moves the correct number of spaces.
      */
-    @Test
-    public void moving() {
-        int spaces = test.move();
-        assertEquals(spaces, test.getCurrentPlayerPosition());
-    }
+//    @Test
+//    public void moving() {
+//        int spaces = test.move();
+//        assertEquals(spaces, test.getCurrentPlayerPosition());
+//    }
 
     /**
      * Test that a property will report as having no action.

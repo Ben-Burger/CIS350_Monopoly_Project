@@ -252,13 +252,13 @@ public class Game {
 	 * Moves a player 2d6 spaces on the board.
 	 * @return number of spaces moved
 	 */
-	public int move() {
+	public int move(int r1, int r2) {
 
-		int movement = rollDice();
+//		int movement = rollDice();
 
 //		int movement = 1;		//TODO for testing
 		        
-
+		int movement = r1 + r2;
 
 		int newPosition = currentPlayer.getPosition() + movement;
 		if (newPosition > 39) {

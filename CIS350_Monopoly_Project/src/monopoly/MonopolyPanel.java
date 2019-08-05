@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 
 
@@ -486,12 +488,12 @@ public class MonopolyPanel extends JPanel {
 			for (int i = 0; i < properties.size(); i++) {
 				char color = properties.get(i).getColor();
 				if (map.containsKey(color)) {
-		            map.replace(color, map.get(color) + properties.get(i).getHouses());
-		        } else {
-		            map.put(color, properties.get(i).getHouses());
-		        }
+					map.replace(color, map.get(color) + properties.get(i).getHouses());
+				} else {
+					map.put(color, properties.get(i).getHouses());
+				}
 			}
-			
+
 			for (int i = 0; i < properties.size(); i++)
 			{
 				boolean entireRowOwned = false;
@@ -621,31 +623,60 @@ public class MonopolyPanel extends JPanel {
 					null, options, null);
 			switch(response) {
 			case 0:
-				int possiblemove = game.rollDice();
-				if(die1.getValue() == die2.getValue()) {
+				ArrayList<Object> params = new ArrayList<Object>();
+				JTextField field1 = new JTextField(2);
+				params.add(field1);
+				field1.getText(); 
+				JTextField field2 = new JTextField(2);
+				params.add(field2);
+				Object[] realParams = new Object[params.size()];
+				realParams = params.toArray(realParams);
+
+
+
+				int n = JOptionPane.showConfirmDialog(null, realParams, "SPECIAL ROLL", JOptionPane.OK_CANCEL_OPTION);
+
+				int r1 = Integer.parseInt(((JTextField) params.get(0)).getText());
+				int r2 = Integer.parseInt(((JTextField) params.get(1)).getText());
+				
+				
+				
+				
+				
+				
+				int possiblemove = r1 + r2;
+				if(r1 == r2) {
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled doubles and got out of jail!");
 					game.moveTo(possiblemove+10);
 					board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), 10);
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
 
-					JOptionPane.showMessageDialog(null, "Double " + die1.getValue()+"'s! You're free!");
+					JOptionPane.showMessageDialog(null, "Double " + r1 +"'s! You're free!");
 
 					checkProperty(game.getCurrentPlayerPosition());
 					hasRolled = true;
 					game.getCurrentPlayer().setJailturns(0);
 				}
 				else if(game.getCurrentPlayer().getJailturns()>2) {
+					int previousPosition = game.getCurrentPlayerPosition();
 					game.getCurrentPlayer().setMoney(game.getCurrentPlayerMoney()-50);
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " paid $50 dollars to get out of jail.");
 					updateBank();
-					JOptionPane.showMessageDialog(null, "You've ran out of attempts and paid $50. Press roll button.");
+					JOptionPane.showMessageDialog(null, "You've ran out of attempts and paid $50.");
 					game.getCurrentPlayer().setJailturns(0);
+					game.move(r1, r2);
+					currentPosition = game.getCurrentPlayerPosition();
+
+					currentPlayer = game.getCurrentPlayerNum();
+					board.movePlayer(currentPlayer, currentPosition, previousPosition);
+					checkProperty(currentPosition);
+					hasRolled = true;
 
 				}
 				else {
 					game.getCurrentPlayer().setJailturns(game.getCurrentPlayer().getJailturns()+1);
 					hasRolled = true;
-					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + die1.getValue() + " and a " + die2.getValue() + " and  did not get out of jail!");
+					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + r1 + " and a " + r2 + " and  did not get out of jail!");
 				}
 
 				break;
@@ -700,7 +731,30 @@ public class MonopolyPanel extends JPanel {
 				if (!hasRolled) {
 					int previousPosition = game.getCurrentPlayerPosition();
 
-					int movement = game.move();
+
+
+
+					ArrayList<Object> params = new ArrayList<Object>();
+					JTextField field1 = new JTextField(2);
+					params.add(field1);
+					field1.getText(); 
+					JTextField field2 = new JTextField(2);
+					params.add(field2);
+					Object[] realParams = new Object[params.size()];
+					realParams = params.toArray(realParams);
+
+
+
+					int n = JOptionPane.showConfirmDialog(null, realParams, "SPECIAL ROLL", JOptionPane.OK_CANCEL_OPTION);
+
+					int r1 = Integer.parseInt(((JTextField) params.get(0)).getText());
+					int r2 = Integer.parseInt(((JTextField) params.get(1)).getText());
+
+					
+					
+					
+					
+					int movement = game.move(r1, r2);
 
 					currentPosition = game.getCurrentPlayerPosition();
 
@@ -712,11 +766,11 @@ public class MonopolyPanel extends JPanel {
 					//					if(game.getCurrentPlayerPosition()>1)
 					//					board.placeHotel(game.getCurrentPlayerPosition()-1);
 
-					dice.removeAll();
-					die1 = game.getDie(1);
-					die2 = game.getDie(2);
-					dice.add(die1);
-					dice.add(die2);
+//					dice.removeAll();
+//					die1 = game.getDie(1);
+//					die2 = game.getDie(2);
+//					dice.add(die1);
+//					dice.add(die2);
 
 					if (currentPosition < previousPosition) {
 						JOptionPane.showMessageDialog(null, "Passed GO! Collect $200");
@@ -727,7 +781,7 @@ public class MonopolyPanel extends JPanel {
 							+ " and is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
 
 					checkProperty(currentPosition);
-					if((die1.getValue() != die2.getValue()) || (game.getCurrentPlayer().getJailturns() > 0))
+					if((r1 != r2) || (game.getCurrentPlayer().getJailturns() > 0))
 						hasRolled = true;
 					else {
 						updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled doubles, and gets to go again.");
@@ -797,7 +851,7 @@ public class MonopolyPanel extends JPanel {
 						int dialogButton = JOptionPane.YES_NO_OPTION;
 						int dialogResult = JOptionPane.showConfirmDialog(null, "A hotel on " + optionList.get(index).getName() + " costs $" + game.houseCost(optionList.get(index).getPosition()) + ". Would you like to continue?" , "Warning" , dialogButton);
 						if (dialogResult == JOptionPane.YES_OPTION) {
-							
+
 							if (game.buyHouse(optionList.get(index).getPosition())) {
 								board.placeHotel(optionList.get(index).getPosition());
 								updateBank();
