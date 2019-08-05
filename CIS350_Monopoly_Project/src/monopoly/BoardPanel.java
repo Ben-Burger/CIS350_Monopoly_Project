@@ -215,19 +215,22 @@ public class BoardPanel extends JPanel {
 	 * @param propertyNum - the property number that the player is moving from
 	 */
 	public void removeHotel(final int propertyNum) {
+		System.out.println("INHERE");
 		PropertyPiecePlacement property = piecePlacements[propertyNum];
-		if (matrix[property.getNoHouseRow()][property.getNoHouseCol()].getText().contentEquals("2")) {
-			matrix[property.getNoHouseRow()][property.getNoHouseCol()].setText("");
-		} else if (matrix[property.getOneHouseRow()][property.getOneHouseCol()].getText().contentEquals("2")) {
-			matrix[property.getOneHouseRow()][property.getOneHouseCol()].setText("");
-		} else if (matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].getText().contentEquals("2")) {
-			matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].setText("");
-		} else {
-			matrix[property.getThreeHouseRow()][property.getThreeHouseCol()].setText("");
-		}
-		
-		revalidate();
-		repaint();
+		clearPosition(matrix[property.getHotelRow1()][property.getHotelCol1()]);
+		clearPosition(matrix[property.getHotelRow2()][property.getHotelCol2()]);
+//		if (matrix[property.getNoHouseRow()][property.getNoHouseCol()].getText().contentEquals("2")) {
+//			matrix[property.getNoHouseRow()][property.getNoHouseCol()].setText("");
+//		} else if (matrix[property.getOneHouseRow()][property.getOneHouseCol()].getText().contentEquals("2")) {
+//			matrix[property.getOneHouseRow()][property.getOneHouseCol()].setText("");
+//		} else if (matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].getText().contentEquals("2")) {
+//			matrix[property.getTwoHouseRow()][property.getTwoHouseCol()].setText("");
+//		} else {
+//			matrix[property.getThreeHouseRow()][property.getThreeHouseCol()].setText("");
+//		}
+//		
+//		revalidate();
+//		repaint();
 	}
 
 	// is this method used??
