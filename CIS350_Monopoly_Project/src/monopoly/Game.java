@@ -35,32 +35,25 @@ public class Game {
 
 	/** Represents one of the two dice. */
 	private GVdie die2 = new GVdie(80);
+
+	public boolean checkBankrupt(int playerNum) {
+		if (players.get(playerNum - 1).getMoney() <= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	public ArrayList<Property> getProperties(int playerNum) {
+		return players.get(playerNum - 1).getPropertiesList();
+	}
+	
+	public void subtractMoney(int playerNum, int amount) {
+
 	/** Represents the money received if player lands on free parking. */
 	private int freeParkingfund = 0;
 
-
-	/**
-	 * Returns properties for given player.
-	 * @param playerNum requested player
-	 * @return ArrayList of properties of player
-	 */
-	public ArrayList<Property> getProperties(final int playerNum) {
-		return players.get(playerNum - 1).getPropertiesList();
-	}
-
-	/**
-	 * Subtracts money from total money
-	 * @param playerNum Number of requested player
-	 * @param amount Amount of money to be removed
-	 * @return True if money being removed results in player being bankrupt.
-	 */
-	public boolean subtractMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
-		if (getPlayerMoney(playerNum) <= 0) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
