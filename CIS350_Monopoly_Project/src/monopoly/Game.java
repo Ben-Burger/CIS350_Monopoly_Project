@@ -245,8 +245,8 @@ public class Game {
 	 */
 	public int move() {
 
-//		int movement = rollDice();
-		int movement = 1;		//TODO for testing
+		int movement = rollDice();
+//		int movement = 7;		//TODO for testing
 		        
 
 
@@ -339,12 +339,13 @@ public class Game {
 				}
 				break;
 			case MOVE_TO_POSITION:
+				if (currentPosition > c.getNum())
+						currentPlayer.addMoney(200);
+				
 				setCurrentPlayerPosition(c.getNum());
+				
 				if (c.getNum() == 10) {
 					currentPlayer.setJailturns(1);
-				}
-				if(c.getNum()==0) {
-					currentPlayer.addMoney(200);
 				}
 				break;
 			case RECEIVE_FROM_BANK:
