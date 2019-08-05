@@ -35,6 +35,9 @@ public class Game {
 
 	/** Represents one of the two dice. */
 	private GVdie die2 = new GVdie(80);
+	
+	/** Represents the money received if player lands on free parking. */
+	private int freeParkingfund = 0;
 
 	public boolean checkBankrupt(int playerNum) {
 		if (players.get(playerNum - 1).getMoney() <= 0) {
@@ -49,10 +52,6 @@ public class Game {
 	}
 	
 	public void subtractMoney(int playerNum, int amount) {
-
-	/** Represents the money received if player lands on free parking. */
-	private int freeParkingfund = 0;
-
 		getPlayer(playerNum).subtractMoney(amount);
 	}
 
@@ -247,7 +246,7 @@ public class Game {
 	public int move() {
 
 //		int movement = rollDice();
-		        int movement = 1;		//TODO for testing
+		int movement = 1;		//TODO for testing
 		        
 
 
@@ -587,6 +586,7 @@ public class Game {
 				sale = 100;
 		}
 	    board[space].removeHouse();
+	    addMoney(currentPlayerNum + 1, sale);
     }
 
 	/**

@@ -7,10 +7,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -50,10 +51,10 @@ public class MonopolyPanel extends JPanel {
 
 	/** Button to end turn. */
 	private JButton endTurnButton;
-	
+
 	/** Button to sell property. */
 	private JButton sellproperty;
-	
+
 	/** Button to buy house. */
 	private JButton buyhouse;
 
@@ -172,8 +173,8 @@ public class MonopolyPanel extends JPanel {
 		c.insets = new Insets(50, 20, 50, 0);
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(endTurnButton, c);
-		
-		
+
+
 		sellproperty = new JButton("Sell Property");
 		sellproperty.addActionListener(listener);
 		sellproperty.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
@@ -184,7 +185,7 @@ public class MonopolyPanel extends JPanel {
 		c.insets = new Insets(50, 20, 50, 0);
 		c.anchor = GridBagConstraints.SOUTH;
 		this.add(sellproperty, c);
-		
+
 		buyhouse = new JButton("Buy house/hotel");
 		buyhouse.addActionListener(listener);
 		buyhouse.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
@@ -373,7 +374,7 @@ public class MonopolyPanel extends JPanel {
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
 			}
-			
+
 			updateBank();
 			break;
 		case "Free Parking":
@@ -477,33 +478,113 @@ public class MonopolyPanel extends JPanel {
 			ArrayList<Object> params = new ArrayList<Object>();
 			params.add("You are at $" + game.getCurrentPlayerMoney() + "\nSelect properties to sell:");
 
-			for(int i = 0; i < properties.size(); i++)
+			Map<Character, Integer> map = new TreeMap<>();
+			for (int i = 0; i < properties.size(); i++) {
+				char color = properties.get(i).getColor();
+				if (map.containsKey(color)) {
+		            map.replace(color, map.get(color) + properties.get(i).getHouses());
+		        } else {
+		            map.put(color, properties.get(i).getHouses());
+		        }
+			}
+			
+			for (int i = 0; i < properties.size(); i++)
 			{
-				JCheckBox checkbox = new JCheckBox();
-				checkbox.setText(properties.get(i).getName() + ": $" + (properties.get(i).getPrice() / 2));
-				checkbox.setSelected(false);
-				params.add(checkbox);
+				boolean entireRowOwned = false;
+				char color = properties.get(i).getColor();
+				if ((color == 'b' || color == 'n' || color == 'u') && (game.getCurrentPlayer().getProperties().get(color) == 2)) {
+					entireRowOwned = true;
+				} else if (game.getCurrentPlayer().getProperties().get(color) == 3) {
+					entireRowOwned = true;
+				} 
+
+
+
+				if ( (entireRowOwned && properties.get(i).getHouses() > 0) || (entireRowOwned && map.get(properties.get(i).getColor())== 0) || (!entireRowOwned) ) {
+					JCheckBox checkbox = new JCheckBox();
+					if (properties.get(i).getHouses() > 0) {
+						int sellPrice = 0;
+						switch (properties.get(i).getColor()) {
+						case 'n':
+						case 't':
+							sellPrice = 25;
+							break;
+						case 'p':
+						case 'o':
+							sellPrice = 50;
+							break;
+						case 'r':
+						case 'y':
+							sellPrice = 75;
+							break;
+						case 'g':
+						case 'b':
+							sellPrice = 100;
+						}
+						if (properties.get(i).getHouses() == 5) {
+							checkbox.setText(properties.get(i).getName() + " hotel: $" + sellPrice);
+						} else {
+							checkbox.setText(properties.get(i).getName() + " house: $" + sellPrice);
+						}
+					} else {
+						checkbox.setText(properties.get(i).getName() + ": $" + (properties.get(i).getPrice() / 2));
+					}
+					checkbox.setSelected(false);
+					params.add(checkbox);
+				}
 			}
 
 			Object[] realParams = new Object[params.size()];
 			realParams = params.toArray(realParams);
 
 
-			int n = JOptionPane.showConfirmDialog(null, realParams, "title", JOptionPane.OK_CANCEL_OPTION);
+			int n = JOptionPane.showConfirmDialog(null, realParams, "SELL PROPERTIES", JOptionPane.OK_CANCEL_OPTION);
 
 
 			if (n == JOptionPane.OK_OPTION) {
 				for(int i = 1; i < realParams.length; i++) {
 					if(((JCheckBox) realParams[i]).isSelected()) {
-						game.sellProperty(properties.get(i - 1).getName());
-						updateGameInfo("Player " + currentPlayer + " sold " + properties.get(i - 1).getName() + " for $" + properties.get(i - 1).getPrice() / 2);
-
-						for (Component c : ownedProperties[currentPlayer - 1].getComponents()) {
-							if (c instanceof JLabel) {
-								if (((JLabel) c).getText().contains(properties.get(i - 1).getName())) {
-									ownedProperties[currentPlayer - 1].remove(c);
-								}
+						if (properties.get(i - 1).getHouses() > 0) {
+							game.sellHouse(properties.get(i - 1).getPosition());
+							int sellPrice = 0;
+							switch (properties.get(i - 1).getColor()) {
+							case 'n':
+							case 't':
+								sellPrice = 25;
+								break;
+							case 'p':
+							case 'o':
+								sellPrice = 50;
+								break;
+							case 'r':
+							case 'y':
+								sellPrice = 75;
+								break;
+							case 'g':
+							case 'b':
+								sellPrice = 100;
+								break;
 							}
+							if (properties.get(i - 1).getHouses() == 5) {
+								updateGameInfo("Player " + currentPlayer + " sold " + properties.get(i - 1).getName()
+										+ " hotel for $" + sellPrice);
+								board.removeHotel(properties.get(i - 1).getPosition());
+							} else {
+								updateGameInfo("Player " + currentPlayer + " sold " + properties.get(i - 1).getName()
+										+ " house for $" + sellPrice);
+								board.removeHouse(properties.get(i - 1).getPosition());
+							}
+						} else {	
+							game.sellProperty(properties.get(i - 1).getName());
+							updateGameInfo("Player " + currentPlayer + " sold " + properties.get(i - 1).getName()
+									+ " for $" + properties.get(i - 1).getPrice() / 2);
+							for (Component c : ownedProperties[currentPlayer - 1].getComponents()) {
+								if (c instanceof JLabel) {
+									if (((JLabel) c).getText().contains(properties.get(i - 1).getName())) {
+										ownedProperties[currentPlayer - 1].remove(c);
+									}
+								}
+							} 
 						}
 					}
 				}
@@ -511,6 +592,9 @@ public class MonopolyPanel extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(null, "You have no properties to sell.");
 		}
+		ownedProperties[currentPlayer - 1].validate();
+		ownedProperties[currentPlayer - 1].repaint();
+		updateBank();
 	}
 
 	/**
@@ -539,9 +623,9 @@ public class MonopolyPanel extends JPanel {
 					game.moveTo(possiblemove+10);
 					board.movePlayer(game.getCurrentPlayerNum(), game.getCurrentPlayerPosition(), 10);
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " is now at " + game.getPropertyName(game.getCurrentPlayerPosition()) + ".");
-	
+
 					JOptionPane.showMessageDialog(null, "Double " + die1.getValue()+"'s! You're free!");
-					
+
 					checkProperty(game.getCurrentPlayerPosition());
 					hasRolled = true;
 					game.getCurrentPlayer().setJailturns(0);
@@ -552,14 +636,14 @@ public class MonopolyPanel extends JPanel {
 					updateBank();
 					JOptionPane.showMessageDialog(null, "You've ran out of attempts and paid $50. Press roll button.");
 					game.getCurrentPlayer().setJailturns(0);
-					
+
 				}
 				else {
 					game.getCurrentPlayer().setJailturns(game.getCurrentPlayer().getJailturns()+1);
 					hasRolled = true;
 					updateGameInfo("Player " + game.getCurrentPlayerNum() + " rolled a " + die1.getValue() + " and a " + die2.getValue() + " and  did not get out of jail!");
 				}
-					
+
 				break;
 			case 1:
 				game.getCurrentPlayer().setMoney(game.getCurrentPlayerMoney()-50);
@@ -568,9 +652,9 @@ public class MonopolyPanel extends JPanel {
 				game.getCurrentPlayer().setJailturns(0);
 
 				break;
-	
+
 			default:
-	
+
 				break;
 			}
 		}
@@ -670,25 +754,27 @@ public class MonopolyPanel extends JPanel {
 					}
 				}
 			}
-			
+
 			if (e.getSource() == sellproperty) {
-				
+				if (hasRolled) {
+					sellProperties();
+				}
 			}
-			
+
 			if (e.getSource() == buyhouse) {
 				ArrayList<Property> optionList = game.canGetHouse();
 				if (optionList.size() > 0) {
 					Object[] options = optionList.toArray();
 					Object value = JOptionPane.showInputDialog(null, 
-					                                           "Property", 
-					                                           "Eligible Properties", 
-					                                            JOptionPane.QUESTION_MESSAGE, 
-					                                            null,
-					                                            options, 
-					                                            options[0].toString());
-	
+							"Property", 
+							"Eligible Properties", 
+							JOptionPane.QUESTION_MESSAGE, 
+							null,
+							options, 
+							options[0].toString());
+
 					int index = optionList.indexOf(value);
-					
+
 					if (optionList.get(index).getHouses() < 4) {
 						int dialogButton = JOptionPane.YES_NO_OPTION;
 						int dialogResult = JOptionPane.showConfirmDialog(null, "Additional houses on " + optionList.get(index).getName() + " cost $" + game.houseCost(optionList.get(index).getPosition()) + ". Would you like to continue?" , "Warning" , dialogButton);
@@ -707,7 +793,7 @@ public class MonopolyPanel extends JPanel {
 							game.buyHouse(optionList.get(index).getPosition());
 							updateBank();
 							updateGameInfo("Player " + game.getCurrentPlayerNum() + " placed a hotel on " + optionList.get(index).getName() + ".");
-					
+
 						}
 					}
 				}
