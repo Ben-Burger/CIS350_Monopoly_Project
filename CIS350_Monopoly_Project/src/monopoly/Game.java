@@ -254,9 +254,9 @@ public class Game {
 	 */
 	public int move() {
 
-//		int movement = rollDice();
+		int movement = rollDice();
 
-		int movement = 1;		//TODO for testing
+//		int movement = 1;		//TODO for testing
 		        
 
 
