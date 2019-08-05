@@ -71,7 +71,16 @@ public class Game {
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
-	
+
+	/**
+	 * Get the number of houses for a space.
+	 * @param space Requested space
+	 * @return Number of houses
+	 */
+	public int getPropertyHouses(int space) {
+		return board[space].getHouses();
+	}
+
 	/**
 	 * Returns the current player.
 	 * @param playerNum - the player number
@@ -246,6 +255,7 @@ public class Game {
 	public int move() {
 
 		int movement = rollDice();
+
 //		int movement = 7;		//TODO for testing
 		        
 
@@ -339,6 +349,8 @@ public class Game {
 				}
 				break;
 			case MOVE_TO_POSITION:
+
+
 				if (currentPosition > c.getNum())
 						currentPlayer.addMoney(200);
 				
@@ -406,14 +418,14 @@ public class Game {
 
 	/**
 	 * Gets the proper possible action for the space landed on by a player.
-	 * @return 	-1: Special property (chance, community chest, free parking, etc.)  
+     * @return 	-1: Special property (chance, community chest, free parking, etc.)
 	 *         	 0: Unowned property. Prompt to buy.
 	 *           1: Owned property. Prompt for payment.
 	 */
 	public int propertyActions() {
 		if (board[currentPosition].getOwnerNum() > 0) {
 			return 1;
-		}	
+		}
 		return board[currentPosition].getOwnerNum();
 	}
 
