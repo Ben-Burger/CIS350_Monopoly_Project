@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -357,6 +356,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $200 for Income Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $200 for Income Tax.");
 			game.subtractMoney(currentPlayer, 200);
+			game.setFreeParkingfund(game.getFreeParkingfund() + 200);
 			updateBank();
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
@@ -401,6 +401,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $100 for Luxury Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $100 for Luxury Tax.");
 			game.subtractMoney(currentPlayer, 200);
+			game.setFreeParkingfund(game.getFreeParkingfund() + 200);
 			updateBank();
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
