@@ -261,8 +261,8 @@ public class Game {
 
 
 		int newPosition = currentPlayer.getPosition() + movement;
-		if (newPosition > 39) {
-			newPosition -= 39;
+		if (newPosition >= 40) {
+			newPosition -= 40;
 			currentPlayer.addMoney(200);
 		}
 		currentPlayer.setPosition(newPosition);
