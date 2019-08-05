@@ -342,6 +342,7 @@ public class MonopolyPanel extends JPanel {
 			currentPosition = game.getCurrentPlayerPosition();
 			if (currentPosition != previousPosition) {
 				board.movePlayer(currentPlayer, currentPosition, previousPosition);
+				checkProperty(currentPosition);
 			}
 
 			if (game.checkBankrupt(currentPlayer)) {
@@ -354,6 +355,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $200 for Income Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $200 for Income Tax.");
 			game.subtractMoney(currentPlayer, 200);
+			updateBank();
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
 			}
@@ -369,6 +371,7 @@ public class MonopolyPanel extends JPanel {
 			currentPosition = game.getCurrentPlayerPosition();
 			if (currentPosition != previousPosition) {
 				board.movePlayer(currentPlayer, currentPosition, previousPosition);
+				checkProperty(currentPosition);
 			}
 
 			if (game.checkBankrupt(currentPlayer)) {
@@ -396,6 +399,7 @@ public class MonopolyPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, "Player " + currentPlayer + ", you must pay $100 for Luxury Tax.");
 			updateGameInfo("Player " + currentPlayer + " paid $100 for Luxury Tax.");
 			game.subtractMoney(currentPlayer, 200);
+			updateBank();
 			if (game.checkBankrupt(currentPlayer)) {
 				bankruptOptions();
 			}
