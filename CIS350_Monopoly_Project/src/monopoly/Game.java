@@ -65,7 +65,7 @@ public class Game {
 	 * @param amount Amount of money to be removed
 	 * @return True if money being removed results in player being bankrupt.
 	 */
-	public boolean subtractMoney(final int playerNum, final int amount) {
+	public void subtractMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
 	}
 
