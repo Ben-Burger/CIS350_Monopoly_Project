@@ -1,6 +1,9 @@
 package monopoly;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 
@@ -39,24 +42,38 @@ public class Game {
 	/** Represents the money received if player lands on free parking. */
 	private int freeParkingfund = 0;
 
-	public boolean checkBankrupt(int playerNum) {
-		if (players.get(playerNum - 1).getMoney() <= 0) {
-			return true;
-		} else {
-			return false;
-		}
+	/**
+	 * This methods checks whether the given player is bankrupt.
+	 * 
+	 * @param playerNum - the player number
+	 * @return boolean - bankrupt or not
+	 */
+	public boolean checkBankrupt(final int playerNum) {
+		return players.get(playerNum - 1).getMoney() <= 0;
 	}
 	
-	public ArrayList<Property> getProperties(int playerNum) {
+	/**
+	 * This method returns the properties owned by the given player.
+	 * 
+	 * @param playerNum - the player number
+	 * @return ArrayList<Property> - the properties
+	 */
+	public ArrayList<Property> getProperties(final int playerNum) {
 		return players.get(playerNum - 1).getPropertiesList();
 	}
 	
-	public void subtractMoney(int playerNum, int amount) {
+	/**
+	 * This methods subtracts the given amount of money from the given player.
+	 * 
+	 * @param playerNum - the player number
+	 * @param amount - the amount of money to be subtracted
+	 */
+	public void subtractMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
 	}
 
 	/**
-	 * Adds money to total money
+	 * Adds money to total money.
 	 * @param playerNum Number of requested player
 	 * @param amount Amount of money to be added
 	 */
@@ -77,7 +94,7 @@ public class Game {
 	 * @param space Requested space
 	 * @return Number of houses
 	 */
-	public int getPropertyHouses(int space) {
+	public int getPropertyHouses(final int space) {
 		return board[space].getHouses();
 	}
 
@@ -270,7 +287,12 @@ public class Game {
 		return movement;
 	}
 
-	public void moveTo(int spot) {
+	/**
+	 * This method moves the current player to the given board position.
+	 * 
+	 * @param spot - the desired board position
+	 */
+	public void moveTo(final int spot) {
 		int tmp = currentPosition;
 		setCurrentPlayerPosition(spot);
 		if (spot != 10 && spot < tmp) {
@@ -281,6 +303,8 @@ public class Game {
 	/**
 	 * Draws a card from the Community Chest deck and performs the necessary
 	 * actions required by the card.
+	 * 
+	 * @return String - the message of the card
 	 */
 	public String drawChest() {
 		Card card = decks.drawChest();
@@ -291,6 +315,7 @@ public class Game {
 	/**
 	 * Draws a card from the Chance deck and performs the necessary actions
 	 * required by the card.
+	 * @return String - the message of the card
 	 */
 	public String drawChance() {
 		Card card = decks.drawChance();
@@ -298,6 +323,13 @@ public class Game {
 		return card.getName();
 	}
 
+	/**
+	 * This method draws the specified card from either the Chance  or Community Chest
+	 * deck and performs the necessary actions required by the card.
+	 * 
+	 * @param c - the card type, 'a' for a Chance card. 'e' (or anything else) for a Chest card
+	 * @param index - index of card in its ArrayList
+	 */
 	public void drawSpecificCard(final char c, final int index) {
 		useCard(decks.getCard(c, index));
 	}
@@ -307,7 +339,7 @@ public class Game {
 	 * of the card.
 	 * @param c Card drawn from either Community Chest or Chance deck.
 	 */
-	private void useCard(Card c) {
+	private void useCard(final Card c) {
 		switch (c.getType()) {
 			case JAIL_FREE:
 				currentPlayer.addProperty('j');
@@ -351,8 +383,9 @@ public class Game {
 			case MOVE_TO_POSITION:
 
 
-				if (currentPosition > c.getNum())
+				if (currentPosition > c.getNum()) {
 						currentPlayer.addMoney(200);
+				}
 				
 				setCurrentPlayerPosition(c.getNum());
 				
@@ -373,6 +406,8 @@ public class Game {
 					}
 				}
 				break;
+		default:
+			break;
 		}
 	}
 
@@ -429,6 +464,11 @@ public class Game {
 		return board[currentPosition].getOwnerNum();
 	}
 
+	/**
+	 * This method returns the properties owned by the current player that can have a house added.
+	 * 
+	 * @return ArrayList<Property> - the properties owned by the current player that can have a house added
+	 */
 	public ArrayList<Property> canGetHouse() {
 	    ArrayList<Property> eligible = new ArrayList<>();
 	    Map<Character, Integer> colorHouse = new TreeMap<Character, Integer>();
@@ -437,7 +477,7 @@ public class Game {
 	            if (p.getColor() == 'n' || p.getColor() == 'b') {
 	                if (currentPlayer.getProperties().get(p.getColor()) == 2) {
 	                    eligible.add(p);
-	                    if (colorHouse.containsKey(p.getColor())){
+	                    if (colorHouse.containsKey(p.getColor())) {
 	                        if (colorHouse.get(p.getColor()) < p.getHouses()) {
 	                            colorHouse.replace(p.getColor(), p.getHouses());
 	                        }
@@ -533,7 +573,9 @@ public class Game {
 			case 'g':
 			case 'b':
 				cost = 200;
+				break;
 			default:
+				break;
 		}
 
 		return cost;
@@ -546,7 +588,7 @@ public class Game {
 	 * @return True if player has the money to buy the property,
 	 * false otherwise.
 	 */
-	public boolean buyHouse(int space) {
+	public boolean buyHouse(final int space) {
 		int cost = 0;
 		switch (board[space].getColor()) {
 			case 'n':
@@ -564,10 +606,13 @@ public class Game {
 			case 'g':
 			case 'b':
 				cost = 200;
+				break;
+			default:
+				break;
 		}
 		if (getCurrentPlayerMoney() >= cost) {
 			board[space].addHouse();
-			currentPlayer.setMoney(getCurrentPlayerMoney()-cost);
+			currentPlayer.setMoney(getCurrentPlayerMoney() - cost);
 			return true;
 		} else {
 			return false;
@@ -597,6 +642,9 @@ public class Game {
 			case 'g':
 			case 'b':
 				sale = 100;
+				break;
+			default:
+				break;
 		}
 	    board[space].removeHouse();
 	    addMoney(currentPlayerNum + 1, sale);
@@ -631,7 +679,7 @@ public class Game {
 	 * @param name Player input of the property name
 	 * @return false if property not found. Otherwise true.
 	 */
-	public boolean sellProperty(String name) {
+	public boolean sellProperty(final String name) {
 		int index = -1;
 		for (int i = 0; i < board.length; i++) {
 				if (board[i].getName().equalsIgnoreCase(name)) {
@@ -656,11 +704,12 @@ public class Game {
 	 * @param num the number of the desired die
 	 * @return the requested die value
 	 */
-	public GVdie getDie(int num) {
-		if (num == 1)
+	public GVdie getDie(final int num) {
+		if (num == 1) {
 			return die1;
-		else
+		} else {
 			return die2;
+		}
 	}
 
 	/**

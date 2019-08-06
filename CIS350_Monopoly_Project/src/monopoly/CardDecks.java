@@ -3,14 +3,20 @@ package monopoly;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Class that represents a deck of Community Chest or Chance cards.
+ *
+ * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
+ * @version	8/5/2019
+ */
 public class CardDecks {
-    /** Cards belonging in the Chance Deck */
+    /** Cards belonging in the Chance Deck. */
     private ArrayList<Card> chanceDeck;
 
-    /** Cards belonging in the Community Chest Deck */
+    /** Cards belonging in the Community Chest Deck. */
     private ArrayList<Card> communityChestDeck;
 
-    /** Random object to pull random cards */
+    /** Random object to pull random cards. */
     private Random r;
 
     /**

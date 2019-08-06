@@ -108,11 +108,11 @@ public class BoardPanel extends JPanel {
 	 * @param playernum - the player number
 	 */
 	private void removePiece(final PropertyPiecePlacement property, final int playernum) {
-		if (matrix[property.getNoPieceRow()][property.getNoPieceCol()].getBackground()==playerColor(playernum)) {
+		if (matrix[property.getNoPieceRow()][property.getNoPieceCol()].getBackground() == playerColor(playernum)) {
 			clearPosition(matrix[property.getNoPieceRow()][property.getNoPieceCol()]);
-		} else if (matrix[property.getOnePieceRow()][property.getOnePieceCol()].getBackground()==playerColor(playernum)) {
+		} else if (matrix[property.getOnePieceRow()][property.getOnePieceCol()].getBackground() == playerColor(playernum)) {
 			clearPosition(matrix[property.getOnePieceRow()][property.getOnePieceCol()]);
-		} else if (matrix[property.getTwoPieceRow()][property.getTwoPieceCol()].getBackground()==playerColor(playernum)) {
+		} else if (matrix[property.getTwoPieceRow()][property.getTwoPieceCol()].getBackground() == playerColor(playernum)) {
 			clearPosition(matrix[property.getTwoPieceRow()][property.getTwoPieceCol()]);
 		} else {
 			clearPosition(matrix[property.getThreePieceRow()][property.getThreePieceCol()]);
@@ -124,7 +124,7 @@ public class BoardPanel extends JPanel {
 	 * @param position - the property number that the player is moving to
 	 * @return true if the position is empty
 	 */
-	private boolean positionEmpty(final JButton position){
+	private boolean positionEmpty(final JButton position) {
 		return (position.getBackground() != playerColor(1)) 
 				&& (position.getBackground() != playerColor(2)) 
 				&& (position.getBackground() != playerColor(3)) 
@@ -136,7 +136,7 @@ public class BoardPanel extends JPanel {
 	 * Clears button position.
 	 * @param position - the property number that the player is moving to
 	 */
-	private void clearPosition(final JButton position){
+	private void clearPosition(final JButton position) { 
 		position.setBorderPainted(false);
 		position.setContentAreaFilled(false);
 		position.setBackground(Color.MAGENTA);
@@ -146,7 +146,7 @@ public class BoardPanel extends JPanel {
 	 * Places a house icon on a property.
 	 * @param propertyNum - the property number that the player is moving to
 	 */
-	public void addHouse(final int propertyNum){
+	public void addHouse(final int propertyNum) {
 		PropertyPiecePlacement property = piecePlacements[propertyNum];
 		if (positionEmpty(matrix[property.getNoHouseRow()][property.getNoHouseCol()])) {
 			matrix[property.getNoHouseRow()][property.getNoHouseCol()].setBorderPainted(true);
@@ -172,8 +172,7 @@ public class BoardPanel extends JPanel {
 
 	/**
 	 * Removes a house icon from a property.
-	 * @param property - the property number that the player is moving from
-	 * @param playernum - the player number
+	 * @param propertyNum - the property number that the player is moving from
 	 */
 	public void removeHouse(final int propertyNum) {
 		PropertyPiecePlacement property = piecePlacements[propertyNum];
@@ -289,7 +288,7 @@ public class BoardPanel extends JPanel {
 		piecePlacements = new PropertyPiecePlacement[40];
 
 		// Manually create properties on the board.
-		int[] positions = new int[]{ 48, 44, 49, 44, 48, 49, 49, 49};
+		int[] positions = new int[] {48, 44, 49, 44, 48, 49, 49, 49};
 		piecePlacements[0] = new PropertyPiecePlacement(positions);
 
 		positions = new int[]{48, 41, 48, 42, 49, 41, 49, 42,

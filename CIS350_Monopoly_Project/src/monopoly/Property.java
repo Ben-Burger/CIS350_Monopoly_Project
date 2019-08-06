@@ -42,6 +42,7 @@ public class Property {
      * @param price - price of the property
      * @param r - rent for the property
      * @param ownerNum - owner number for the property
+     * @param position - the board position of the property
      */
     public Property(final String name, final int price, final int[] r, final int ownerNum, final int position) {
     	this.name = name;
@@ -64,6 +65,7 @@ public class Property {
      * @param ownerNum - owner number for the property
      * @param color - color of the property
      * @param image - image of the property
+     * @param position - the board position of the property
      */
     public Property(final String name, final int price, final int[] r, final int ownerNum, final char color, final ImageIcon image, final int position) {
         this.name = name;
@@ -164,6 +166,11 @@ public class Property {
         houses--;
     }
 
+    /**
+     * This methods returns the amount of houses on the property.
+     * 
+     * @return int - the amount of houses on the proeprty
+     */
 	public int getHouses() {
         return houses;
     }
