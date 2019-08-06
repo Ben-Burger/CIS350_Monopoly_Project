@@ -46,6 +46,14 @@ public class Game {
 	}
 
 	/**
+	 * Gets Community Chest and Chance cards.
+	 * @return CardDeck of Cards
+	 */
+	public CardDecks getDecks() {
+		return decks;
+	}
+
+	/**
 	 * Subtracts money from total money
 	 * @param playerNum Number of requested player
 	 * @param amount Amount of money to be removed
@@ -256,6 +264,11 @@ public class Game {
 		return movement;
 	}
 
+    /**
+     * Moves player to specific spot. If passes go and not going directly
+     * to jail, they receive $200.
+     * @param spot
+     */
 	public void moveTo(int spot) {
 		int tmp = currentPosition;
 		setCurrentPlayerPosition(spot);
@@ -408,6 +421,10 @@ public class Game {
 		return board[currentPosition].getOwnerNum();
 	}
 
+    /**
+     *
+     * @return ArrayList of properties capable of receiving a house.
+     */
 	public ArrayList<Property> canGetHouse() {
 	    ArrayList<Property> eligible = new ArrayList<>();
 	    Map<Character, Integer> colorHouse = new TreeMap<Character, Integer>();
@@ -515,6 +532,7 @@ public class Game {
 		}
 		if (getCurrentPlayerMoney() >= cost) {
 			board[space].addHouse();
+			subtractMoney(getCurrentPlayerNum(), cost);
 			return true;
 		} else {
 			return false;
@@ -545,6 +563,7 @@ public class Game {
 			case 'b':
 				sale = 100;
 		}
+		addMoney(getCurrentPlayerNum(), sale);
 	    board[space].removeHouse();
     }
 
@@ -617,8 +636,6 @@ public class Game {
 	 */
 	private void createProperties() {
 		board = new Property[40];
-
-		// Manually create properties on the board.
 		board[0] = new Property("GO", 0, new int[] {0}, -1);
 		board[1] = new Property("Mediterranean Avenue", 60, new int[]{2, 10, 30, 90, 16, 250}, 0, 'n', new ImageIcon("pictures/Mediterranean Ave.png"));
 		board[2] = new Property("Community Chest", 0, new int[] {0}, -1);
