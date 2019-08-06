@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
  * will be identified with a price and rent of $0.
  * 
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019
+ * @version	8/5/2019
  */
 public class Property {
     /** Number of houses on property. 5 houses means 1 hotel */

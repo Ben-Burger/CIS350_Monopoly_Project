@@ -10,7 +10,7 @@ import static junit.framework.TestCase.assertTrue;
  * JUnit test class that tests the game class.
  * 
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019 
+ * @version	8/5/2019 
  */
 public class MonopolyGameTest {
 	

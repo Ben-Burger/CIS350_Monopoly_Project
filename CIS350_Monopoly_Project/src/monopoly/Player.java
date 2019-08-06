@@ -7,7 +7,7 @@ import java.util.TreeMap;
 /**
  * Player class for a monopoly game.
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019
+ * @version	8/5/2019
  */
 public class Player {
 

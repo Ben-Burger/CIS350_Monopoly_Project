@@ -4,7 +4,7 @@ package monopoly;
  * Main driver class that creates the Monopoly GUI.
  *
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/25/2019 
+ * @version	8/5/2019 
  */
 public final class Main {
 

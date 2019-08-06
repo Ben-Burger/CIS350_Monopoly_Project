@@ -13,7 +13,7 @@ import javax.swing.JMenuItem;
  * GUI for the Monopoly game board.
  *
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019
+ * @version	8/5/2019
  */
 @SuppressWarnings("serial")
 public final class MonopolyGUI extends JFrame implements ActionListener {

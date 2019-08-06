@@ -4,7 +4,7 @@ package monopoly;
  * Class that helps determine where to place the player icons on a property.
  *
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis 
- * @version	7/20/2019 
+ * @version	8/5/2019 
  */
 public class PropertyPiecePlacement {
 	

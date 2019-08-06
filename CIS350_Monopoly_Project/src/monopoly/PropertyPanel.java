@@ -8,7 +8,7 @@ import javax.swing.JPanel;
  * There is a property panel for every player in the game.
  * 
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019 
+ * @version	8/5/2019 
  */
 @SuppressWarnings("serial")
 public class PropertyPanel extends JPanel {
