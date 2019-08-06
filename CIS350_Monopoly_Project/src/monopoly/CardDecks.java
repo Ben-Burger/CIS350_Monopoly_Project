@@ -30,6 +30,22 @@ public class CardDecks {
     }
 
     /**
+     * Gets cards left in the deck
+     * @return Number of cards.
+     */
+    public int cardsLeftInChance() {
+        return chanceDeck.size();
+    }
+
+    /**
+     * Gets cards left in the deck
+     * @return Number of cards.
+     */
+    public int cardsLeftInChest() {
+        return communityChestDeck.size();
+    }
+
+    /**
      * Clears any remaining cards in decks and fills both decks with cards.
      */
     public void initialize() {
@@ -121,6 +137,9 @@ public class CardDecks {
      * @return Card chosen.
      */
     public Card drawChest() {
+        if (cardsLeftInChance() == 0) {
+            makeCommunityChest();
+        }
         int draw = r.nextInt(communityChestDeck.size());
         Card tmp = communityChestDeck.get(draw);
         communityChestDeck.remove(draw);
@@ -133,6 +152,9 @@ public class CardDecks {
      * @return Card chosen.
      */
     public Card drawChance() {
+        if (cardsLeftInChest() == 0) {
+            makeChance();
+        }
         int draw = r.nextInt(chanceDeck.size());
         Card tmp = chanceDeck.get(draw);
         chanceDeck.remove(draw);
@@ -151,6 +173,5 @@ public class CardDecks {
         } else {
             return communityChestDeck.get(index);
         }
-
     }
 }

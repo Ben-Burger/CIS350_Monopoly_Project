@@ -10,11 +10,11 @@ import static junit.framework.TestCase.assertTrue;
  * JUnit test class that tests the game class.
  * 
  * @author	Ben Burger, Ian Hall-Watt, Reuben Nyenhuis
- * @version	7/20/2019 
+ * @version	7/20/2019
  */
 public class MonopolyGameTest {
-	
-	/** Game object to be tested. */
+
+    /** Game object to be tested. */
     private Game test;
 
     /**
@@ -87,7 +87,7 @@ public class MonopolyGameTest {
         assertEquals(1150, test.getPlayer(1).getMoney());
     }
 
-    
+
     /**
      * Testing that a player goes bankrupt when they run out of money.
      */
@@ -110,7 +110,8 @@ public class MonopolyGameTest {
         test.buyProperty();
         test.setCurrentPlayerPosition(39);
         test.buyProperty();
-        assertEquals((Integer) 2, test.getCurrentPlayer().getProperties().get('b'));
+        assertEquals((Integer) 2, test.getCurrentPlayer()
+                .getProperties().get('b'));
     }
 
     /**
@@ -209,6 +210,15 @@ public class MonopolyGameTest {
     }
 
     /**
+     * Tests pulling a specific card
+     */
+    @Test
+    public void gettingCardName(){
+        assertEquals("Advance to Go (Collect $200)",
+                test.getDecks().getCard('a', 0).getName());
+    }
+
+    /**
      *Tests cards that pay out to everyone.
      */
     @Test
@@ -220,6 +230,9 @@ public class MonopolyGameTest {
         assertEquals(1550, test.getPlayerMoney(4));
     }
 
+    /**
+     * Tests card that receives money from everyone.
+     */
     @Test
     public void cardThatReceivesFromEveryone() {
         test.drawSpecificCard('e', 9);
@@ -229,6 +242,9 @@ public class MonopolyGameTest {
         assertEquals(1490, test.getPlayerMoney(4));
     }
 
+    /**
+     * Tests card that moves player back a number of spaces.
+     */
     @Test
     public void cardThatMovesBackSpaces() {
         test.moveTo(7);
@@ -237,6 +253,9 @@ public class MonopolyGameTest {
         assertEquals(1500, test.getCurrentPlayerMoney());
     }
 
+    /**
+     * Tests card that sends you to GO.
+     */
     @Test
     public void cardThatSendsYouToGo() {
         test.moveTo(7);
@@ -245,6 +264,29 @@ public class MonopolyGameTest {
         assertEquals(1700, test.getCurrentPlayerMoney());
     }
 
+    /**
+     * Tests cards that send you to specific locations and past GO.
+     */
+    @Test
+    public void cardsThatSendYouToSpecificSpaces() {
+        test.drawSpecificCard('a', 1);
+        test.nextTurn();
+        test.moveTo(7);
+        test.drawSpecificCard('a', 10);
+        test.nextTurn();
+        test.drawSpecificCard('a', 11);
+
+        assertEquals(24, test.getPlayer(1).getPosition());
+        assertEquals(1500, test.getPlayerMoney(1));
+        assertEquals(5, test.getPlayer(2).getPosition());
+        assertEquals(1700, test.getPlayerMoney(2));
+        assertEquals(39, test.getPlayer(3).getPosition());
+        assertEquals(1500, test.getPlayerMoney(3));
+    }
+
+    /**
+     * Tests buying a house for a property.
+     */
     @Test
     public void buyHouse() {
         test.setCurrentPlayerPosition(1);
@@ -255,6 +297,9 @@ public class MonopolyGameTest {
         assertEquals(1, test.getPropertyHouses(1));
     }
 
+    /**
+     * Tests that properties with houses charge the appropriate rent.
+     */
     @Test
     public void chargesRentForHouse() {
         test.setCurrentPlayerPosition(6);
@@ -269,5 +314,104 @@ public class MonopolyGameTest {
         test.payRent();
         assertEquals(1, test.getPropertyHouses(6));
         assertEquals(1470, test.getCurrentPlayerMoney());
+    }
+
+    /**
+     * Checks for a single bankrupt player.
+     */
+    @Test
+    public void checkPlayerBankrupt() {
+        test.setCurrentPlayerBankrupt(true);
+        assertTrue(test.checkCurrentPlayerBankrupt());
+    }
+
+    /**
+     * Gets all properties after selling one.
+     */
+    @Test
+    public void getTotalProperties() {
+        test.setCurrentPlayerPosition(1);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(6);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(8);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(9);
+        test.buyProperty();
+        test.sellProperty("Oriental Avenue");
+        assertEquals(3, test.getProperties(1).size());
+    }
+
+    /**
+     * Gives money correctly for selling houses.
+     */
+    @Test
+    public void sellHouses(){
+        test.setCurrentPlayerPosition(6);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(8);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(9);
+        test.buyProperty();
+        test.buyHouse(6);
+        test.buyHouse(8);
+        test.sellHouse(6);
+        test.sellHouse(8);
+        assertEquals(1130, test.getCurrentPlayerMoney());
+    }
+
+    /**
+     * Gives money correctly for selling property
+     */
+    @Test
+    public void sellProperty() {
+        test.setCurrentPlayerPosition(6);
+        test.buyProperty();
+        test.sellProperty(test.getPropertyName(6));
+        assertEquals(0, test.getPropertyOwner(6));
+        assertEquals(1450, test.getCurrentPlayerMoney());
+    }
+
+    /**
+     * Ensures game ends correctly.
+     */
+    @Test
+    public void checkGameEnd() {
+        assertEquals(0, test.checkForGameEnd());
+        test.setCurrentPlayerBankrupt(true);
+        test.nextTurn();
+        test.setCurrentPlayerBankrupt(true);
+        test.nextTurn();
+        test.setCurrentPlayerBankrupt(true);
+        test.nextTurn();
+        test.nextTurn();
+        assertEquals(4, test.checkForGameEnd());
+    }
+
+    /**
+     * Gets properties that can have houses.
+     */
+    @Test
+    public void getPropertiesForHouses() {
+        test.setCurrentPlayerPosition(1);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(6);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(8);
+        test.buyProperty();
+        test.setCurrentPlayerPosition(9);
+        test.buyProperty();
+        assertEquals(3, test.canGetHouse().size());
+    }
+
+    @Test
+    public void removesCardsFromDecks() {
+        test.addMoney(1, 5000);
+        for (int i = 0; i < 4; i++) {
+            test.drawChance();
+            test.drawChest();
+        }
+        assertEquals(11, test.getDecks().cardsLeftInChance());
+        assertEquals(12, test.getDecks().cardsLeftInChest());
     }
 }

@@ -38,7 +38,7 @@ public class Game {
 
 	/** Represents one of the two dice. */
 	private GVdie die2 = new GVdie(80);
-	
+
 	/** Represents the money received if player lands on free parking. */
 	private int freeParkingfund = 0;
 
@@ -51,22 +51,30 @@ public class Game {
 	public boolean checkBankrupt(final int playerNum) {
 		return players.get(playerNum - 1).getMoney() <= 0;
 	}
-	
-	/**
+  
+  /**
 	 * This method returns the properties owned by the given player.
 	 * 
 	 * @param playerNum - the player number
 	 * @return ArrayList<Property> - the properties
 	 */
-	public ArrayList<Property> getProperties(final int playerNum) {
+	public ArrayList<Property> getProperties(int playerNum) {
 		return players.get(playerNum - 1).getPropertiesList();
 	}
-	
+
 	/**
-	 * This methods subtracts the given amount of money from the given player.
-	 * 
-	 * @param playerNum - the player number
-	 * @param amount - the amount of money to be subtracted
+	 * Gets Community Chest and Chance cards.
+	 * @return CardDeck of Cards
+	 */
+	public CardDecks getDecks() {
+		return decks;
+	}
+
+	/**
+	 * Subtracts money from total money
+	 * @param playerNum Number of requested player
+	 * @param amount Amount of money to be removed
+	 * @return True if money being removed results in player being bankrupt.
 	 */
 	public void subtractMoney(final int playerNum, final int amount) {
 		getPlayer(playerNum).subtractMoney(amount);
@@ -164,7 +172,7 @@ public class Game {
 	public void setCurrentPlayerBankrupt(final boolean bankrupt) {
 		currentPlayer.setBankrupt(bankrupt);
 	}
-	
+
 	/**
 	 * Returns the free Parking amount.
 	 * @return freeParkingfund - int of the amount in free Parking
@@ -239,12 +247,12 @@ public class Game {
 	 * Initializes game with given number of players.
 	 * @param numPlayers - Total number of players in the game.
 	 */
-	public Game(final int numPlayers) {
+    public Game(final int numPlayers) {
 		players = new ArrayList<>();
 		for (int i = 1; i <= numPlayers; i++) {
 			players.add(new Player(i, 1500));		//TODO for testing
 		}
-		
+
 		createProperties();
 		currentPlayerNum = 0;
 		currentPlayer = players.get(0);
@@ -273,6 +281,7 @@ public class Game {
 
 		int movement = rollDice();
 
+
 //		int movement = 1;		//TODO for testing
 		        
 
@@ -287,12 +296,12 @@ public class Game {
 		return movement;
 	}
 
-	/**
-	 * This method moves the current player to the given board position.
-	 * 
-	 * @param spot - the desired board position
-	 */
-	public void moveTo(final int spot) {
+    /**
+     * Moves player to specific spot. If passes go and not going directly
+     * to jail, they receive $200.
+     * @param spot
+     */
+	public void moveTo(int spot) {
 		int tmp = currentPosition;
 		setCurrentPlayerPosition(spot);
 		if (spot != 10 && spot < tmp) {
@@ -385,10 +394,10 @@ public class Game {
 
 				if (currentPosition > c.getNum()) {
 						currentPlayer.addMoney(200);
-				}
-				
+        }
+        
 				setCurrentPlayerPosition(c.getNum());
-				
+
 				if (c.getNum() == 10) {
 					currentPlayer.setJailturns(1);
 				}
@@ -580,7 +589,7 @@ public class Game {
 
 		return cost;
 	}
-	
+
 	/**
 	 * Buys a house on the given space. Removes the cost of the house from
 	 * currentPlayer's money and adds house to the property.
@@ -612,7 +621,7 @@ public class Game {
 		}
 		if (getCurrentPlayerMoney() >= cost) {
 			board[space].addHouse();
-			currentPlayer.setMoney(getCurrentPlayerMoney() - cost);
+			subtractMoney(getCurrentPlayerNum(), cost);
 			return true;
 		} else {
 			return false;
@@ -646,8 +655,8 @@ public class Game {
 			default:
 				break;
 		}
+		addMoney(getCurrentPlayerNum(), sale);
 	    board[space].removeHouse();
-	    addMoney(currentPlayerNum + 1, sale);
     }
 
 	/**
