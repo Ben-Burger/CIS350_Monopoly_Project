@@ -16,14 +16,7 @@ public class PropertyPiecePlacement {
 
 	/**
 	 * Initialize the rows and columns for a property.
-	 * @param r0 - row 0
-	 * @param c0 - column 0
-	 * @param r1 - row 1
-	 * @param c1 - column 1
-	 * @param r2 - row 2
-	 * @param c2 - column 2
-	 * @param r3 - row 3
-	 * @param c3 - column 3
+	 * @param positions - the positions for the rows and columns
 	 */
 	public PropertyPiecePlacement(final int[] positions) {
 		row0 = positions[0];
@@ -35,7 +28,7 @@ public class PropertyPiecePlacement {
 		row3 = positions[6];
 		col3 = positions[7];
 		
-		if(positions.length>8) {
+		if (positions.length > 8) {
 			hs1row = positions[8]; 
 			hs1col = positions[9]; 
 			hs2row = positions[10]; 

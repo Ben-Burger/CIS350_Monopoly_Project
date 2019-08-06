@@ -26,6 +26,7 @@ public class Player {
     /** If the player is bankrupt or not. */
     private boolean bankrupt;
 
+    /** ArrayList of the properties owned by the player. */
     private ArrayList<Property> propertiesList;
 
     /** How many turns the player has been in jail. */
@@ -159,7 +160,7 @@ public class Player {
 	}
 	
 	/**
-	 * Returns the number of turns in jail
+	 * Returns the number of turns in jail.
 	 * @return jailturns - integer 0-3
 	 */
 	public int getJailturns() {
@@ -170,7 +171,7 @@ public class Player {
 	 * Set the player number of jail turns.
 	 * @param jailturns - integer value
 	 */
-	public void setJailturns(int jailturns) {
+	public void setJailturns(final int jailturns) {
 		this.jailturns = jailturns;
 	}
 
@@ -200,6 +201,11 @@ public class Player {
         }
     }
     
+    /**
+     * This methods returns the properties owned by the player.
+     * 
+     * @return ArrayList<Property> - the properties owned by the player
+     */
     public ArrayList<Property> getPropertiesList() {
     	ArrayList<Property> list = new ArrayList<Property>();
     	
