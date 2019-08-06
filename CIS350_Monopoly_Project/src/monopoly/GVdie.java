@@ -91,6 +91,7 @@ setBorder(compound);
 
 // set default values
 displayValue = (int) (Math.random() * 6) + 1;
+displayValue = (int) (Math.random() * 6) + 1;
 myValue = (int) (Math.random() * 6) + 1;
 setNumRolls(0);
 myTimer = new javax.swing.Timer(250, new Animator());

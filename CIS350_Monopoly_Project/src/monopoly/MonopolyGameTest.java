@@ -220,6 +220,9 @@ public class MonopolyGameTest {
         assertEquals(1550, test.getPlayerMoney(4));
     }
 
+    /**
+     * Tests card that receives payment from everyone.
+     */
     @Test
     public void cardThatReceivesFromEveryone() {
         test.drawSpecificCard('e', 9);
@@ -229,6 +232,9 @@ public class MonopolyGameTest {
         assertEquals(1490, test.getPlayerMoney(4));
     }
 
+    /**
+     * Test cards that moves player back spaces.
+     */
     @Test
     public void cardThatMovesBackSpaces() {
         test.moveTo(7);
@@ -237,6 +243,9 @@ public class MonopolyGameTest {
         assertEquals(1500, test.getCurrentPlayerMoney());
     }
 
+    /**
+     * Test that sends player to GO.
+     */
     @Test
     public void cardThatSendsYouToGo() {
         test.moveTo(7);
@@ -245,6 +254,9 @@ public class MonopolyGameTest {
         assertEquals(1700, test.getCurrentPlayerMoney());
     }
 
+    /**
+     * Tests buying a house.
+     */
     @Test
     public void buyHouse() {
         test.setCurrentPlayerPosition(1);
@@ -255,6 +267,9 @@ public class MonopolyGameTest {
         assertEquals(1, test.getPropertyHouses(1));
     }
 
+    /**
+     * Tests that rent is scaling properly when a house is added to property.
+     */
     @Test
     public void chargesRentForHouse() {
         test.setCurrentPlayerPosition(6);
