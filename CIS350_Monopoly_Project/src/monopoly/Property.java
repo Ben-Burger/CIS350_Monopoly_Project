@@ -32,6 +32,9 @@ public class Property {
 
     /** Image of the property, pops up when player lands on it. */
     private ImageIcon image;
+    
+    /** Position of the property. */
+    private int position;
 
     /**
      * Creates a special property without color or an image.
@@ -40,13 +43,14 @@ public class Property {
      * @param r - rent for the property
      * @param ownerNum - owner number for the property
      */
-    public Property(final String name, final int price, final int[] r, final int ownerNum) {
+    public Property(final String name, final int price, final int[] r, final int ownerNum, final int position) {
     	this.name = name;
         this.price = price;
         this.ownerNum = ownerNum;
         this.color = '0';
         this.rent = new int[r.length];
         this.rent = new int[r.length];
+        this.position = position;
         for (int i = 0; i < r.length; i++) {
             this.rent[i] = r[i];
         }
@@ -61,12 +65,13 @@ public class Property {
      * @param color - color of the property
      * @param image - image of the property
      */
-    public Property(final String name, final int price, final int[] r, final int ownerNum, final char color, final ImageIcon image) {
+    public Property(final String name, final int price, final int[] r, final int ownerNum, final char color, final ImageIcon image, final int position) {
         this.name = name;
         this.price = price;
         this.ownerNum = ownerNum;
         this.color = color;
         this.image = image;
+        this.position = position;
         this.rent = new int[r.length];
         for (int i = 0; i < r.length; i++) {
             this.rent[i] = r[i];
@@ -183,4 +188,16 @@ public class Property {
 	public ImageIcon getImage() {
 		return image;
 	}
+	
+	/**
+     * Returns position of the property.
+     * @return position - position of the property
+     */
+    public int getPosition() {
+    	return position;
+    }
+	@Override
+    public String toString() { 
+        return name; 
+    } 
 }
